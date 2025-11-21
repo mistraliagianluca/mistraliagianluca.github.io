@@ -15,12 +15,12 @@
         min-height: 100vh;
     }
 
-    /* Logo centrato in alto */
+    /* Logo centrato in alto con spazio ridotto */
     .hero {
         display: flex;
         justify-content: center;
         padding-top: 20px;
-        padding-bottom: 20px;
+        padding-bottom: 5px;  /* Ridotto da 20px a 5px */
     }
 
     .hero img {
@@ -67,12 +67,12 @@
     /* MOBILE */
     @media (max-width: 700px) {
         .hero img {
-            width: 100%;   /* Logo full width su mobile */
+            width: 100%;
             max-width: none;
         }
 
         .bottom-text {
-            flex-direction: column;  /* Blocchi uno sotto l’altro */
+            flex-direction: column;
             gap: 20px;
             padding: 20px;
         }
