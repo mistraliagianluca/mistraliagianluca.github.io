@@ -1,82 +1,83 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mistralia</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #E4FAF7;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mistralia</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #E4FAF7;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-        /* Logo centrato, più piccolo, spaziatura fissa */
-        .hero {
-            display: flex;
-            justify-content: center;
-            padding-top: 20px;   /* Spaziatura costante */
-            padding-bottom: 20px;
-        }
+    /* Logo centrato in alto */
+    .hero {
+        display: flex;
+        justify-content: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
 
+    .hero img {
+        width: 30%;
+        min-width: 180px;
+        max-width: 300px;
+        height: auto;
+    }
+
+    /* Sezione testo in basso */
+    .bottom-text {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+        padding: 20px 40px;
+        box-sizing: border-box;
+    }
+
+    .box {
+        flex: 1;
+        min-width: 200px;
+        text-align: center;
+        color: #333;
+    }
+
+    h1 {
+        margin-bottom: 8px;
+        font-size: 2rem;
+    }
+
+    p {
+        margin: 5px 0;
+        font-size: 1.2rem;
+        line-height: 1.5;
+    }
+
+    .email {
+        font-weight: bold;
+        margin-top: 8px;
+        font-size: 1.2rem;
+    }
+
+    /* MOBILE */
+    @media (max-width: 700px) {
         .hero img {
-            width: 30%;          /* Logo più piccolo */
-            min-width: 180px;    /* Evita sia troppo piccolo su mobile */
-            height: auto;
-            display: block;
+            width: 100%;   /* Logo full width su mobile */
+            max-width: none;
         }
 
-        /* Sezione testo in basso */
         .bottom-text {
-            margin-top: auto;
-            display: flex;
-            justify-content: space-between;
-            gap: 40px;
-            padding: 20px 40px;
-            box-sizing: border-box;
+            flex-direction: column;  /* Blocchi uno sotto l’altro */
+            gap: 20px;
+            padding: 20px;
         }
-
-        .box {
-            flex: 1;
-            min-width: 200px;
-            text-align: center;
-            color: #333;
-        }
-
-        h1 {
-            margin-bottom: 8px;
-            font-size: 2rem;            /* TESTO PIÙ GRANDE */
-        }
-
-        p {
-            margin: 5px 0;
-            font-size: 1.2rem;          /* TESTO PIÙ GRANDE */
-            line-height: 1.5;
-        }
-
-        .email {
-            font-weight: bold;
-            margin-top: 8px;
-            font-size: 1.2rem;
-        }
-
-        /* Mobile: colonne verticali */
-        @media (max-width: 700px) {
-            .bottom-text {
-                flex-direction: column;
-                gap: 20px;
-                padding: 20px;
-            }
-
-            .hero img {
-                width: 50%;  /* Più adatto agli schermi piccoli */
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 
