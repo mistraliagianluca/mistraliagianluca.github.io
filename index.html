@@ -8,69 +8,80 @@
         body {
             margin: 0;
             padding: 0;
+            background: #E4FAF7;
             font-family: Arial, sans-serif;
-            background: linear-gradient(145deg, #f2f5f8, #dfe3e8);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Logo full width */
+        .hero img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Sezione bassa con il doppio blocco */
+        .bottom-text {
+            margin-top: auto;            /* Spinge il contenuto in basso */
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .box {
+            flex: 1;
+            min-width: 200px;
             text-align: center;
             color: #333;
         }
 
-        .container {
-            max-width: 600px;
-            padding: 20px;
-        }
-
-        img {
-            max-width: 180px;
-            margin-bottom: 25px;
-        }
-
         h1 {
             margin-bottom: 10px;
-            font-size: 2rem;
+            font-size: 1.6rem;
         }
 
         p {
-            font-size: 1.1rem;
-            line-height: 1.5;
-            margin: 8px 0;
+            margin: 5px 0;
+            font-size: 1rem;
+            line-height: 1.4;
         }
 
         .email {
             font-weight: bold;
-            margin-top: 15px;
+            margin-top: 8px;
         }
 
-        @media (max-width: 500px) {
-            img {
-                max-width: 140px;
-            }
-            h1 {
-                font-size: 1.6rem;
-            }
-            p {
-                font-size: 1rem;
+        /* Responsive: su mobile le due colonne vanno sotto */
+        @media (max-width: 700px) {
+            .bottom-text {
+                flex-direction: column;
+                gap: 20px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="hero">
         <img src="logo-landing-page.png" alt="Mistralia logo">
+    </div>
 
-        <h1>Benvenuto!</h1>
-        <p>Questo sito è attualmente in costruzione.</p>
-        <p class="email">Puoi contattarci a: info@mistralia.co</p>
+    <div class="bottom-text">
+        <div class="box">
+            <h1>Benvenuto!</h1>
+            <p>Questo sito è attualmente in costruzione.</p>
+            <p class="email">Puoi contattarci a: info@mistralia.co</p>
+        </div>
 
-        <br>
-
-        <h1>Welcome!</h1>
-        <p>This site is currently under construction.</p>
-        <p class="email">You can reach us at: info@mistralia.co</p>
+        <div class="box">
+            <h1>Welcome!</h1>
+            <p>This site is currently under construction.</p>
+            <p class="email">You can reach us at: info@mistralia.co</p>
+        </div>
     </div>
 
 </body>
