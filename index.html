@@ -1,41 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Welcome</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 10%;
-      background-color: #f9f9f9;
-      color: #333;
-    }
-    h1 {
-      margin-bottom: 0.3em;
-    }
-    hr {
-      margin: 3em auto;
-      width: 60%;
-      max-width: 400px;
-    }
-    p {
-      margin: 0.5em 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mistralia</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(145deg, #f2f5f8, #dfe3e8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        img {
+            max-width: 180px;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin: 8px 0;
+        }
+
+        .email {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 500px) {
+            img {
+                max-width: 140px;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Welcome!</h1>
-  <p>This site is currently under construction.</p>
-  <p>You can reach us at: <strong>info@mistralia.co</strong></p>
+    <div class="container">
+        <img src="logo-landing-page.png" alt="Mistralia logo">
 
-  <hr>
+        <h1>Benvenuto!</h1>
+        <p>Questo sito è attualmente in costruzione.</p>
+        <p class="email">Puoi contattarci a: info@mistralia.co</p>
 
-  <h1>Benvenuto!</h1>
-  <p>Questo sito è attualmente in costruzione.</p>
-  <p>Puoi contattarci a: <strong>info@mistralia.co</strong></p>
+        <br>
+
+        <h1>Welcome!</h1>
+        <p>This site is currently under construction.</p>
+        <p class="email">You can reach us at: info@mistralia.co</p>
+    </div>
 
 </body>
 </html>
