@@ -1,103 +1,497 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mistralia</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mistralia • Kentucky — Noleggio Van</title>
+
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: #FFFFFF;
-        font-family: Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
+:root{
+  --brand:#7ACBBD;
+  --ink:#0b0f12;
+  --stroke:rgba(0,0,0,.08);
+  --bg:#ffffff;
+  --radius:20px;
+  --max:1200px;
+}
 
-    /* Logo centrato in alto con spazio ridotto */
-    .hero {
-        display: flex;
-        justify-content: center;
-        padding-top: 20px;
-        padding-bottom: 5px;  /* Ridotto da 20px a 5px */
-    }
+/* RESET */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  color:var(--ink);
+  background:#fff;
+  line-height:1.55;
+}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+.container{max-width:var(--max);margin:auto;padding:0 20px}
 
-    .hero img {
-        width: 30%;
-        min-width: 180px;
-        max-width: 300px;
-        height: auto;
-    }
+/* LOGO TOP (PRIMA COSA DEL SITO) */
+body{ position:relative; }
 
-    /* Sezione testo in basso */
-    .bottom-text {
-        margin-top: auto;
-        display: flex;
-        justify-content: space-between;
-        gap: 40px;
-        padding: 20px 40px;
-        box-sizing: border-box;
-    }
+body::before{
+  content:"";
+  position:absolute;          /* non fisso, solo in alto pagina */
+  top:16px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(1080px, 92vw);    /* TRIPLO rispetto a ~360px */
+  height:360px;               /* TRIPLO rispetto a 120px */
+  background:url("assets/logo.png") center/contain no-repeat;
+  opacity:.99;                /* più trasparente */
+  pointer-events:none;
+  z-index:0;
+}
 
-    .box {
-        flex: 1;
-        min-width: 200px;
-        text-align: center;
-        color: #333;
-    }
+/* spazio sopra per non sovrapporre contenuti al logo */
+body{
+  padding-top:320px;          /* regola se vuoi più/meno spazio */
+}
 
-    h1 {
-        margin-bottom: 8px;
-        font-size: 2rem;
-    }
+/* PULSANTI IN ALTO A DESTRA (senza barra) */
+.top-actions{
+  position:absolute;
+  top:26px;
+  right:20px;
+  display:flex;
+  gap:10px;
+  z-index:5;                  /* sopra il logo */
+  <a class="btn" href="#gallery">Foto</a>
+}
 
-    p {
-        margin: 5px 0;
-        font-size: 1.2rem;
-        line-height: 1.5;
-    }
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 14px;
+  border-radius:999px;
+  border:1px solid var(--stroke);
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(10px);
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+  transition:transform .12s ease, opacity .12s ease;
+  opacity:.95;
+}
 
-    .email {
-        font-weight: bold;
-        margin-top: 8px;
-        font-size: 1.2rem;
-    }
+.btn:hover{ transform:translateY(-1px); opacity:1; }
 
-    /* MOBILE */
-    @media (max-width: 700px) {
-        .hero img {
-            width: 100%;
-            max-width: none;
-        }
 
-        .bottom-text {
-            flex-direction: column;
-            gap: 20px;
-            padding: 20px;
-        }
-    }
+/* HERO */
+.hero{
+  padding:40px 0 40px;
+}
+.hero-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+.kicker{
+  display:inline-flex;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(122,203,189,.15);
+  font-weight:800;
+}
+.hero h1{
+  font-size:clamp(36px,5vw,56px);
+  line-height:1.05;
+  margin:20px 0 10px;
+}
+.hero p{
+  max-width:700px;
+  font-size:18px;
+  opacity:.8;
+}
+
+/* GRID */
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.card{
+  background:#fff;
+  border:1px solid var(--stroke);
+  border-radius:var(--radius);
+  padding:22px;
+  box-shadow:0 12px 40px rgba(0,0,0,.06);
+  position:relative;
+  z-index:1;
+}
+.card h3{margin-top:0}
+
+/* GALLERY */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.gallery img{
+  border-radius:16px;
+  height:220px;
+  object-fit:cover;
+}
+
+/* TARIFFARIO */
+.table-wrap{overflow-x:auto}
+table{
+  border-collapse:collapse;
+  width:100%;
+  font-size:13px;
+}
+th,td{
+  border:1px solid var(--stroke);
+  padding:6px;
+  text-align:center;
+  white-space:nowrap;
+}
+thead th{
+  background:#f7f7f7;
+  font-weight:800;
+}
+
+/* Prima colonna (mese) fissa */
+.month{
+  position:sticky;
+  left:0;
+  z-index:3;
+  text-align:left;
+  padding-left:10px;
+  font-weight:900;
+  background:#f7f7f7;
+}
+tbody .month{
+  background:#fff;
+}
+
+/* Stagioni (colori) */
+.b{background:#D9F7E5}  /* verde */
+.m{background:#FFF4C2}  /* giallo */
+.a{background:#FFD0D0}  /* rosso */
+.dash{opacity:.55}
+
+/* Legend / prezzi */
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:10px 0 0;
+  position:relative;
+  z-index:1;
+}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid var(--stroke);
+  background:#fff;
+  border-radius:999px;
+  padding:8px 12px;
+  font-weight:800;
+}
+.dot{
+  width:12px;height:12px;border-radius:999px;border:1px solid var(--stroke);
+}
+.dot.b{background:#D9F7E5}
+.dot.m{background:#FFF4C2}
+.dot.a{background:#FFD0D0}
+
+/* CONTACT */
+.copy{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border:1px solid var(--stroke);
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:10px;
+  position:relative;
+  z-index:1;
+}
+.copy button{
+  background:var(--brand);
+  border:none;
+  border-radius:999px;
+  padding:8px 14px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .grid-3{grid-template-columns:1fr}
+  .gallery{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
+
 <body>
 
-    <div class="hero">
-        <img src="logo-landing-page.png" alt="Mistralia logo">
+<div class="top-actions">
+  <a class="btn" href="#piani">Piani</a>
+  <a class="btn" href="#tariffe">Tariffe</a>
+  <a class="btn" href="#contatti">Contatti</a>
+</div>
+
+
+<section class="hero" id="top">
+  <div class="container">
+    <div class="hero-top">
+      <div class="kicker">Van • 4+1 — Kentucky · libertà, comfort e sicurezza</div>
+      <!-- tolto logo in alto a destra -->
     </div>
 
-    <div class="bottom-text">
-        <div class="box">
-            <h1>Benvenuto!</h1>
-            <p>Questo sito è attualmente in costruzione.</p>
-            <p class="email">Puoi contattarci a: info@mistralia.co</p>
-        </div>
+    <h1>La tua avventura inizia quando smetti di pianificare.</h1>
+    <p>
+      Kentucky è il van Mistralia pensato per viaggiare in autonomia:
+      stabile, confortevole, controllato prima di ogni partenza.
+    </p>
+  </div>
+</section>
 
-        <div class="box">
-            <h1>Welcome!</h1>
-            <p>This site is currently under construction.</p>
-            <p class="email">You can reach us at: info@mistralia.co</p>
-        </div>
+<section id="piani">
+  <div class="container">
+    <h2>Piani disponibili</h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Basic</h3>
+        <p>Essenziale, semplice, perfetto per chi vuole partire leggero.</p>
+      </div>
+      <div class="card">
+        <h3>Plus</h3>
+        <ul>
+          <li>Franchigia cancellata</li>
+          <li>Deposito cauzionale inferiore</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Premium</h3>
+        <ul>
+          <li>Tutto il Plus</li>
+          <li>Deposito ancora più basso</li>
+          <li>Secondo guidatore incluso</li>
+        </ul>
+      </div>
     </div>
+    <p><b>👉 Contattaci</b> per capire quale piano è più adatto al tuo viaggio.</p>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="container">
+    <h2>Gallery</h2>
+    <div class="gallery">
+      <!-- 20 FOTO -->
+      <img src="assets/gallery/1.jpg"><img src="assets/gallery/2.jpg">
+      <img src="assets/gallery/3.jpg"><img src="assets/gallery/4.jpg">
+      <img src="assets/gallery/5.jpg"><img src="assets/gallery/6.jpg">
+      <img src="assets/gallery/7.jpg"><img src="assets/gallery/8.jpg">
+      <img src="assets/gallery/9.jpg"><img src="assets/gallery/10.jpg">
+      <img src="assets/gallery/11.jpg"><img src="assets/gallery/12.jpg">
+      <img src="assets/gallery/13.jpg"><img src="assets/gallery/14.jpg">
+      <img src="assets/gallery/15.jpg"><img src="assets/gallery/16.jpg">
+      <img src="assets/gallery/17.jpg"><img src="assets/gallery/18.jpg">
+      <img src="assets/gallery/19.jpg"><img src="assets/gallery/20.jpg">
+    </div>
+  </div>
+</section>
+
+<!-- ✅ NUOVA SEZIONE TARIFFE -->
+<section id="tariffe">
+  <div class="container">
+    <h2>Tariffario 2026 (stagioni)</h2>
+    <p>
+      Tabella completa: mesi in riga, giorni in colonna. Colori:
+      <b>verde</b> (Bassa), <b>giallo</b> (Media), <b>rosso</b> (Alta).
+    </p>
+
+    <div class="grid-3" style="margin-top:14px">
+      <div class="card">
+        <h3>Bassa</h3>
+        <p style="font-size:28px;font-weight:900;margin:10px 0 0">€110</p>
+        <p style="margin:0;opacity:.75">/giorno</p>
+      </div>
+      <div class="card">
+        <h3>Media</h3>
+        <p style="font-size:28px;font-weight:900;margin:10px 0 0">€120</p>
+        <p style="margin:0;opacity:.75">/giorno</p>
+      </div>
+      <div class="card">
+        <h3>Alta</h3>
+        <p style="font-size:28px;font-weight:900;margin:10px 0 0">€130</p>
+        <p style="margin:0;opacity:.75">/giorno</p>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="pill"><span class="dot b"></span> Bassa</div>
+      <div class="pill"><span class="dot m"></span> Media</div>
+      <div class="pill"><span class="dot a"></span> Alta</div>
+      <div class="pill"><span class="dot dash" style="background:#fff"></span> — (non presente)</div>
+    </div>
+
+    <h3 style="margin-top:26px;position:relative;z-index:1">Calendario stagioni 2026</h3>
+    <p style="margin-top:6px;opacity:.8;position:relative;z-index:1">
+      Scorri orizzontalmente su mobile/tablet. La prima colonna (mese) resta fissa.
+    </p>
+
+    <div class="table-wrap card" style="padding:0">
+      <table>
+        <thead>
+          <tr>
+            <th class="month">Mese</th>
+            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
+            <th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th>
+            <th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="month">Gennaio</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+          </tr>
+
+          <tr>
+            <td class="month">Febbraio</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
+          </tr>
+
+          <tr>
+            <td class="month">Marzo</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+          </tr>
+
+          <tr>
+            <td class="month">Aprile</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="dash">—</td>
+          </tr>
+
+          <tr>
+            <td class="month">Maggio</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="a">A</td><td class="a">A</td>
+          </tr>
+
+          <tr>
+            <td class="month">Giugno</td>
+            <td class="a">A</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="dash">—</td>
+          </tr>
+
+          <tr>
+            <td class="month">Luglio</td>
+            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
+            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
+            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
+          </tr>
+
+          <tr>
+            <td class="month">Agosto</td>
+            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
+            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
+            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
+          </tr>
+
+          <tr>
+            <td class="month">Settembre</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="dash">—</td>
+          </tr>
+
+          <tr>
+            <td class="month">Ottobre</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="m">M</td><td class="m">M</td>
+          </tr>
+
+          <tr>
+            <td class="month">Novembre</td>
+            <td class="m">M</td>
+            <td class="m">M</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="dash">—</td>
+          </tr>
+
+          <tr>
+            <td class="month">Dicembre</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="b">B</td><td class="b">B</td>
+            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="contatti">
+  <div class="container">
+    <h2>Contatti</h2>
+
+    <div class="copy">
+      <div><b>Telefono / WhatsApp</b><br>+39 375 647 3829</div>
+      <button data-copy="+39 375 647 3829">Copia</button>
+    </div>
+
+    <div class="copy">
+      <div><b>Telefono / WhatsApp</b><br>+39 375 647 3839</div>
+      <button data-copy="+39 375 647 3839">Copia</button>
+    </div>
+
+    <div class="copy">
+      <div><b>Email</b><br>info@mistralia.co</div>
+      <button data-copy="info@mistralia.co">Copia</button>
+    </div>
+
+    <div class="copy">
+      <div><b>Sito</b><br>mistralia.co</div>
+      <button data-copy="mistralia.co">Copia</button>
+    </div>
+  </div>
+</section>
+
+<script>
+document.querySelectorAll('[data-copy]').forEach(b=>{
+  b.onclick=()=>navigator.clipboard.writeText(b.dataset.copy);
+});
+</script>
 
 </body>
 </html>
