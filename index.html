@@ -13,6 +13,9 @@
   --bg:#ffffff;
   --radius:20px;
   --max:1200px;
+
+  /* dimensioni tabella giorni (uguali per tutte) */
+  --dayw: 34px; /* calibrata per "25-31" con font 13px */
 }
 
 /* RESET */
@@ -23,70 +26,108 @@ body{
   color:var(--ink);
   background:#fff;
   line-height:1.55;
+  position:relative;
 }
 img{max-width:100%;display:block}
 a{text-decoration:none;color:inherit}
 .container{max-width:var(--max);margin:auto;padding:0 20px}
 
 /* LOGO TOP (PRIMA COSA DEL SITO) */
-body{ position:relative; }
-
 body::before{
   content:"";
-  position:absolute;          /* non fisso, solo in alto pagina */
-  top:16px;
+  position:absolute;
+  top:22px;
   left:50%;
   transform:translateX(-50%);
-  width:min(1080px, 92vw);    /* TRIPLO rispetto a ~360px */
-  height:360px;               /* TRIPLO rispetto a 120px */
+  width:min(1080px, 92vw);
+  height:360px;
   background:url("assets/logo.png") center/contain no-repeat;
-  opacity:.99;                /* più trasparente */
+  opacity:.99;                 
   pointer-events:none;
   z-index:0;
 }
 
-/* spazio sopra per non sovrapporre contenuti al logo */
+
+/* spazio sopra per NON sovrapporre contenuti al logo */
 body{
-  padding-top:320px;          /* regola se vuoi più/meno spazio */
+  padding-top:420px;           /* ↑ evita overlap con kicker/titolo */
 }
 
-/* PULSANTI IN ALTO A DESTRA (senza barra) */
-.top-actions{
+/* TOP UI (lingua a sinistra, pulsanti a destra) */
+.top-ui{
   position:absolute;
-  top:26px;
-  right:20px;
+  top:18px;
+  left:0;
+  width:100%;
+  z-index:6;                   /* sopra logo */
+  pointer-events:none;         /* abilitiamo solo i figli cliccabili */
+}
+.top-ui .container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.lang, .top-actions{ pointer-events:auto; }
+
+/* evitiamo che "galleggino" sul logo: mettiamo pannellino chiaro */
+.lang, .top-actions{
+  background:rgba(255,255,255,.92);
+  border:1px solid var(--stroke);
+  border-radius:999px;
+  padding:6px;
+  backdrop-filter:blur(10px);
+}
+
+/* Language switch */
+.lang{
+  display:flex;
+  gap:6px;
+}
+.flag{
+  width:42px;
+  height:34px;
+  border-radius:999px;
+  border:1px solid var(--stroke);
+  background:#fff;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  transition:transform .12s ease, opacity .12s ease;
+  opacity:.8;
+}
+.flag.active{ opacity:1; transform:translateY(-1px); }
+
+/* Pulsanti top a destra */
+.top-actions{
   display:flex;
   gap:10px;
-  z-index:5;                  /* sopra il logo */
-  <a class="btn" href="#gallery">Foto</a>
+  padding:6px 8px;
 }
-
 .btn{
   display:inline-flex;
   align-items:center;
   justify-content:center;
   padding:10px 14px;
   border-radius:999px;
-  border:1px solid var(--stroke);
-  background:rgba(255,255,255,.85);
-  backdrop-filter:blur(10px);
-  font-weight:800;
+  border:1px solid rgba(0,0,0,.06);
+  background:var(--brand);     /* ✅ richiesto */
+  color:#fff;                  /* ✅ testo bianco */
+  font-weight:900;
   font-size:14px;
   cursor:pointer;
-  transition:transform .12s ease, opacity .12s ease;
-  opacity:.95;
+  transition:transform .12s ease, filter .12s ease, opacity .12s ease;
+  opacity:.98;
 }
-
-.btn:hover{ transform:translateY(-1px); opacity:1; }
-
+.btn:hover{ transform:translateY(-1px); filter:brightness(.96); opacity:1; }
 
 /* HERO */
-.hero{
-  padding:40px 0 40px;
-}
+.hero{ padding:30px 0 40px; position:relative; z-index:1; }
 .hero-top{
   display:flex;
-  justify-content:space-between;
+  justify-content:flex-start; /* evitare “spazi strani” */
   align-items:center;
   gap:20px;
 }
@@ -96,17 +137,24 @@ body{
   padding:10px 14px;
   border-radius:999px;
   background:rgba(122,203,189,.15);
-  font-weight:800;
+  font-weight:900;
 }
+
+/* Titolo e testo allineati e ottimizzati */
 .hero h1{
-  font-size:clamp(36px,5vw,56px);
-  line-height:1.05;
-  margin:20px 0 10px;
+  margin:18px 0 10px;
+  font-size:clamp(34px,4.6vw,54px);
+  line-height:1.08;
+  letter-spacing:-0.02em;
+  max-width:860px;            /* allinea visivamente col testo */
 }
 .hero p{
-  max-width:700px;
+  max-width:860px;            /* stesso max del titolo */
   font-size:18px;
-  opacity:.8;
+  opacity:.86;
+  text-align:justify;         /* ✅ punto 1 */
+  text-justify:inter-word;
+  margin:0;
 }
 
 /* GRID */
@@ -126,6 +174,20 @@ body{
 }
 .card h3{margin-top:0}
 
+/* Link “contattaci” cliccabile */
+.cta-link{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+  color:var(--ink);
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px dashed var(--stroke);
+  background:rgba(122,203,189,.12);
+}
+.cta-link:hover{ filter:brightness(.98); }
+
 /* GALLERY */
 .gallery{
   display:grid;
@@ -136,14 +198,69 @@ body{
   border-radius:16px;
   height:220px;
   object-fit:cover;
+  cursor:pointer;
+  transition:transform .18s ease, filter .18s ease;
 }
+.gallery img:hover{
+  transform:translateY(-2px) scale(1.01);
+  filter:brightness(.97);
+}
+
+/* Lightbox moderno */
+.lightbox{
+  position:fixed;
+  inset:0;
+  background:rgba(10,14,18,.78);
+  backdrop-filter:blur(10px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  padding:24px;
+}
+.lightbox.open{ display:flex; }
+.lightbox-inner{
+  width:min(1200px, 96vw);
+  max-height:88vh;
+  position:relative;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
+  background:#111;
+}
+.lightbox img{
+  width:100%;
+  height:88vh;
+  object-fit:contain;
+  display:block;
+}
+.lb-close{
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:46px;
+  height:46px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  font-size:22px;
+  font-weight:900;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.lb-close:hover{ background:rgba(255,255,255,.18); }
 
 /* TARIFFARIO */
 .table-wrap{overflow-x:auto}
 table{
   border-collapse:collapse;
-  width:100%;
+  width:max-content;          /* permette scroll */
+  min-width:100%;
   font-size:13px;
+  table-layout:fixed;         /* ✅ colonne uniformi */
 }
 th,td{
   border:1px solid var(--stroke);
@@ -153,8 +270,11 @@ th,td{
 }
 thead th{
   background:#f7f7f7;
-  font-weight:800;
+  font-weight:900;
 }
+
+/* larghezza uniforme per i giorni */
+th.day, td.day{ width:var(--dayw); min-width:var(--dayw); max-width:var(--dayw); }
 
 /* Prima colonna (mese) fissa */
 .month{
@@ -165,10 +285,9 @@ thead th{
   padding-left:10px;
   font-weight:900;
   background:#f7f7f7;
+  min-width:140px;
 }
-tbody .month{
-  background:#fff;
-}
+tbody .month{ background:#fff; }
 
 /* Stagioni (colori) */
 .b{background:#D9F7E5}  /* verde */
@@ -176,12 +295,12 @@ tbody .month{
 .a{background:#FFD0D0}  /* rosso */
 .dash{opacity:.55}
 
-/* Legend / prezzi */
+/* Legend / prezzi (✅ qui mettiamo le tariffe, niente box grandi) */
 .legend{
   display:flex;
   flex-wrap:wrap;
   gap:10px;
-  margin:10px 0 0;
+  margin:12px 0 0;
   position:relative;
   z-index:1;
 }
@@ -193,7 +312,11 @@ tbody .month{
   background:#fff;
   border-radius:999px;
   padding:8px 12px;
+  font-weight:900;
+}
+.pill small{
   font-weight:800;
+  opacity:.75;
 }
 .dot{
   width:12px;height:12px;border-radius:999px;border:1px solid var(--stroke);
@@ -213,13 +336,16 @@ tbody .month{
   margin-bottom:10px;
   position:relative;
   z-index:1;
+  gap:12px;
 }
+.copy .label{ font-weight:900; }
 .copy button{
   background:var(--brand);
   border:none;
+  color:#fff;
   border-radius:999px;
   padding:8px 14px;
-  font-weight:800;
+  font-weight:900;
   cursor:pointer;
 }
 
@@ -227,123 +353,138 @@ tbody .month{
 @media(max-width:900px){
   .grid-3{grid-template-columns:1fr}
   .gallery{grid-template-columns:1fr 1fr}
+  body{ padding-top:440px; }
+}
+
+.footer-logo{
+  width:min(520px, 86vw);
+  height:160px;
+  margin:60px auto 40px;
+  background:url("assets/logo.png") center/contain no-repeat;
+  opacity:.70;             /* regolalo a piacere */
+  pointer-events:none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="top-actions">
-  <a class="btn" href="#piani">Piani</a>
-  <a class="btn" href="#tariffe">Tariffe</a>
-  <a class="btn" href="#contatti">Contatti</a>
-</div>
+<!-- TOP UI -->
+<div class="top-ui">
+  <div class="container">
+    <div class="lang" aria-label="Language selector">
+      <button class="flag active" type="button" data-lang="it" aria-label="Italiano">🇮🇹</button>
+      <button class="flag" type="button" data-lang="en" aria-label="English (UK)">🇬🇧</button>
+    </div>
 
+    <div class="top-actions">
+      <a class="btn" href="#piani" data-i18n="nav_plans">Piani</a>
+      <a class="btn" href="#tariffe" data-i18n="nav_rates">Tariffe</a>
+      <a class="btn" href="#contatti" data-i18n="nav_contacts">Contatti</a>
+    </div>
+  </div>
+</div>
 
 <section class="hero" id="top">
   <div class="container">
     <div class="hero-top">
-      <div class="kicker">Van • 4+1 — Kentucky · libertà, comfort e sicurezza</div>
-      <!-- tolto logo in alto a destra -->
+      <div class="kicker" data-i18n="kicker">Van • 4+1 — Kentucky · libertà, comfort e sicurezza</div>
     </div>
 
-    <h1>Mistralia - Kentucky: Libertà, Comfort e Sicurezza per la tua Avventura</h1>
-    <p>
+    <h1 data-i18n="hero_title">Mistralia – Kentucky: Libertà, Comfort e Sicurezza per la tua Avventura</h1>
+
+    <!-- ✅ testo giustificato -->
+    <p data-i18n="hero_body">
       Che la tua meta sia il mare o la montagna, il nostro Kentucky è la soluzione perfetta per chi cerca avventure in totale autonomia. Grazie alla solida meccanica Ford Transit con ruote gemellate e pneumatici per ogni stagione, vi garantiamo la massima stabilità su ogni tracciato.
-
+      <br><br>
       Internamente, il mezzo offre una vivibilità eccellente per 4+1 ospiti: la zona notte vanta due ampi letti matrimoniali sempre pronti (uno spazioso in mansarda e uno confortevole in coda), mentre il quinto posto si compone trasformando la zona dinette.
-
+      <br><br>
       Le nostre dotazioni top di gamma includono una cucina completa con frigo trivalente, forno, 4 fuochi e scaldavivande, oltre a un bagno con doccia separata. Ideale per la sosta libera, il mezzo offre inverter, prese ovunque, aria condizionata e riscaldamento a gasolio. Come azienda, garantiamo la massima affidabilità con controlli rigorosi su meccanica, livelli e igiene prima di ogni partenza. Disponibilità telefonica per qualsiasi evenienza.
-
+      <br><br>
       Sali a bordo: la tua avventura inizia con la certezza di un mezzo perfetto e un'assistenza dedicata.
-
     </p>
   </div>
 </section>
 
 <section id="piani">
   <div class="container">
-    <h2>Piani disponibili</h2>
+    <h2 data-i18n="plans_title">Piani disponibili</h2>
+
     <div class="grid-3">
       <div class="card">
-        <h3>Basic</h3>
-        <p>Essenziale, semplice, perfetto per chi vuole partire leggero.</p>
+        <h3 data-i18n="plan_basic_title">Basic</h3>
+        <p data-i18n="plan_basic_body">Essenziale, semplice, perfetto per chi vuole partire leggero.</p>
       </div>
+
       <div class="card">
-        <h3>Plus</h3>
+        <h3 data-i18n="plan_plus_title">Plus</h3>
         <ul>
-          <li>Franchigia cancellata</li>
-          <li>Deposito cauzionale inferiore</li>
+          <li data-i18n="plan_plus_li1">Franchigia cancellata</li>
+          <li data-i18n="plan_plus_li2">Deposito cauzionale inferiore</li>
         </ul>
       </div>
+
       <div class="card">
-        <h3>Premium</h3>
+        <h3 data-i18n="plan_premium_title">Premium</h3>
         <ul>
-          <li>Tutto il Plus</li>
-          <li>Deposito ancora più basso</li>
-          <li>Secondo guidatore incluso</li>
+          <li data-i18n="plan_premium_li1">Tutto il Plus</li>
+          <li data-i18n="plan_premium_li2">Deposito ancora più basso</li>
+          <li data-i18n="plan_premium_li3">Secondo guidatore incluso</li>
         </ul>
       </div>
     </div>
-    <p><b>👉 Contattaci</b> per capire quale piano è più adatto al tuo viaggio.</p>
+
+    <!-- ✅ cliccabile verso contatti -->
+    <p style="margin-top:14px">
+      <a class="cta-link" href="#contatti" data-i18n="plans_cta">👉 Contattaci per capire quale piano è più adatto al tuo viaggio.</a>
+    </p>
   </div>
 </section>
 
 <section id="gallery">
   <div class="container">
-    <h2>Gallery</h2>
-    <div class="gallery">
+    <h2 data-i18n="gallery_title">Gallery</h2>
+
+    <div class="gallery" id="galleryGrid">
       <!-- 20 FOTO -->
-      <img src="assets/gallery/1.jpg"><img src="assets/gallery/2.jpg">
-      <img src="assets/gallery/3.jpg"><img src="assets/gallery/4.jpg">
-      <img src="assets/gallery/5.jpg"><img src="assets/gallery/6.jpg">
-      <img src="assets/gallery/7.jpg"><img src="assets/gallery/8.jpg">
-      <img src="assets/gallery/9.jpg"><img src="assets/gallery/10.jpg">
-      <img src="assets/gallery/11.jpg"><img src="assets/gallery/12.jpg">
-      <img src="assets/gallery/13.jpg"><img src="assets/gallery/14.jpg">
-      <img src="assets/gallery/15.jpg"><img src="assets/gallery/16.jpg">
-      <img src="assets/gallery/17.jpg"><img src="assets/gallery/18.jpg">
-      <img src="assets/gallery/19.jpg"><img src="assets/gallery/20.jpg">
+      <img src="assets/gallery/1.jpg"  data-full="assets/gallery/1.jpg"  alt="Gallery 1">
+      <img src="assets/gallery/2.jpg"  data-full="assets/gallery/2.jpg"  alt="Gallery 2">
+      <img src="assets/gallery/3.jpg"  data-full="assets/gallery/3.jpg"  alt="Gallery 3">
+      <img src="assets/gallery/4.jpg"  data-full="assets/gallery/4.jpg"  alt="Gallery 4">
+      <img src="assets/gallery/5.jpg"  data-full="assets/gallery/5.jpg"  alt="Gallery 5">
+      <img src="assets/gallery/6.jpg"  data-full="assets/gallery/6.jpg"  alt="Gallery 6">
+      <img src="assets/gallery/7.jpg"  data-full="assets/gallery/7.jpg"  alt="Gallery 7">
+      <img src="assets/gallery/8.jpg"  data-full="assets/gallery/8.jpg"  alt="Gallery 8">
+      <img src="assets/gallery/9.jpg"  data-full="assets/gallery/9.jpg"  alt="Gallery 9">
+      <img src="assets/gallery/10.jpg" data-full="assets/gallery/10.jpg" alt="Gallery 10">
+      <img src="assets/gallery/11.jpg" data-full="assets/gallery/11.jpg" alt="Gallery 11">
+      <img src="assets/gallery/12.jpg" data-full="assets/gallery/12.jpg" alt="Gallery 12">
+      <img src="assets/gallery/13.jpg" data-full="assets/gallery/13.jpg" alt="Gallery 13">
+      <img src="assets/gallery/14.jpg" data-full="assets/gallery/14.jpg" alt="Gallery 14">
+      <img src="assets/gallery/15.jpg" data-full="assets/gallery/15.jpg" alt="Gallery 15">
+      <img src="assets/gallery/16.jpg" data-full="assets/gallery/16.jpg" alt="Gallery 16">
+      <img src="assets/gallery/17.jpg" data-full="assets/gallery/17.jpg" alt="Gallery 17">
+      <img src="assets/gallery/18.jpg" data-full="assets/gallery/18.jpg" alt="Gallery 18">
+      <img src="assets/gallery/19.jpg" data-full="assets/gallery/19.jpg" alt="Gallery 19">
+      <img src="assets/gallery/20.jpg" data-full="assets/gallery/20.jpg" alt="Gallery 20">
     </div>
   </div>
 </section>
 
-<!-- ✅ NUOVA SEZIONE TARIFFE -->
 <section id="tariffe">
   <div class="container">
-    <h2>Tariffario 2026 (stagioni)</h2>
-    <p>
-      Tabella completa: mesi in riga, giorni in colonna. Colori:
-      <b>verde</b> (Bassa), <b>giallo</b> (Media), <b>rosso</b> (Alta).
-    </p>
+    <h2 data-i18n="rates_title">Tariffario 2026 (stagioni)</h2>
 
-    <div class="grid-3" style="margin-top:14px">
-      <div class="card">
-        <h3>Bassa</h3>
-        <p style="font-size:28px;font-weight:900;margin:10px 0 0">€110</p>
-        <p style="margin:0;opacity:.75">/giorno</p>
-      </div>
-      <div class="card">
-        <h3>Media</h3>
-        <p style="font-size:28px;font-weight:900;margin:10px 0 0">€120</p>
-        <p style="margin:0;opacity:.75">/giorno</p>
-      </div>
-      <div class="card">
-        <h3>Alta</h3>
-        <p style="font-size:28px;font-weight:900;margin:10px 0 0">€130</p>
-        <p style="margin:0;opacity:.75">/giorno</p>
-      </div>
+    <!-- ✅ niente box grandi: prezzi nella legenda -->
+    <div class="legend" aria-label="Legend">
+      <div class="pill"><span class="dot b"></span> <span data-i18n="low">Bassa</span> <small>€110 / <span data-i18n="per_day">giorno</span></small></div>
+      <div class="pill"><span class="dot m"></span> <span data-i18n="mid">Media</span> <small>€120 / <span data-i18n="per_day">giorno</span></small></div>
+      <div class="pill"><span class="dot a"></span> <span data-i18n="high">Alta</span> <small>€130 / <span data-i18n="per_day">giorno</span></small></div>
+      <div class="pill"><span class="dot dash" style="background:#fff"></span> <span data-i18n="na">— (non presente)</span></div>
     </div>
 
-    <div class="legend">
-      <div class="pill"><span class="dot b"></span> Bassa</div>
-      <div class="pill"><span class="dot m"></span> Media</div>
-      <div class="pill"><span class="dot a"></span> Alta</div>
-      <div class="pill"><span class="dot dash" style="background:#fff"></span> — (non presente)</div>
-    </div>
-
-    <h3 style="margin-top:26px;position:relative;z-index:1">Calendario stagioni 2026</h3>
-    <p style="margin-top:6px;opacity:.8;position:relative;z-index:1">
+    <h3 style="margin-top:22px" data-i18n="rates_calendar_title">Calendario stagioni 2026</h3>
+    <p style="margin-top:6px;opacity:.8" data-i18n="rates_calendar_hint">
       Scorri orizzontalmente su mobile/tablet. La prima colonna (mese) resta fissa.
     </p>
 
@@ -351,115 +492,114 @@ tbody .month{
       <table>
         <thead>
           <tr>
-            <th class="month">Mese</th>
-            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
-            <th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th>
-            <th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th>
+            <th class="month" data-i18n="month">Mese</th>
+            <th class="day">1</th><th class="day">2</th><th class="day">3</th><th class="day">4</th><th class="day">5</th><th class="day">6</th><th class="day">7</th><th class="day">8</th><th class="day">9</th><th class="day">10</th>
+            <th class="day">11</th><th class="day">12</th><th class="day">13</th><th class="day">14</th><th class="day">15</th><th class="day">16</th><th class="day">17</th><th class="day">18</th><th class="day">19</th><th class="day">20</th>
+            <th class="day">21</th><th class="day">22</th><th class="day">23</th><th class="day">24</th><th class="day">25</th><th class="day">26</th><th class="day">27</th><th class="day">28</th><th class="day">29</th><th class="day">30</th><th class="day">31</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td class="month">Gennaio</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="month" data-i18n="jan">Gennaio</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
           </tr>
 
           <tr>
-            <td class="month">Febbraio</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
+            <td class="month" data-i18n="feb">Febbraio</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day dash">—</td><td class="day dash">—</td><td class="day dash">—</td>
           </tr>
 
           <tr>
-            <td class="month">Marzo</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
+            <td class="month" data-i18n="mar">Marzo</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
           </tr>
 
           <tr>
-            <td class="month">Aprile</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="dash">—</td>
+            <td class="month" data-i18n="apr">Aprile</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day dash">—</td>
           </tr>
 
           <tr>
-            <td class="month">Maggio</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="a">A</td><td class="a">A</td>
+            <td class="month" data-i18n="may">Maggio</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day a">A</td><td class="day a">A</td>
           </tr>
 
           <tr>
-            <td class="month">Giugno</td>
-            <td class="a">A</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="dash">—</td>
+            <td class="month" data-i18n="jun">Giugno</td>
+            <td class="day a">A</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day dash">—</td>
           </tr>
 
           <tr>
-            <td class="month">Luglio</td>
-            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
-            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
-            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
+            <td class="month" data-i18n="jul">Luglio</td>
+            <td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td>
+            <td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td>
+            <td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td>
           </tr>
 
           <tr>
-            <td class="month">Agosto</td>
-            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
-            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
-            <td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td><td class="a">A</td>
+            <td class="month" data-i18n="aug">Agosto</td>
+            <td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td>
+            <td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td>
+            <td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td><td class="day a">A</td>
           </tr>
 
           <tr>
-            <td class="month">Settembre</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="dash">—</td>
+            <td class="month" data-i18n="sep">Settembre</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day dash">—</td>
           </tr>
 
           <tr>
-            <td class="month">Ottobre</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="m">M</td><td class="m">M</td>
+            <td class="month" data-i18n="oct">Ottobre</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day m">M</td><td class="day m">M</td>
           </tr>
 
           <tr>
-            <td class="month">Novembre</td>
-            <td class="m">M</td>
-            <td class="m">M</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="dash">—</td>
+            <td class="month" data-i18n="nov">Novembre</td>
+            <td class="day m">M</td><td class="day m">M</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day dash">—</td>
           </tr>
 
           <tr>
-            <td class="month">Dicembre</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
-            <td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td><td class="b">B</td>
-            <td class="b">B</td><td class="b">B</td>
-            <td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td><td class="m">M</td>
+            <td class="month" data-i18n="dec">Dicembre</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
+            <td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td><td class="day b">B</td>
+            <td class="day b">B</td><td class="day b">B</td>
+            <td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td><td class="day m">M</td>
           </tr>
         </tbody>
       </table>
@@ -469,35 +609,197 @@ tbody .month{
 
 <section id="contatti">
   <div class="container">
-    <h2>Contatti</h2>
+    <h2 data-i18n="contacts_title">Contatti</h2>
 
     <div class="copy">
-      <div><b>Telefono / WhatsApp</b><br>+39 375 647 3829</div>
-      <button data-copy="+39 375 647 3829">Copia</button>
+      <div>
+        <div class="label">📞💬 <span data-i18n="phone_whatsapp">Telefono / WhatsApp</span></div>
+        <div>+39 375 647 3829</div>
+      </div>
+      <button data-copy="+39 375 647 3829" data-i18n="copy">Copia</button>
     </div>
 
     <div class="copy">
-      <div><b>Telefono / WhatsApp</b><br>+39 375 647 3839</div>
-      <button data-copy="+39 375 647 3839">Copia</button>
+      <div>
+        <div class="label">📞💬 <span data-i18n="phone_whatsapp">Telefono / WhatsApp</span></div>
+        <div>+39 375 647 3839</div>
+      </div>
+      <button data-copy="+39 375 647 3839" data-i18n="copy">Copia</button>
     </div>
 
     <div class="copy">
-      <div><b>Email</b><br>info@mistralia.co</div>
-      <button data-copy="info@mistralia.co">Copia</button>
-    </div>
-
-    <div class="copy">
-      <div><b>Sito</b><br>mistralia.co</div>
-      <button data-copy="mistralia.co">Copia</button>
+      <div>
+        <div class="label">📧 <span data-i18n="email">email</span></div>
+        <div>info@mistralia.co</div>
+      </div>
+      <button data-copy="info@mistralia.co" data-i18n="copy">Copia</button>
     </div>
   </div>
 </section>
 
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox-inner">
+    <button class="lb-close" id="lbClose" aria-label="Close">×</button>
+    <img id="lbImg" alt="">
+  </div>
+</div>
+
 <script>
+/* Copia */
 document.querySelectorAll('[data-copy]').forEach(b=>{
-  b.onclick=()=>navigator.clipboard.writeText(b.dataset.copy);
+  b.addEventListener('click', ()=> navigator.clipboard.writeText(b.dataset.copy));
 });
+
+/* Lightbox gallery (catchy + moderno) */
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbClose = document.getElementById('lbClose');
+
+function openLightbox(src, alt=""){
+  lbImg.src = src;
+  lbImg.alt = alt;
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden','true');
+  lbImg.src = '';
+  document.body.style.overflow = '';
+}
+
+document.getElementById('galleryGrid').addEventListener('click', (e)=>{
+  const img = e.target.closest('img');
+  if(!img) return;
+  openLightbox(img.dataset.full || img.src, img.alt || "");
+});
+lbClose.addEventListener('click', closeLightbox);
+lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLightbox(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && lb.classList.contains('open')) closeLightbox(); });
+
+/* i18n (IT default, EN-GB) */
+const dict = {
+  it: {
+    nav_plans: "Piani",
+    nav_rates: "Tariffe",
+    nav_contacts: "Contatti",
+    kicker: "Van • 4+1 — Kentucky · libertà, comfort e sicurezza",
+    hero_title: "Mistralia – Kentucky: Libertà, Comfort e Sicurezza per la tua Avventura",
+    hero_body:
+`Che la tua meta sia il mare o la montagna, il nostro Kentucky è la soluzione perfetta per chi cerca avventure in totale autonomia. Grazie alla solida meccanica Ford Transit con ruote gemellate e pneumatici per ogni stagione, vi garantiamo la massima stabilità su ogni tracciato.
+
+Internamente, il mezzo offre una vivibilità eccellente per 4+1 ospiti: la zona notte vanta due ampi letti matrimoniali sempre pronti (uno spazioso in mansarda e uno confortevole in coda), mentre il quinto posto si compone trasformando la zona dinette.
+
+Le nostre dotazioni top di gamma includono una cucina completa con frigo trivalente, forno, 4 fuochi e scaldavivande, oltre a un bagno con doccia separata. Ideale per la sosta libera, il mezzo offre inverter, prese ovunque, aria condizionata e riscaldamento a gasolio. Come azienda, garantiamo la massima affidabilità con controlli rigorosi su meccanica, livelli e igiene prima di ogni partenza. Disponibilità telefonica per qualsiasi evenienza.
+
+Sali a bordo: la tua avventura inizia con la certezza di un mezzo perfetto e un'assistenza dedicata.`,
+    plans_title: "Piani disponibili",
+    plan_basic_title: "Basic",
+    plan_basic_body: "Essenziale, semplice, perfetto per chi vuole partire leggero.",
+    plan_plus_title: "Plus",
+    plan_plus_li1: "Franchigia cancellata",
+    plan_plus_li2: "Deposito cauzionale inferiore",
+    plan_premium_title: "Premium",
+    plan_premium_li1: "Tutto il Plus",
+    plan_premium_li2: "Deposito ancora più basso",
+    plan_premium_li3: "Secondo guidatore incluso",
+    plans_cta: "👉 Contattaci per capire quale piano è più adatto al tuo viaggio.",
+    gallery_title: "Gallery",
+    rates_title: "Tariffario 2026 (stagioni)",
+    rates_intro: "Tabella completa: mesi in riga, giorni in colonna. Colori: verde (Bassa), giallo (Media), rosso (Alta).",
+    rates_calendar_title: "Calendario stagioni 2026",
+    rates_calendar_hint: "Scorri orizzontalmente su mobile/tablet. La prima colonna (mese) resta fissa.",
+    low: "Bassa",
+    mid: "Media",
+    high: "Alta",
+    na: "— (non presente)",
+    per_day: "giorno",
+    month: "Mese",
+    jan:"Gennaio", feb:"Febbraio", mar:"Marzo", apr:"Aprile", may:"Maggio", jun:"Giugno", jul:"Luglio", aug:"Agosto", sep:"Settembre", oct:"Ottobre", nov:"Novembre", dec:"Dicembre",
+    contacts_title:"Contatti",
+    phone_whatsapp:"Telefono / WhatsApp",
+    email:"Email",
+    website:"Sito",
+    copy:"Copia"
+  },
+  en: {
+    nav_plans: "Plans",
+    nav_rates: "Rates",
+    nav_contacts: "Contact",
+    kicker: "Campervan • 4+1 — Kentucky · freedom, comfort and safety",
+    hero_title: "Mistralia – Kentucky: Freedom, Comfort and Safety for Your Adventure",
+    hero_body:
+`Whether you’re heading for the sea or the mountains, our Kentucky is the perfect choice for those who want to travel in complete independence. Built on the robust Ford Transit chassis with twin rear wheels and all-season tyres, it offers outstanding stability on any route.
+
+Inside, the layout is comfortably designed for 4+1 guests: the sleeping area features two generous double beds always ready to use (a spacious overcab bed and a comfortable rear bed), while the fifth berth is created by converting the dinette area.
+
+Top-of-the-range equipment includes a fully fitted kitchen with a three-way fridge, oven, four-burner hob and food warmer, plus a bathroom with a separate shower. Ideal for wild camping, it also provides an inverter, power sockets throughout, air conditioning and diesel heating. As a company, we guarantee maximum reliability with thorough checks of mechanics, fluid levels and hygiene before every departure. Phone support is available for any eventuality.
+
+Step aboard: your adventure starts with the confidence of a perfectly prepared vehicle and dedicated support.`,
+    plans_title: "Available plans",
+    plan_basic_title: "Basic",
+    plan_basic_body: "Essential, simple and ideal if you want to travel light.",
+    plan_plus_title: "Plus",
+    plan_plus_li1: "Excess waived",
+    plan_plus_li2: "Lower security deposit",
+    plan_premium_title: "Premium",
+    plan_premium_li1: "Everything in Plus",
+    plan_premium_li2: "Even lower security deposit",
+    plan_premium_li3: "Second driver included",
+    plans_cta: "👉 Contact us to find the plan that best suits your trip.",
+    gallery_title: "Gallery",
+    rates_title: "2026 rate calendar (seasons)",
+    rates_calendar_title: "2026 season calendar",
+    rates_calendar_hint: "Swipe horizontally on mobile/tablet. The first column (month) stays fixed.",
+    low: "Low",
+    mid: "Mid",
+    high: "High",
+    na: "— (not applicable)",
+    per_day: "day",
+    month: "Month",
+    jan:"January", feb:"February", mar:"March", apr:"April", may:"May", jun:"June", jul:"July", aug:"August", sep:"September", oct:"October", nov:"November", dec:"December",
+    contacts_title:"Contact",
+    phone_whatsapp:"Phone / WhatsApp",
+    email:"Email",
+    website:"Website",
+    copy:"Copy"
+  }
+};
+
+function setLang(lang){
+  // toggle flag active
+  document.querySelectorAll('.flag').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+
+  // swap text
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    const val = dict[lang][key];
+    if(!val) return;
+
+    // per il paragrafo lungo: manteniamo i <br><br> sostituendo \n\n
+    if(el.tagName.toLowerCase() === 'p' && key === 'hero_body'){
+      el.innerHTML = val.replaceAll("\n\n","<br><br>");
+    }else{
+      el.textContent = val;
+    }
+  });
+
+  document.documentElement.lang = (lang === 'en') ? 'en' : 'it';
+}
+
+document.querySelectorAll('.flag').forEach(btn=>{
+  btn.addEventListener('click', ()=> setLang(btn.dataset.lang));
+});
+
+// default IT
+setLang('it');
 </script>
+
+<div class="footer-logo" aria-hidden="true"></div>
 
 </body>
 </html>
