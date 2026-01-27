@@ -364,6 +364,55 @@ tbody .month{ background:#fff; }
   opacity:.70;             /* regolalo a piacere */
   pointer-events:none;
 }
+
+/* FOOTER PREMIUM */
+.site-footer{
+  margin-top:100px;
+  padding:60px 0 28px;
+  background:var(--brand);
+  color:#fff;
+  font-size:14px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:32px;
+}
+
+.footer-brand strong{
+  font-size:18px;
+  letter-spacing:.4px;
+}
+
+.site-footer span,
+.site-footer strong{
+  opacity:.95;
+}
+
+.footer-bottom{
+  margin-top:36px;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,.25);
+  text-align:center;
+  font-size:13px;
+  opacity:.8;
+}
+
+/* Responsive */
+@media(max-width:900px){
+  .footer-grid{
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+  }
+}
+
+@media(max-width:520px){
+  .footer-grid{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+}
 </style>
 </head>
 
@@ -634,6 +683,20 @@ tbody .month{ background:#fff; }
       </div>
       <button data-copy="info@mistralia.co" data-i18n="copy">Copia</button>
     </div>
+
+    <div class="copy">
+  <div>
+    <div class="label">📍 Indirizzo</div>
+    <div>
+      <a href="https://maps.google.com/?q=Brugherio,+(MB)+Italia"
+         target="_blank" rel="noopener">
+        Brugherio<br>
+        20861 Monza e Brianza – Italia
+      </a>
+    </div>
+  </div>
+  <button data-copy="Brugherio, (MB) Italia">Copia</button>
+</div>
   </div>
 </section>
 
@@ -789,6 +852,8 @@ function setLang(lang){
   });
 
   document.documentElement.lang = (lang === 'en') ? 'en' : 'it';
+  // ✅ aggiorna anche il footer
+  if (typeof updateFooterLanguage === "function") updateFooterLanguage(lang);
 }
 
 document.querySelectorAll('.flag').forEach(btn=>{
@@ -800,6 +865,76 @@ setLang('it');
 </script>
 
 <div class="footer-logo" aria-hidden="true"></div>
+
+<footer class="site-footer" data-lang="it">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+      <strong>Mistralia srls</strong><br>
+      <span data-i18n="tagline">Noleggio Van e Camper</span>
+    </div>
+
+    <div>
+      <span data-i18n="address">
+        Via Andrea Gabrieli, 4<br>
+        70125 Bari (BA) – Italia
+      </span>
+    </div>
+
+    <div>
+      <span data-i18n="vat">
+        P. IVA 09082950727<br>
+        REA BA-670566
+      </span>
+    </div>
+
+    <div>
+      <span data-i18n="contacts">
+        info@mistralia.co<br>
+        mistralia.co
+      </span>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span data-i18n="copyright">
+      © 2026 Mistralia – Tutti i diritti riservati
+    </span>
+  </div>
+</footer>
+
+<script>
+const footerTranslations = {
+  it: {
+    tagline: "Noleggio Van e Camper",
+    address: "Via Andrea Gabrieli 4<br>70125 Bari (BA) – Italia",
+    vat: "P. IVA 09082950727<br>REA BA-670566",
+    contacts: "info@mistralia.co<br>mistralia.co",
+    copyright: "© 2026 Mistralia – Tutti i diritti riservati"
+  },
+  en: {
+    tagline: "Van and Camper Hire",
+    address: "Via Andrea Gabrieli 4<br>70125 Bari (BA) – Italy",
+    vat: "VAT No. 09082950727<br>REA BA-670566",
+    contacts: "info@mistralia.co<br>mistralia.co",
+    copyright: "© 2026 Mistralia – All rights reserved"
+  }
+};
+
+function updateFooterLanguage(lang){
+  const footer = document.querySelector('.site-footer');
+  if(!footer) return;
+
+  footer.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    if(footerTranslations[lang] && footerTranslations[lang][key]){
+      el.innerHTML = footerTranslations[lang][key];
+    }
+  });
+}
+
+</script>
 
 </body>
 </html>
