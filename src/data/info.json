@@ -1,0 +1,272 @@
+{
+  "_leggimi": "Contatti, kit incluso, ritiro, regole e FAQ. Le voci con DA_CONFERMARE sono provvisorie.",
+  "whatsapp": "393756473829",
+  "telefoni": [
+    "+39 375 647 3829",
+    "+39 375 647 3839"
+  ],
+  "email": "info@mistralia.co",
+  "ragioneSociale": "Mistralia srls",
+  "sedeLegale": "Via Andrea Gabrieli 4, 70125 Bari (BA)",
+  "piva": "09082950727",
+  "rea": "BA-670566",
+  "ritiro": {
+    "_nota": "Indirizzo di ritiro e riconsegna: è quello mostrato ai clienti e su Google Maps",
+    "indirizzo": "Strada Statale 96, km 115,500 – 70026 Modugno (BA)",
+    "mappaUrl": "https://www.google.com/maps/search/?api=1&query=Strada+Statale+96+km+115%2C500+70026+Modugno+BA",
+    "orari": "9:00–12:00 · 14:00–18:00"
+  },
+  "calendarioEmbedUrl": "",
+  "_calendario": "Incolla qui il link 'Incorpora' del Google Calendar pubblico 'Mistralia - occupato' (Impostazioni calendario > Integra calendario). Vuoto = il sito mostra un invito a scrivere su WhatsApp.",
+  "goatcounter": "",
+  "_goatcounter": "Facoltativo: codice del sito su goatcounter.com (statistiche gratuite senza cookie). Esempio: mistralia",
+  "galleria": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "fotoApertura": "SER.JPG",
+  "kit": [
+    {
+      "titolo": {
+        "it": "Viaggio",
+        "en": "Travel"
+      },
+      "voci": {
+        "it": "Si parte con il pieno di carburante",
+        "en": "Full fuel tank at departure"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Benvenuto",
+        "en": "Welcome kit"
+      },
+      "voci": {
+        "it": "Acqua minerale 1,5 L, caffè 200 g e moka",
+        "en": "1.5 L mineral water, 200 g of coffee and a moka pot"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Sicurezza",
+        "en": "Safety"
+      },
+      "voci": {
+        "it": "Estintore, kit di pronto soccorso, assistenza stradale 24/7",
+        "en": "Fire extinguisher, first-aid kit, 24/7 roadside assistance"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Energia e sosta libera",
+        "en": "Energy and off-grid"
+      },
+      "voci": {
+        "it": "Inverter, prese ovunque, cavo elettrico, tubo dell'acqua, cunei di livellamento, oscurante termico",
+        "en": "Inverter, sockets throughout, power cable, water hose, levelling wedges, thermal cover"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Cucina",
+        "en": "Kitchen"
+      },
+      "voci": {
+        "it": "Pentole e stoviglie per 4 persone, moka e accessori",
+        "en": "Pots and tableware for 4, moka pot and accessories"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Esterno e relax",
+        "en": "Outdoor and relax"
+      },
+      "voci": {
+        "it": "Tavolo con 4 sedie, tappeto da esterno, tendalino, carte (napoletane, burraco, Uno)",
+        "en": "Table with 4 chairs, outdoor mat, awning, playing cards (Neapolitan, burraco, Uno)"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Igiene",
+        "en": "Hygiene"
+      },
+      "voci": {
+        "it": "Kit pulizia, carta igienica, sfera d'argento per l'acqua, spugna, panno, sgrassatore, scopino",
+        "en": "Cleaning kit, toilet paper, silver ball for the water tank, sponge, cloth, degreaser, toilet brush"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Comfort",
+        "en": "Comfort"
+      },
+      "voci": {
+        "it": "TV e multimedia, aria condizionata in cabina e cellula, riscaldamento a gasolio, 2 bombole del gas in vetroresina da 10 kg",
+        "en": "TV and multimedia, air conditioning in cab and living area, diesel heating, 2 lightweight fibreglass 10 kg gas bottles"
+      }
+    }
+  ],
+  "preparazione": {
+    "it": [
+      "Pulizia professionale",
+      "Igienizzazione",
+      "Bombole del gas piene",
+      "Prodotti chimici per il WC",
+      "Serbatoio dell'acqua pieno",
+      "Batterie cariche"
+    ],
+    "en": [
+      "Professional cleaning",
+      "Sanitisation",
+      "Full gas bottles",
+      "Toilet chemicals",
+      "Full fresh-water tank",
+      "Fully charged batteries"
+    ]
+  },
+  "riconsegna": {
+    "it": [
+      "Interni puliti",
+      "Pieno di carburante",
+      "Serbatoi svuotati e puliti",
+      "Stesse condizioni del ritiro"
+    ],
+    "en": [
+      "Clean interior",
+      "Full fuel tank",
+      "Tanks emptied and cleaned",
+      "Same condition as at pick-up"
+    ]
+  },
+  "regole": [
+    {
+      "it": "Patente B",
+      "en": "Car licence (category B)"
+    },
+    {
+      "it": "Viaggi all'estero consentiti",
+      "en": "Travel abroad allowed"
+    },
+    {
+      "it": "Animali non ammessi",
+      "en": "No pets"
+    },
+    {
+      "it": "Vietato fumare",
+      "en": "No smoking"
+    }
+  ],
+  "faq": [
+    {
+      "it": [
+        "Che patente serve?",
+        "Basta la patente B. DA_CONFERMARE: età minima e anni di patente."
+      ],
+      "en": [
+        "Which licence do I need?",
+        "A standard car licence (category B). TO_CONFIRM: minimum age and years of licence."
+      ]
+    },
+    {
+      "it": [
+        "Quanto è la cauzione?",
+        "€2.000 con il piano Basic, più bassa con Plus e Premium. Viene restituita alla riconsegna se il camper torna senza danni."
+      ],
+      "en": [
+        "How much is the deposit?",
+        "€2,000 with the Basic plan, lower with Plus and Premium. It is returned at drop-off if the camper comes back undamaged."
+      ]
+    },
+    {
+      "it": [
+        "Cosa copre l'assicurazione?",
+        "L'assicurazione del veicolo copre la responsabilità civile verso terzi. Con i piani Plus e Premium la franchigia è azzerata."
+      ],
+      "en": [
+        "What does the insurance cover?",
+        "The vehicle insurance covers third-party liability. With the Plus and Premium plans the excess is waived."
+      ]
+    },
+    {
+      "it": [
+        "Cos'è il costo di €200?",
+        "È la quota obbligatoria di pulizia finale, preparazione e check-in, una volta per noleggio: ti consegniamo il camper pulito, igienizzato, con bombole, acqua e batterie piene."
+      ],
+      "en": [
+        "What is the €200 fee?",
+        "It's the mandatory final cleaning, preparation and check-in fee, charged once per rental: you get the camper cleaned, sanitised, with full gas, water and batteries."
+      ]
+    },
+    {
+      "it": [
+        "Posso portare il cane?",
+        "No, gli animali non sono ammessi a bordo."
+      ],
+      "en": [
+        "Can I bring my dog?",
+        "No, pets are not allowed on board."
+      ]
+    },
+    {
+      "it": [
+        "Posso andare all'estero?",
+        "Sì, i viaggi all'estero sono consentiti."
+      ],
+      "en": [
+        "Can I drive abroad?",
+        "Yes, travel abroad is allowed."
+      ]
+    },
+    {
+      "it": [
+        "E se si guasta durante il viaggio?",
+        "Hai l'assistenza stradale 24/7 inclusa e puoi chiamarci quando vuoi."
+      ],
+      "en": [
+        "What if it breaks down?",
+        "24/7 roadside assistance is included, and you can call us any time."
+      ]
+    },
+    {
+      "it": [
+        "Ci sono km inclusi?",
+        "DA_CONFERMARE: km inclusi al giorno. Oltre, ogni km costa €0,35."
+      ],
+      "en": [
+        "Are kilometres included?",
+        "TO_CONFIRM: km included per day. Beyond that, each km costs €0.35."
+      ]
+    },
+    {
+      "it": [
+        "Posso cancellare?",
+        "DA_CONFERMARE: condizioni di cancellazione per le prenotazioni dirette."
+      ],
+      "en": [
+        "Can I cancel?",
+        "TO_CONFIRM: cancellation terms for direct bookings."
+      ]
+    }
+  ],
+  "fotoAperturaRiserva": 2,
+  "_fotoApertura": "Foto grande in cima. Può essere un numero della galleria (es. 7) oppure il nome di un file copiato in public/assets/gallery/ (es. SER.JPG, maiuscole o minuscole è uguale). Se il file non c'è, il sito usa la foto di riserva."
+}

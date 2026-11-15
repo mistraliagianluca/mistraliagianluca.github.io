@@ -1,0 +1,125 @@
+---
+import '../styles/global.css';
+import { t, paths, info, getPromo, fmtDate, type Lang } from '../lib/site';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Percorso della stessa pagina nell'altra lingua */
+  altPath: string;
+  /** true solo sulla home italiana: reindirizza i browser non italiani a /en/ alla prima visita */
+  langRedirect?: boolean;
+  image?: string;
+}
+const { lang, title, description, altPath, langRedirect = false, image = '/assets/gallery/2.jpg' } = Astro.props;
+const other: Lang = lang === 'it' ? 'en' : 'it';
+const home = paths.home(lang);
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const canonical = site + Astro.url.pathname;
+const promo = getPromo();
+const waText = encodeURIComponent(t(lang, 'wa_generic'));
+const waUrl = `https://wa.me/${info.whatsapp}?text=${waText}`;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={lang} href={canonical} />
+    <link rel="alternate" hreflang={other} href={site + altPath} />
+    <link rel="alternate" hreflang="x-default" href={site + (lang === 'it' ? Astro.url.pathname : altPath)} />
+    <link rel="icon" href="/assets/brand/favicon.png" />
+    <meta name="theme-color" content="#0c4b42" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={site + image} />
+    <meta property="og:locale" content={lang === 'it' ? 'it_IT' : 'en_GB'} />
+    {langRedirect && (
+      <script is:inline>
+        try {
+          var k = 'mistralia-lang';
+          var chosen = localStorage.getItem(k);
+          var nav = (navigator.language || 'it').toLowerCase();
+          if (!chosen && nav.indexOf('it') !== 0 && document.referrer.indexOf(location.host) === -1) {
+            location.replace('/en/' + location.hash);
+          }
+        } catch (e) {}
+      </script>
+    )}
+    {info.goatcounter && (
+      <script is:inline async data-goatcounter={`https://${info.goatcounter}.goatcounter.com/count`} src="//gc.zgo.at/count.js"></script>
+    )}
+  </head>
+  <body>
+    {promo.attiva && (
+      <div class="promo" hidden data-from={promo.mostraDal} data-to={promo.mostraAl}>
+        {promo.titolo[lang]}
+        <small>{t(lang, 'promo_until', { d: fmtDate(promo.mostraAl, lang) })}</small>
+      </div>
+    )}
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href={home} aria-label="Mistralia">
+          <img class="badge" src="/assets/brand/logo-badge.png" alt="" width="600" height="261" />
+          <img class="word" src="/assets/brand/wordmark.png" alt="Mistralia" width="700" height="189" />
+        </a>
+        <nav class="nav">
+          <a class="nav-link" href={`${home}#prezzi`}>{t(lang, 'nav_prices')}</a>
+          <a class="nav-link" href={`${home}#disponibilita`}>{t(lang, 'nav_availability')}</a>
+          <a class="nav-link" href={`${home}#diario`}>{t(lang, 'nav_journal')}</a>
+          <a class="nav-link" href={`${home}#contatti`}>{t(lang, 'nav_contacts')}</a>
+          <a class="lang-btn nav-lang" href={altPath} hreflang={other} aria-label={t(lang, 'lang_switch_label')} data-lang={other}>{t(lang, 'lang_switch')}</a>
+        </nav>
+      </div>
+      <div class="stripes"></div>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div>
+          <strong>{info.ragioneSociale}</strong><br />
+          {t(lang, 'contacts_legal')}: {info.sedeLegale}<br />
+          P. IVA {info.piva} · REA {info.rea}
+        </div>
+        <div>
+          {info.telefoni.map((tel) => (<><a href={`tel:${tel.replace(/\s/g, '')}`}>{tel}</a><br /></>))}
+          <a href={`mailto:${info.email}`}>{info.email}</a>
+        </div>
+        <div>© {new Date().getFullYear()} Mistralia · {t(lang, 'footer_rights')}</div>
+      </div>
+    </footer>
+
+    <a class="btn btn-wa wa-float" href={waUrl} target="_blank" rel="noopener" aria-label={t(lang, 'cta_whatsapp')}>
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C7 3 3 6.6 3 11c0 2.3 1.1 4.4 2.9 5.9L5 21l4.4-2.2c.8.2 1.7.3 2.6.3 5 0 9-3.6 9-8s-4-8.1-9-8.1z"/></svg>
+      WhatsApp
+    </a>
+
+    <script>
+      // Banner promo: visibile solo nelle date indicate in promo.md
+      const banner = document.querySelector<HTMLElement>('.promo');
+      if (banner) {
+        const today = new Date().toISOString().slice(0, 10);
+        const { from = '', to = '' } = banner.dataset;
+        if ((!from || today >= from) && (!to || today <= to)) banner.hidden = false;
+      }
+      // In cima alla home il logo grande è già visibile: quello piccolo compare quando si scorre
+      const bigLogo = document.querySelector('.hero-logo');
+      const header = document.querySelector('.site-header');
+      if (bigLogo && header) {
+        new IntersectionObserver(([e]) => header.classList.toggle('brand-hidden', e.isIntersecting), { rootMargin: '-90px 0px 0px 0px' }).observe(bigLogo);
+      }
+      // Ricorda la lingua scelta a mano
+      document.querySelectorAll<HTMLAnchorElement>('[data-lang]').forEach((a) =>
+        a.addEventListener('click', () => {
+          try { localStorage.setItem('mistralia-lang', a.dataset.lang || ''); } catch (e) {}
+        }),
+      );
+    </script>
+  </body>
+</html>

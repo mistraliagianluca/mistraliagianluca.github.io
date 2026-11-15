@@ -1,0 +1,105 @@
+{
+  "_leggimi": "Prezzi e stagioni presi dal calendario Yescapa (novembre 2026). Modifica i numeri e salva: il sito si aggiorna da solo. Le voci con DA_CONFERMARE sono provvisorie.",
+  "prezzoGiorno": {
+    "B": 77,
+    "M": 105,
+    "A": 150
+  },
+  "minimoGiorni": {
+    "B": 2,
+    "M": 3,
+    "A": 3
+  },
+  "_minimoGiorni": "Noleggio minimo in giorni secondo la stagione del giorno di ritiro; le eccezioni qui sotto valgono per i ritiri nel periodo indicato",
+  "kmInclusiGiorno": 250,
+  "prezzoKmExtra": 0.35,
+  "_km": "Prezzo km extra €0,35 come su Yescapa. DA_CONFERMARE: km inclusi al giorno",
+  "piani": [
+    {
+      "id": "basic",
+      "supplementoGiorno": 0,
+      "cauzione": 2000,
+      "franchigia": "standard"
+    },
+    {
+      "id": "plus",
+      "supplementoGiorno": 15,
+      "cauzione": 800,
+      "franchigia": "azzerata"
+    },
+    {
+      "id": "premium",
+      "supplementoGiorno": 25,
+      "cauzione": 500,
+      "franchigia": "azzerata",
+      "secondoGuidatore": true
+    }
+  ],
+  "_piani": "Cauzione Basic €2.000 come su Yescapa. DA_CONFERMARE: supplemento al giorno di ogni piano e cauzione di Plus e Premium",
+  "servizio": {
+    "importo": 200,
+    "it": "Pulizia finale, preparazione e check-in",
+    "en": "Final cleaning, preparation and check-in"
+  },
+  "_servizio": "Obbligatorio, una volta per noleggio. Su Yescapa è 'Cleaning Fees' €200; nel testo dell'annuncio compare €150: DA_CONFERMARE quale vale per le prenotazioni dirette",
+  "extra": [
+    {
+      "id": "lenzuola",
+      "importo": 40,
+      "it": "Lenzuola",
+      "en": "Bed linen"
+    },
+    {
+      "id": "asciugamani",
+      "importo": 15,
+      "it": "Asciugamani",
+      "en": "Bath towels"
+    },
+    {
+      "id": "barbecue",
+      "importo": 25,
+      "it": "Barbecue",
+      "en": "Barbecue"
+    },
+    {
+      "id": "transfer",
+      "importo": 100,
+      "it": "Transfer aeroporto (andata e ritorno)",
+      "en": "Airport transfer (pick-up and drop-off)"
+    }
+  ],
+  "_extra": "Extra facoltativi, prezzo per noleggio",
+  "minimoEccezioni": [
+    {
+      "dal": "2026-11-01",
+      "al": "2026-12-31",
+      "giorni": 3
+    },
+    {
+      "dal": "2027-09-12",
+      "al": "2027-10-01",
+      "giorni": 2
+    }
+  ],
+  "stagioni": {
+    "_leggimi": "Una lettera per ogni giorno del mese: B bassa, M media, A alta. Se un anno manca si usa l'ultimo anno presente.",
+    "2026": {
+      "11": "MMBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "12": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+    },
+    "2027": {
+      "01": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "02": "BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "03": "BBBBBBBBBBBBBBBBBBBBBBBBAAAAAAM",
+      "04": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
+      "05": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMAAA",
+      "06": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "07": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "08": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "09": "AAAAAMMMMMMMMMMMMMMMMMMMMMMMMM",
+      "10": "MMMMBBBBBBBBBBBBBBBBBBBBBBBBMMM",
+      "11": "MBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "12": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+---
+import Base from '../layouts/Base.astro';
+import Home from '../components/Home.astro';
+import { t } from '../lib/site';
+---
+<Base lang="it" title={t('it', 'meta_title')} description={t('it', 'meta_desc')} altPath="/en/" langRedirect>
+  <Home lang="it" />
+</Base>

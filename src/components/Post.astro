@@ -1,0 +1,25 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { t, paths, fmtDate, type Lang } from '../lib/site';
+
+interface Props { post: CollectionEntry<'diario'>; lang: Lang }
+const { post, lang } = Astro.props;
+const { Content } = await render(post);
+const other: Lang = lang === 'it' ? 'en' : 'it';
+---
+<Base lang={lang} title={`${post.data.titolo} · Mistralia`} description={post.data.estratto}
+      altPath={paths.post(other, post.data.chiave)} image={post.data.immagine}>
+  <article class="post">
+    <div class="wrap">
+      <a href={paths.home(lang)}>← {t(lang, 'journal_back')}</a>
+      <h1>{post.data.titolo}</h1>
+      <p class="post-meta">{fmtDate(post.data.data, lang)}</p>
+      <img class="post-hero" src={post.data.immagine} alt="" />
+      <Content />
+      <div class="post-cta">
+        <a class="btn btn-primary" href={`${paths.home(lang)}#calcola`}>{t(lang, 'journal_cta')}</a>
+      </div>
+    </div>
+  </article>
+</Base>
