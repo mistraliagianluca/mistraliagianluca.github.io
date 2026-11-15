@@ -1,2 +1,0 @@
-# mistraliagianluca.github.io
-Landing
