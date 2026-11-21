@@ -114,7 +114,8 @@ async function main() {
         Object.assign(stato, leggiStato());
         continue;
       }
-      if (stato.bozza && m.reply_to_message?.message_id === stato.bozza.messageId) {
+      const risposta = m.reply_to_message?.message_id;
+      if (stato.bozza && risposta && [stato.bozza.messageId, stato.bozza.testoId].includes(risposta)) {
         await scrivi('Ricevuto, preparo la versione corretta…', { reply_parameters: { message_id: m.message_id } });
         await creaBozza({ nota: testo, precedente: leggiBozza(stato.bozza.id) });
         Object.assign(stato, leggiStato());

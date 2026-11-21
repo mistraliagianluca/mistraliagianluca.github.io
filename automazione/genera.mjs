@@ -47,29 +47,30 @@ export async function creaBozza({ nota, precedente } = {}) {
   const bozza = { id, tipo, creata: new Date().toISOString(), contenuto: c, immagine };
   fs.writeFileSync(path.join(dir, 'bozza.json'), JSON.stringify(bozza, null, 2));
 
-  // Anteprima su Telegram
-  const didascalia = [
-    `📝 Bozza della settimana${tipo === 'improbabile' ? ' (immagine improbabile)' : ''}`,
-    `«${c.titolo_it}»`,
-    '',
-    c.post_it,
-    '',
-    c.hashtag.map((h) => '#' + h).join(' '),
-    '',
-    'Per correggere: rispondi a questo messaggio scrivendo cosa cambiare.',
-  ].join('\n').slice(0, 1024);
+  // Anteprima su Telegram. La didascalia di una foto ha un limite di 1024 caratteri:
+  // se il testo è più lungo, la foto porta titolo e istruzioni e il testo completo arriva subito sotto.
+  const testo = [c.post_it, '', c.hashtag.map((h) => '#' + h).join(' ')].join('\n');
+  const testa = `📝 Bozza della settimana${tipo === 'improbabile' ? ' (immagine improbabile)' : ''}\n«${c.titolo_it}»`;
+  const coda = 'Per correggere: rispondi a questo messaggio scrivendo cosa cambiare.';
+  const intera = [testa, '', testo, '', coda].join('\n');
+  const staInFoto = intera.length <= 1024;
   const msg = await telegram('sendPhoto', {
     chat_id: chatId(),
-    caption: didascalia,
+    caption: staInFoto ? intera : [testa, '', 'Testo completo nel messaggio qui sotto.', '', coda].join('\n'),
     reply_markup: { inline_keyboard: [[{ text: '✅ Pubblica', callback_data: `pub:${id}` }, { text: '🔄 Rigenera', callback_data: `rig:${id}` }]] },
   }, immagine);
+  let testoId = null;
+  if (!staInFoto) {
+    const t = await telegram('sendMessage', { chat_id: chatId(), text: testo.slice(0, 4096), reply_parameters: { message_id: msg.message_id } });
+    testoId = t.message_id;
+  }
 
   // Chiude i pulsanti della bozza precedente, se c'era
   if (stato.bozza?.messageId && stato.bozza.id !== id) {
     await telegram('editMessageReplyMarkup', { chat_id: chatId(), message_id: stato.bozza.messageId, reply_markup: { inline_keyboard: [] } }).catch(() => {});
   }
 
-  stato.bozza = { id, messageId: msg.message_id, creata: bozza.creata, promemoria: false };
+  stato.bozza = { id, messageId: msg.message_id, testoId, creata: bozza.creata, promemoria: false };
   stato.storico = [...(stato.storico || []), { id, tema: c.tema, data: oggiISO() }].slice(-30);
   salvaStato(stato);
   console.log(`Bozza ${id} inviata su Telegram.`);

@@ -1,1 +1,7 @@
+node_modules/
+dist/
+.astro/
 .DS_Store
+automazione/.da-pubblicare
+automazione/prova-telegram.log
+automazione/prova-updates.json

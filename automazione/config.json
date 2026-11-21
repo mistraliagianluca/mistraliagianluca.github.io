@@ -1,6 +1,6 @@
 {
   "_leggimi": "Impostazioni del post settimanale. I modelli si possono cambiare anche senza toccare questo file, con le variabili del repository ANTHROPIC_MODEL e GEMINI_IMAGE_MODEL.",
-  "modelloTesti": "claude-sonnet-4-5",
+  "modelloTesti": "claude-opus-5-5",
   "modelloImmagini": "gemini-3.1-flash-image",
   "fotoRiferimento": ["public/assets/gallery/2.jpg", "public/assets/gallery/1.jpg"],
   "ogniQuanteSettimaneImprobabile": 4,
