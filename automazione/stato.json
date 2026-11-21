@@ -1,13 +1,6 @@
 {
-  "offset": 926428045,
-  "bozza": {
-    "id": "2026-11-21-ndocciata-agnone-camper-dicembre-2026",
-    "codice": "0c0a42fdf2",
-    "messageId": 29,
-    "testoId": 30,
-    "creata": "2026-11-21T21:52:22.283Z",
-    "promemoria": false
-  },
+  "offset": 926428048,
+  "bozza": null,
   "storico": [
     {
       "id": "2026-11-21-selva-di-fasano-camper-apulia-for-christmas-2026",
@@ -34,6 +27,14 @@
       "tema": "Weekend lungo in camper in Alto Molise per la Grande 'Ndocciata di Agnone, la sfilata di fiaccole giganti di sabato 12 dicembre 2026, più borghi e boschi dei dintorni",
       "luogo": "Agnone (Isernia, Molise)",
       "data": "2026-11-21"
+    }
+  ],
+  "pubblicati": [
+    {
+      "id": "2026-11-21-ndocciata-agnone-camper-dicembre-2026",
+      "chiave": "ndocciata-agnone-camper-dicembre-2026",
+      "data": "2026-11-21",
+      "da": "Gianluca"
     }
   ]
 }
