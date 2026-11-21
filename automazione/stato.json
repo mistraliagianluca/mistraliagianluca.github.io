@@ -1,13 +1,6 @@
 {
-  "offset": 926428050,
-  "bozza": {
-    "id": "2026-11-21-matera-natale-sassi-presepe-vivente-camper",
-    "codice": "c9172535fb",
-    "messageId": 39,
-    "testoId": 40,
-    "creata": "2026-11-21T22:07:12.885Z",
-    "promemoria": false
-  },
+  "offset": 926428052,
+  "bozza": null,
   "storico": [
     {
       "id": "2026-11-21-selva-di-fasano-camper-apulia-for-christmas-2026",
@@ -52,6 +45,12 @@
     {
       "id": "2026-11-21-ndocciata-agnone-camper-dicembre-2026",
       "chiave": "ndocciata-agnone-camper-dicembre-2026",
+      "data": "2026-11-21",
+      "da": "Gianluca"
+    },
+    {
+      "id": "2026-11-21-matera-natale-sassi-presepe-vivente-camper",
+      "chiave": "matera-natale-sassi-presepe-vivente-camper",
       "data": "2026-11-21",
       "da": "Gianluca"
     }
