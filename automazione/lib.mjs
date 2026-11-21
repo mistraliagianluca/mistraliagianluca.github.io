@@ -49,7 +49,7 @@ export function temiUsati(stato) {
         return t ? t[1] : f;
       })
     : [];
-  const proposti = (stato.storico || []).map((x) => x.tema);
+  const proposti = (stato.storico || []).map((x) => (x.luogo ? `${x.tema} (${x.luogo})` : x.tema));
   return [...new Set([...pubblicati, ...proposti])].slice(-config.temiDaEvitareUltimi);
 }
 

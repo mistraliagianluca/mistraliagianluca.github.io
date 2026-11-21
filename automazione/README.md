@@ -1,8 +1,8 @@
 # Post settimanale automatico
 
-Ogni lunedì mattina il sistema prepara un post sulla Puglia e lo manda al gruppo Telegram "Mistralia":
+Ogni lunedì mattina il sistema prepara un post su una meta raggiungibile in camper da Bari (entro circa 4 ore di guida o con traghetto dal porto di Bari) e lo manda al gruppo Telegram "Mistralia":
 
-1. Claude cerca sul web un evento o un luogo delle settimane successive e scrive articolo, didascalia e testo TikTok in italiano e inglese.
+1. Claude cerca sul web un evento o un luogo delle settimane successive, alternando Puglia, regioni vicine ed estero e scrive articolo, didascalia e testo TikTok in italiano e inglese.
 2. Una seconda chiamata a Claude, indipendente, **verifica sul web ogni fatto** su eventi e luoghi (edizione di quest'anno, date, luogo, ingresso). Se un dettaglio è sbagliato lo fa correggere; se l'evento non è confermato cambia tema. Dopo 3 tentativi ripiega su un luogo senza eventi né date. Se nemmeno così la verifica passa, la bozza arriva con ⚠️ e l'elenco dei problemi.
 3. Gemini crea l'immagine partendo dalle foto vere del Kentucky (una settimana su quattro in versione "improbabile").
 4. Nel gruppo arriva l'anteprima con i pulsanti **✅ Pubblica** e **🔄 Rigenera**. Per una correzione basta **rispondere al messaggio** scrivendo cosa cambiare.

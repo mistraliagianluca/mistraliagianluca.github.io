@@ -25,8 +25,9 @@ async function verifica(contenuto) {
  * @param {object} opz
  * @param {string} [opz.nota]       correzione scritta dal team (rigenera la stessa bozza tenendone conto)
  * @param {object} [opz.precedente] bozza da correggere
+ * @param {object} [opz.scartata]  bozza scartata con Rigenera: la nuova deve avere un altro tema e un altro luogo
  */
-export async function creaBozza({ nota, precedente } = {}) {
+export async function creaBozza({ nota, precedente, scartata } = {}) {
   const stato = leggiStato();
   const improbabile = settimanaISO() % config.ogniQuanteSettimaneImprobabile === 0;
   const tipo = precedente?.tipo ?? (improbabile ? 'improbabile' : 'reale');
@@ -35,11 +36,14 @@ export async function creaBozza({ nota, precedente } = {}) {
   const prompt = (notaPrompt) => fs.readFileSync(path.join(AUTO, 'prompt.md'), 'utf8')
     .replaceAll('{{OGGI}}', oggi())
     .replaceAll('{{PREZZO_DA}}', String(config.prezzoDa))
+    .replaceAll('{{ORE_MAX}}', String(config.oreMaxDaBari ?? 4))
     .replaceAll('{{LINK}}', link)
     .replaceAll('{{TEMI_USATI}}', [...temiUsati(stato), ...scartati].map((t) => `"${t}"`).join(', ') || 'nessuno')
     .replaceAll('{{TIPO}}', tipo)
-    .replaceAll('{{NOTA}}', notaPrompt);
+    .replaceAll('{{NOTA}}', notaPrompt + (scartata ? SCARTATA : ''));
   const correggi = (contenuto, testo) => `\n## Correzione richiesta\nRiscrivi questa bozza tenendo lo stesso tema e luogo, applicando la correzione: "${testo}".\nSe la correzione non riguarda l'immagine, metti "rifai_immagine": false e lascia invariato "prompt_immagine".\nBozza attuale:\n\`\`\`json\n${JSON.stringify(contenuto, null, 2)}\n\`\`\`\n`;
+  const sc = scartata?.contenuto;
+  const SCARTATA = sc ? `\n## Proposta scartata dal team\nIl team ha premuto "Rigenera" su questa proposta: «${sc.titolo_it}» (tema: ${sc.tema}; luogo: ${sc.luogo}).\nProponi qualcosa di **completamente diverso**: un altro evento, in un altro luogo. Non riproporre lo stesso evento, la stessa sagra o lo stesso paese, nemmeno con parole diverse.\n` : '';
   const SENZA_EVENTI = '\n## Attenzione\nQuesta settimana **non citare eventi né date**: scegli un luogo, un borgo o un itinerario e parla della stagione. Ogni fatto deve essere vero e verificabile.\n';
 
   // Scrittura + verifica indipendente dei fatti. Se la verifica non conferma, si corregge o si cambia tema.
@@ -87,7 +91,7 @@ export async function creaBozza({ nota, precedente } = {}) {
     ? `🔎 Fatti verificati su: ${fonti.map(dominio).join(', ') || 'fonti web'}`
     : `⚠️ VERIFICA NON SUPERATA, non pubblicare senza controllare:\n${(c.verifica.problemi || []).map((p) => '• ' + p).join('\n')}`;
   const testo = [c.post_it, '', c.hashtag.map((h) => '#' + h).join(' '), '', esitoVerifica, ...fonti].join('\n');
-  const testa = `${c.verifica.esito === 'ok' ? '📝' : '⚠️'} Bozza della settimana${tipo === 'improbabile' ? ' (immagine improbabile)' : ''}\n«${c.titolo_it}»`;
+  const testa = `${c.verifica.esito === 'ok' ? '📝' : '⚠️'} Bozza della settimana${tipo === 'improbabile' ? ' (immagine improbabile)' : ''}\n«${c.titolo_it}»${c.durata ? `\n🗓 ${c.durata}` : ''}`;
   const coda = 'Per correggere: rispondi a questo messaggio scrivendo cosa cambiare.';
   const intera = [testa, '', testo, '', coda].join('\n');
   const staInFoto = intera.length <= 1024 && c.verifica.esito === 'ok';
@@ -108,7 +112,7 @@ export async function creaBozza({ nota, precedente } = {}) {
   }
 
   stato.bozza = { id, codice, messageId: msg.message_id, testoId, creata: bozza.creata, promemoria: false };
-  stato.storico = [...(stato.storico || []), { id, tema: c.tema, data: oggiISO() }].slice(-30);
+  stato.storico = [...(stato.storico || []), { id, tema: c.tema, luogo: c.luogo, data: oggiISO() }].slice(-30);
   salvaStato(stato);
   console.log(`Bozza ${id} inviata su Telegram.`);
   return bozza;

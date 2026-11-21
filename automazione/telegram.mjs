@@ -19,6 +19,9 @@ const AIUTO = [
   '/id — mostra l\'identificativo di questa chat',
 ].join('\n');
 
+// Telegram accetta la risposta a un tap solo per pochi secondi; il bot passa ogni 15 minuti, quindi spesso è scaduta: si ignora.
+const rispondiTap = (q, text) => telegram('answerCallbackQuery', { callback_query_id: q.id, text }).catch(() => {});
+
 const leggiBozza = (id) => JSON.parse(fs.readFileSync(path.join(AUTO, 'bozze', id, 'bozza.json'), 'utf8'));
 const yaml = (v) => JSON.stringify(v); // una stringa JSON è anche una stringa YAML valida
 
@@ -85,15 +88,16 @@ async function main() {
         const [azione, codice] = String(q.data).split(':');
         const chi = q.from?.first_name || 'il team';
         if (!stato.bozza || ![stato.bozza.codice, stato.bozza.id].includes(codice)) {
-          await telegram('answerCallbackQuery', { callback_query_id: q.id, text: 'Questa bozza non è più attiva.' });
+          await rispondiTap(q, 'Questa bozza non è più attiva.');
           continue;
         }
         if (azione === 'pub') {
-          await telegram('answerCallbackQuery', { callback_query_id: q.id, text: 'Pubblico…' });
+          await rispondiTap(q, 'Pubblico…');
           await pubblica(stato, stato.bozza.id, chi);
         } else if (azione === 'rig') {
-          await telegram('answerCallbackQuery', { callback_query_id: q.id, text: 'Preparo un\'altra proposta, qualche minuto…' });
-          await creaBozza();
+          await rispondiTap(q, 'Preparo un\'altra proposta, qualche minuto…');
+          await scrivi(`🔄 ${chi} ha chiesto un'altra proposta: arriva tra qualche minuto.`);
+          await creaBozza({ scartata: leggiBozza(stato.bozza.id) });
           Object.assign(stato, leggiStato());
         }
         continue;
