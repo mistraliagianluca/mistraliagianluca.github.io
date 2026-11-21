@@ -3,9 +3,10 @@
 Ogni lunedì mattina il sistema prepara un post sulla Puglia e lo manda al gruppo Telegram "Mistralia":
 
 1. Claude cerca sul web un evento o un luogo delle settimane successive e scrive articolo, didascalia e testo TikTok in italiano e inglese.
-2. Gemini crea l'immagine partendo dalle foto vere del Kentucky (una settimana su quattro in versione "improbabile").
-3. Nel gruppo arriva l'anteprima con i pulsanti **✅ Pubblica** e **🔄 Rigenera**. Per una correzione basta **rispondere al messaggio** scrivendo cosa cambiare.
-4. Con **Pubblica** l'articolo entra nel Diario di bordo del sito (IT + EN) e il bot manda i testi pronti da incollare su Instagram, Facebook e TikTok.
+2. Una seconda chiamata a Claude, indipendente, **verifica sul web ogni fatto** su eventi e luoghi (edizione di quest'anno, date, luogo, ingresso). Se un dettaglio è sbagliato lo fa correggere; se l'evento non è confermato cambia tema. Dopo 3 tentativi ripiega su un luogo senza eventi né date. Se nemmeno così la verifica passa, la bozza arriva con ⚠️ e l'elenco dei problemi.
+3. Gemini crea l'immagine partendo dalle foto vere del Kentucky (una settimana su quattro in versione "improbabile").
+4. Nel gruppo arriva l'anteprima con i pulsanti **✅ Pubblica** e **🔄 Rigenera**. Per una correzione basta **rispondere al messaggio** scrivendo cosa cambiare.
+5. Con **Pubblica** l'articolo entra nel Diario di bordo del sito (IT + EN) e il bot manda i testi pronti da incollare su Instagram, Facebook e TikTok.
 
 Il bot controlla il gruppo **ogni 15 minuti, dalle 7 alle 22**: dopo un tap la risposta può arrivare fino a 15 minuti dopo. Se nessuno risponde entro 48 ore, il bot manda un promemoria.
 
@@ -53,7 +54,7 @@ Nel repository del sito: **Settings → Secrets and variables → Actions → Ne
 - **Giorno e ora**: riga `cron` in `.github/workflows/post-settimanale.yml` (l'orario è UTC).
 
 ## Costi
-Circa €0,10–0,30 per bozza (testi con ricerca web + 1 immagine); ogni Rigenera o correzione costa come una bozza. GitHub Actions è gratis se il repository è pubblico; se è privato, il bot usa circa 1.000 dei 2.000 minuti gratuiti al mese.
+Circa €0,30–0,60 per bozza (testi e verifica con ricerca web + 1 immagine; fino a circa €1,50 se servono più tentativi); ogni Rigenera o correzione costa come una bozza. GitHub Actions è gratis se il repository è pubblico; se è privato, il bot usa circa 1.000 dei 2.000 minuti gratuiti al mese.
 
 ## Comandi nel gruppo
 - `/nuovo` prepara subito una nuova bozza
