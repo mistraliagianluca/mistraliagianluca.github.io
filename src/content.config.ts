@@ -14,6 +14,7 @@ const diario = defineCollection({
     immagine: z.string(),
     estratto: z.string(),
     esempio: z.boolean().optional(),
+    immagineAI: z.boolean().optional(),
   }),
 });
 

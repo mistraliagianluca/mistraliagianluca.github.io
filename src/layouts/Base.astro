@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { t, paths, info, getPromo, fmtDate, type Lang } from '../lib/site';
+import { t, paths, info, getPromo, fmtDate, u, BASE, type Lang } from '../lib/site';
 
 interface Props {
   lang: Lang;
@@ -16,7 +16,8 @@ const { lang, title, description, altPath, langRedirect = false, image = '/asset
 const other: Lang = lang === 'it' ? 'en' : 'it';
 const home = paths.home(lang);
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
-const canonical = site + Astro.url.pathname;
+const origin = Astro.site?.origin ?? '';
+const canonical = origin + Astro.url.pathname;
 const promo = getPromo();
 const waText = encodeURIComponent(t(lang, 'wa_generic'));
 const waUrl = `https://wa.me/${info.whatsapp}?text=${waText}`;
@@ -30,22 +31,23 @@ const waUrl = `https://wa.me/${info.whatsapp}?text=${waText}`;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang={lang} href={canonical} />
-    <link rel="alternate" hreflang={other} href={site + altPath} />
-    <link rel="alternate" hreflang="x-default" href={site + (lang === 'it' ? Astro.url.pathname : altPath)} />
-    <link rel="icon" href="/assets/brand/favicon.png" />
+    <link rel="alternate" hreflang={other} href={origin + altPath} />
+    <link rel="alternate" hreflang="x-default" href={origin + (lang === 'it' ? Astro.url.pathname : altPath)} />
+    <link rel="icon" href={u('/assets/brand/favicon.png')} />
+    {BASE && <meta name="robots" content="noindex" />}
     <meta name="theme-color" content="#0c4b42" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={site + image} />
+    <meta property="og:image" content={origin + u(image)} />
     <meta property="og:locale" content={lang === 'it' ? 'it_IT' : 'en_GB'} />
     {langRedirect && (
-      <script is:inline>
+      <script is:inline define:vars={{ enHome: paths.home('en') }}>
         try {
           var k = 'mistralia-lang';
           var chosen = localStorage.getItem(k);
           var nav = (navigator.language || 'it').toLowerCase();
           if (!chosen && nav.indexOf('it') !== 0 && document.referrer.indexOf(location.host) === -1) {
-            location.replace('/en/' + location.hash);
+            location.replace(enHome + location.hash);
           }
         } catch (e) {}
       </script>
@@ -64,13 +66,13 @@ const waUrl = `https://wa.me/${info.whatsapp}?text=${waText}`;
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href={home} aria-label="Mistralia">
-          <img class="badge" src="/assets/brand/logo-badge.png" alt="" width="600" height="261" />
-          <img class="word" src="/assets/brand/wordmark.png" alt="Mistralia" width="700" height="189" />
+          <img class="badge" src={u('/assets/brand/logo-badge.png')} alt="" width="600" height="261" />
+          <img class="word" src={u('/assets/brand/wordmark.png')} alt="Mistralia" width="700" height="189" />
         </a>
         <nav class="nav">
           <a class="nav-link" href={`${home}#prezzi`}>{t(lang, 'nav_prices')}</a>
           <a class="nav-link" href={`${home}#disponibilita`}>{t(lang, 'nav_availability')}</a>
-          <a class="nav-link" href={`${home}#diario`}>{t(lang, 'nav_journal')}</a>
+          <a class="nav-link nav-journal" href={`${home}#diario`} hidden>{t(lang, 'nav_journal')}</a>
           <a class="nav-link" href={`${home}#contatti`}>{t(lang, 'nav_contacts')}</a>
           <a class="lang-btn nav-lang" href={altPath} hreflang={other} aria-label={t(lang, 'lang_switch_label')} data-lang={other}>{t(lang, 'lang_switch')}</a>
         </nav>
@@ -114,6 +116,9 @@ const waUrl = `https://wa.me/${info.whatsapp}?text=${waText}`;
       if (bigLogo && header) {
         new IntersectionObserver(([e]) => header.classList.toggle('brand-hidden', e.isIntersecting), { rootMargin: '-90px 0px 0px 0px' }).observe(bigLogo);
       }
+      // Il link "Diario" compare solo quando ci sono articoli
+      const jl = document.querySelector<HTMLElement>('.nav-journal');
+      if (jl && (document.getElementById('diario') || !document.querySelector('.hero-logo'))) jl.hidden = false;
       // Ricorda la lingua scelta a mano
       document.querySelectorAll<HTMLAnchorElement>('[data-lang]').forEach((a) =>
         a.addEventListener('click', () => {

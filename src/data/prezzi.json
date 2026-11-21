@@ -11,9 +11,9 @@
     "A": 3
   },
   "_minimoGiorni": "Noleggio minimo in giorni secondo la stagione del giorno di ritiro; le eccezioni qui sotto valgono per i ritiri nel periodo indicato",
-  "kmInclusiGiorno": 250,
+  "kmInclusiGiorno": null,
   "prezzoKmExtra": 0.35,
-  "_km": "Prezzo km extra €0,35 come su Yescapa. DA_CONFERMARE: km inclusi al giorno",
+  "_km": "Prezzo km extra €0,35 come su Yescapa. kmInclusiGiorno: metti il numero di km inclusi al giorno (es. 250); con null il sito mostra solo il prezzo del km extra",
   "piani": [
     {
       "id": "basic",

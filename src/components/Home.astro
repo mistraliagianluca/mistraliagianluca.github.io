@@ -1,14 +1,14 @@
 ---
 import fs from 'node:fs';
 import { getCollection } from 'astro:content';
-import { t, paths, prezzi, info, getPromo, prezzoMinimo, fmtDate, type Lang } from '../lib/site';
+import { t, paths, prezzi, info, getPromo, prezzoMinimo, fmtDate, u, type Lang } from '../lib/site';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const promo = getPromo();
 const waUrl = `https://wa.me/${info.whatsapp}?text=${encodeURIComponent(t(lang, 'wa_generic'))}`;
 
-const posts = (await getCollection('diario', ({ data }) => data.lingua === lang))
+const posts = (await getCollection('diario', ({ data }) => data.lingua === lang && !data.esempio))
   .sort((a, b) => b.data.data.getTime() - a.data.data.getTime())
   .slice(0, 3);
 
@@ -81,7 +81,7 @@ const jsonLd = {
 <!-- APERTURA -->
 <section class="hero">
   <div class="wrap hero-grid">
-    <img class="hero-logo" src="/assets/brand/logo.png" alt="Mistralia" width="900" height="677" />
+    <img class="hero-logo" src={u('/assets/brand/logo.png')} alt="Mistralia" width="900" height="677" />
     <div class="hero-text">
       <p class="eyebrow">{t(lang, 'kicker')}</p>
       <h1>{t(lang, 'hero_title')}</h1>
@@ -93,7 +93,7 @@ const jsonLd = {
       <p class="from-price">{t(lang, 'from_price', { p: prezzoMinimo })}</p>
     </div>
     <div class="hero-photo">
-      <img src={heroSrc} alt="Kentucky" width="1264" height="848" fetchpriority="high" />
+      <img src={u(heroSrc)} alt="Kentucky" width="1264" height="848" fetchpriority="high" />
       <div class="hero-badge">
         <strong>{lang === 'it' ? 'Tutto incluso' : 'All inclusive'}</strong>
         <span>{lang === 'it' ? 'tranne le lenzuola' : 'except the sheets'}</span>
@@ -158,7 +158,7 @@ const jsonLd = {
         </div>
       ))}
     </div>
-    <p class="price-notes">{t(lang, 'min_days')} {t(lang, 'km_note', { km: prezzi.kmInclusiGiorno, price: prezzi.prezzoKmExtra.toLocaleString(lang === 'it' ? 'it-IT' : 'en-GB', { minimumFractionDigits: 2 }) })}</p>
+    <p class="price-notes">{t(lang, 'min_days')} {t(lang, prezzi.kmInclusiGiorno ? 'km_note' : 'km_note_only', { km: prezzi.kmInclusiGiorno ?? '', price: prezzi.prezzoKmExtra.toLocaleString(lang === 'it' ? 'it-IT' : 'en-GB', { minimumFractionDigits: 2 }) })}</p>
 
     <h3 class="step-title">{t(lang, 'step2_title')}</h3>
     <p class="step-sub">{t(lang, 'step2_sub')} {t(lang, 'insurance_note')}</p>
@@ -256,8 +256,8 @@ const jsonLd = {
     <h2>{t(lang, 'gallery_title')}</h2>
     <div class="gallery">
       {info.galleria.map((n) => (
-        <a href={`/assets/gallery/${n}.jpg`} target="_blank" rel="noopener">
-          <img src={`/assets/gallery/${n}.jpg`} alt={`Kentucky ${n}`} loading="lazy" width="400" height="300" />
+        <a href={u(`/assets/gallery/${n}.jpg`)} target="_blank" rel="noopener">
+          <img src={u(`/assets/gallery/${n}.jpg`)} alt={`Kentucky ${n}`} loading="lazy" width="400" height="300" />
         </a>
       ))}
     </div>
@@ -273,7 +273,7 @@ const jsonLd = {
       <div class="cards3">
         {posts.map((p) => (
           <a class="post-card" href={paths.post(lang, p.data.chiave)}>
-            <img src={p.data.immagine} alt="" loading="lazy" width="400" height="225" />
+            <img src={u(p.data.immagine)} alt="" loading="lazy" width="400" height="225" />
             <div>
               <small>{fmtDate(p.data.data, lang)}</small>
               <h3>{p.data.titolo}</h3>
@@ -315,7 +315,7 @@ const jsonLd = {
 <section id="faq" class="faq">
   <div class="wrap">
     <h2>{t(lang, 'faq_title')}</h2>
-    {info.faq.map((f) => (
+    {info.faq.filter((f) => !/DA_CONFERMARE|TO_CONFIRM/.test(f.it[1] + f.en[1])).map((f) => (
       <details>
         <summary>{f[lang][0]}</summary>
         <p>{f[lang][1]}</p>
@@ -327,7 +327,7 @@ const jsonLd = {
 <!-- CONTATTI -->
 <section id="contatti" class="contacts">
   <div class="wrap contacts-grid">
-    <div class="contacts-logo"><img src="/assets/brand/logo.png" alt="Mistralia" width="900" height="677" loading="lazy" /></div>
+    <div class="contacts-logo"><img src={u('/assets/brand/logo.png')} alt="Mistralia" width="900" height="677" loading="lazy" /></div>
     <div>
       <h2>{t(lang, 'contacts_title')}</h2>
       <h3>{t(lang, 'contacts_where')}</h3>

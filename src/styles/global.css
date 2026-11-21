@@ -92,3 +92,8 @@ section { padding: 72px 0; }
 .post-hero { border-radius: var(--radius); aspect-ratio: 16/9; object-fit: cover; width: 100%; margin: 24px 0; }
 .post-meta { color: var(--muted); font-size: 0.95rem; }
 .post-cta { margin-top: 40px; padding: 28px; background: var(--mint-soft); border-radius: var(--radius); }
+.nav [hidden] { display: none; }
+
+.post-figure { margin: 24px 0; }
+.post-figure .post-hero { margin: 0; }
+.post-figure figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 6px; }

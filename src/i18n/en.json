@@ -111,5 +111,7 @@
   "driver_yes": "Included",
   "driver_no": "Not included",
   "step3_title": "3 · Fixed fee per rental",
-  "per_rental_once": "once per rental, mandatory"
+  "per_rental_once": "once per rental, mandatory",
+  "km_note_only": "Extra kilometres: €{price} per km.",
+  "ai_image": "Image created with artificial intelligence."
 }

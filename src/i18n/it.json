@@ -111,5 +111,7 @@
   "driver_yes": "Incluso",
   "driver_no": "Non incluso",
   "step3_title": "3 · Quota fissa a noleggio",
-  "per_rental_once": "una volta per noleggio, obbligatoria"
+  "per_rental_once": "una volta per noleggio, obbligatoria",
+  "km_note_only": "Km extra: €{price} per km.",
+  "ai_image": "Immagine creata con l'intelligenza artificiale."
 }

@@ -1,0 +1,38 @@
+# Ogni lunedì prepara la bozza del post e la manda al gruppo Telegram.
+name: Post settimanale
+
+on:
+  schedule:
+    - cron: '7 8 * * 1'   # lunedì alle 9:07 (ora solare italiana)
+  workflow_dispatch:       # per lanciarlo a mano dalla scheda Actions
+
+permissions:
+  contents: write
+
+concurrency:
+  group: automazione
+  cancel-in-progress: false
+
+jobs:
+  bozza:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node automazione/genera.mjs
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
+          GEMINI_IMAGE_MODEL: ${{ vars.GEMINI_IMAGE_MODEL }}
+      - name: Salva bozza e stato
+        if: always()
+        run: |
+          git config user.name "Mistralia bot"
+          git config user.email "bot@mistralia.co"
+          git add automazione
+          git diff --cached --quiet || git commit -m "Bozza post settimanale" && git pull --rebase --autostash && git push

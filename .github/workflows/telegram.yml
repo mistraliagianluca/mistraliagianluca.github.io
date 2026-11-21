@@ -1,0 +1,44 @@
+# Ogni 15 minuti (dalle 7 alle 22) legge i pulsanti e le risposte nel gruppo Telegram.
+# Se qualcuno ha premuto "Pubblica", salva l'articolo e ripubblica il sito.
+name: Bot Telegram
+
+on:
+  schedule:
+    - cron: '*/15 6-21 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: automazione
+  cancel-in-progress: false
+
+jobs:
+  controlla:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node automazione/telegram.mjs
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
+          GEMINI_IMAGE_MODEL: ${{ vars.GEMINI_IMAGE_MODEL }}
+      - name: Salva modifiche
+        if: always()
+        run: |
+          git config user.name "Mistralia bot"
+          git config user.email "bot@mistralia.co"
+          git add automazione src/content/diario public/assets/diario
+          git diff --cached --quiet || git commit -m "Bot Telegram: aggiornamento" && git pull --rebase --autostash && git push
+      - name: Ripubblica il sito se c'è un nuovo articolo
+        run: if [ -f automazione/.da-pubblicare ]; then gh workflow run deploy.yml --ref main; fi
+        env:
+          GH_TOKEN: ${{ github.token }}

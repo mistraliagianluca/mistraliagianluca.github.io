@@ -5,7 +5,7 @@
 # Lo sconto si applica nel calcolatore solo ai noleggi che iniziano tra "noleggi_dal" e "noleggi_al".
 # Per spegnere subito la promo: attiva: false
 
-attiva: true
+attiva: false
 nome: "Black Friday"
 sconto: 15            # percentuale
 mostra_dal: "2026-11-24"

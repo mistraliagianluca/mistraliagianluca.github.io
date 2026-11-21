@@ -13,10 +13,15 @@ export function t(lang: Lang, key: string, vars: Record<string, string | number>
   return s.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? `{${k}}`));
 }
 
+/** Prefisso del sito: '' in produzione, '/new' per l'anteprima in sottocartella. */
+export const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+/** Aggiunge il prefisso a un percorso interno che inizia con '/'. */
+export const u = (path: string) => (path.startsWith('/') ? BASE + path : path);
+
 /** Percorsi delle pagine nelle due lingue. */
 export const paths = {
-  home: (lang: Lang) => (lang === 'it' ? '/' : '/en/'),
-  post: (lang: Lang, chiave: string) => (lang === 'it' ? `/diario/${chiave}/` : `/en/journal/${chiave}/`),
+  home: (lang: Lang) => u(lang === 'it' ? '/' : '/en/'),
+  post: (lang: Lang, chiave: string) => u(lang === 'it' ? `/diario/${chiave}/` : `/en/journal/${chiave}/`),
 };
 
 const iso = (v: unknown) => (v instanceof Date ? v.toISOString().slice(0, 10) : String(v ?? ''));

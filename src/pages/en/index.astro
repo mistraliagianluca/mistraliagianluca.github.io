@@ -1,8 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Home from '../../components/Home.astro';
-import { t } from '../../lib/site';
+import { t, paths } from '../../lib/site';
 ---
-<Base lang="en" title={t('en', 'meta_title')} description={t('en', 'meta_desc')} altPath="/">
+<Base lang="en" title={t('en', 'meta_title')} description={t('en', 'meta_desc')} altPath={paths.home('it')}>
   <Home lang="en" />
 </Base>

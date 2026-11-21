@@ -2,14 +2,19 @@
 
 Sito di una pagina, bilingue (`/` italiano, `/en/` inglese), fatto con [Astro](https://astro.build) e pubblicato gratis su GitHub Pages.
 
-## Messa online (una volta sola)
+## Messa online in produzione (una volta sola)
 
-1. **Copia questi file nel repository del sito attuale** (meglio in un ramo nuovo, per esempio `sito-nuovo`).
-2. **Foto e logo sono già inclusi**: le 20 foto sono in `public/assets/gallery/` (`1.jpg … 20.jpg`) e il logo in `public/assets/brand/`. La vecchia cartella `assets/` del sito attuale non serve più.
-3. **Togli il vecchio `index.html`** dalla radice, perché ora la pagina la genera Astro.
-4. Su GitHub apri **Settings → Pages → Source** e scegli **GitHub Actions**.
-5. Unisci il ramo in `main`: il workflow `.github/workflows/deploy.yml` compila e pubblica il sito in circa 2 minuti.
-6. Il dominio è nel file `public/CNAME` (`www.mistralia.co`). Se oggi su GitHub usi un altro nome, correggilo qui.
+Il nuovo sito sostituisce quello attuale su `www.mistralia.co`. Da fare nel repository GitHub del sito attuale:
+
+1. **Salva il vecchio sito** in un ramo, per poter tornare indietro: `git checkout -b sito-vecchio && git push -u origin sito-vecchio && git checkout main`
+2. **Svuota `main` e copia dentro il contenuto di questa cartella** (compresi `.github/` e `.gitignore`; non serve `node_modules`):
+   `git rm -r -q . && cp -R /percorso/di/mistralia-site/. . && rm -rf node_modules dist .astro`
+3. **Controlla `public/CNAME`**: deve contenere lo stesso dominio del file `CNAME` che avevi prima (`www.mistralia.co` oppure `mistralia.co`).
+4. Su GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+5. `git add -A && git commit -m "Nuovo sito" && git push`
+6. Nella scheda **Actions** parte "Pubblica sito": dopo circa 2 minuti il sito è online. In Settings → Pages verifica che il dominio personalizzato sia ancora impostato e che "Enforce HTTPS" sia attivo.
+
+Per tornare al vecchio sito: Settings → Pages → Source: "Deploy from a branch" → ramo `sito-vecchio`.
 
 Per provarlo sul tuo computer: `npm install`, poi `npm run dev`, poi apri http://localhost:4321.
 
@@ -21,7 +26,7 @@ Per provarlo sul tuo computer: `npm install`, poi `npm run dev`, poi apri http:/
 | Prezzi, piani, cauzioni, km, quota obbligatoria di pulizia e preparazione (€200), extra, stagioni | `src/data/prezzi.json` | Le stagioni sono una lettera per giorno (B/M/A). Sono caricati novembre–dicembre 2026 e tutto il 2027, copiati dal calendario Yescapa. Se manca un anno, il sito usa l'ultimo presente |
 | Contatti, indirizzo di ritiro (Modugno), orari, kit incluso, regole, FAQ, foto, calendario | `src/data/info.json` | `galleria` = numeri delle foto in ordine; `fotoApertura` = foto grande in alto: un numero della galleria oppure il nome di un file copiato in `public/assets/gallery/` (ora `SER.JPG`; finché il file non c'è, il sito usa la foto n. 2) |
 | Testi del sito | `src/i18n/it.json` e `src/i18n/en.json` | Stesse chiavi nei due file |
-| Articoli del Diario | `src/content/diario/*.it.md` e `*.en.md` | Li scriverà l'automazione settimanale. Gli articoli `esempio-*` vanno cancellati quando arrivano quelli veri |
+| Articoli del Diario | `src/content/diario/*.it.md` e `*.en.md` | Li scriverà l'automazione settimanale. Gli articoli `esempio-*` non vengono pubblicati (hanno `esempio: true`): la sezione Diario compare da sola al primo articolo vero |
 
 Tutti i file si possono modificare anche dal sito o dall'app di GitHub (icona della matita): al salvataggio il sito si ricompila da solo.
 
@@ -32,6 +37,9 @@ Tutti i file si possono modificare anche dal sito o dall'app di GitHub (icona de
 3. In *Integra calendario* copia l'**URL dell'incorporamento** e incollalo in `calendarioEmbedUrl` dentro `src/data/info.json`.
 
 ## Da completare (cerca `DA_CONFERMARE` nei file)
+
+Le FAQ ancora da confermare non vengono mostrate sul sito finché contengono `DA_CONFERMARE`. La promo è spenta (`attiva: false`).
+
 
 - supplemento al giorno dei piani Plus e Premium e la loro cauzione, km inclusi al giorno, importo della quota obbligatoria (€200 su Yescapa, €150 nel testo dell'annuncio) (`prezzi.json`)
 - età minima e anni di patente, condizioni di cancellazione per le prenotazioni dirette (FAQ in `info.json`)
