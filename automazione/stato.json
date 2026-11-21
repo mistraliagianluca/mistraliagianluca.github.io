@@ -1,6 +1,13 @@
 {
-  "offset": 926428048,
-  "bozza": null,
+  "offset": 926428049,
+  "bozza": {
+    "id": "2026-11-21-matera-natale-sassi-presepe-vivente-camper",
+    "codice": "c9172535fb",
+    "messageId": 35,
+    "testoId": 36,
+    "creata": "2026-11-21T22:02:42.157Z",
+    "promemoria": false
+  },
   "storico": [
     {
       "id": "2026-11-21-selva-di-fasano-camper-apulia-for-christmas-2026",
@@ -27,6 +34,12 @@
       "tema": "Weekend lungo in camper in Alto Molise per la Grande 'Ndocciata di Agnone, la sfilata di fiaccole giganti di sabato 12 dicembre 2026, più borghi e boschi dei dintorni",
       "luogo": "Agnone (Isernia, Molise)",
       "data": "2026-11-21"
+    },
+    {
+      "id": "2026-11-21-matera-natale-sassi-presepe-vivente-camper",
+      "tema": "Natale a Matera: Presepe Vivente nel Sasso Caveoso, mercatini e luminarie, in un weekend lungo",
+      "luogo": "Matera (Basilicata), a circa un'ora da Bari (1h-1h15 in camper)",
+      "data": "2026-11-21"
     }
   ],
   "pubblicati": [
@@ -36,5 +49,9 @@
       "data": "2026-11-21",
       "da": "Gianluca"
     }
-  ]
+  ],
+  "spesa": {
+    "mese": "2026-11",
+    "dollari": 0.6949259999999999
+  }
 }
