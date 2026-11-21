@@ -1,13 +1,36 @@
 {
   "_leggimi": "Impostazioni del post settimanale. I modelli si possono cambiare anche senza toccare questo file, con le variabili del repository ANTHROPIC_MODEL e GEMINI_IMAGE_MODEL.",
-  "modelloTesti": "claude-opus-5-5",
+  "modelloTesti": "claude-sonnet-5-5",
   "modelloImmagini": "gemini-3.1-flash-image",
-  "fotoRiferimento": ["public/assets/gallery/2.jpg", "public/assets/gallery/1.jpg"],
+  "fotoRiferimento": [
+    "public/assets/gallery/2.jpg",
+    "public/assets/gallery/1.jpg"
+  ],
   "ogniQuanteSettimaneImprobabile": 4,
   "temiDaEvitareUltimi": 12,
   "oreProMemoria": 48,
-  "tentativiVerifica": 3,
+  "tentativiVerifica": 2,
+  "ricercheScrittura": 3,
+  "ricercheVerifica": 4,
+  "budgetMensileDollari": 8,
   "oreMaxDaBari": 4,
   "sito": "https://www.mistralia.co",
-  "prezzoDa": 77
+  "prezzoDa": 77,
+  "_prezzi": "Dollari per milione di token (input, output) e per singola ricerca/immagine: servono solo a calcolare la spesa mostrata su Telegram.",
+  "prezzi": {
+    "claude-sonnet-5-5": [
+      2,
+      10
+    ],
+    "claude-opus-5-5": [
+      4,
+      20
+    ],
+    "claude-fable-5-2": [
+      8,
+      40
+    ],
+    "ricercaWeb": 0.01,
+    "immagine": 0.07
+  }
 }

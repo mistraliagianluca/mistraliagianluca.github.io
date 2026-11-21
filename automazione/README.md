@@ -54,7 +54,11 @@ Nel repository del sito: **Settings → Secrets and variables → Actions → Ne
 - **Giorno e ora**: riga `cron` in `.github/workflows/post-settimanale.yml` (l'orario è UTC).
 
 ## Costi
-Circa €0,30–0,60 per bozza (testi e verifica con ricerca web + 1 immagine; fino a circa €1,50 se servono più tentativi); ogni Rigenera o correzione costa come una bozza. GitHub Actions è gratis se il repository è pubblico; se è privato, il bot usa circa 1.000 dei 2.000 minuti gratuiti al mese.
+Ogni bozza mostra su Telegram quanto è costata e la spesa del mese. La stima viene dai token che l'API restituisce, quindi è indicativa: il dato esatto è su console.anthropic.com → Usage.
+- Il costo principale sono le **ricerche web**: i risultati delle pagine entrano in Claude come testo da leggere e si pagano come token. Per questo le ricerche sono limitate (`ricercheScrittura`, `ricercheVerifica` in `config.json`).
+- Il modello predefinito è Claude Sonnet 5.5, che costa la metà di Opus.
+- **Tetto di spesa**: con `budgetMensileDollari` (predefinito $8) il bot smette di preparare bozze quando il mese supera la cifra e lo scrive nel gruppo. Impostate comunque anche un limite su console.anthropic.com → Settings → Limits.
+- GitHub Actions è gratis se il repository è pubblico.
 
 ## Comandi nel gruppo
 - `/nuovo` prepara subito una nuova bozza

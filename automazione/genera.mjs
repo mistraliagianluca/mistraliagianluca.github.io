@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import path from 'node:path';
-import { AUTO, config, leggiStato, salvaStato, oggiISO, settimanaISO, slug, temiUsati, chiediClaude, creaImmagine, telegram, chatId } from './lib.mjs';
+import { AUTO, config, leggiStato, salvaStato, oggiISO, settimanaISO, slug, temiUsati, chiediClaude, creaImmagine, telegram, chatId, spesaDelGiro, spesaDelMese, meseCorrente } from './lib.mjs';
 
 const BOZZE = path.join(AUTO, 'bozze');
 const oggi = () => new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -15,7 +15,7 @@ async function verifica(contenuto) {
   const testo = fs.readFileSync(path.join(AUTO, 'verifica.md'), 'utf8')
     .replaceAll('{{OGGI}}', oggi())
     .replaceAll('{{BOZZA}}', JSON.stringify(daVerificare, null, 2));
-  const v = await chiediClaude(testo, { ricerche: 8, finta: () => ({ esito: 'ok', problemi: [], correzione: '', fonti: ['https://example.org/prova'] }) });
+  const v = await chiediClaude(testo, { ricerche: config.ricercheVerifica ?? 4, finta: () => ({ esito: 'ok', problemi: [], correzione: '', fonti: ['https://example.org/prova'] }) });
   if (!['ok', 'correggi', 'scarta'].includes(v.esito)) v.esito = 'scarta';
   return v;
 }
@@ -27,8 +27,28 @@ async function verifica(contenuto) {
  * @param {object} [opz.precedente] bozza da correggere
  * @param {object} [opz.scartata]  bozza scartata con Rigenera: la nuova deve avere un altro tema e un altro luogo
  */
-export async function creaBozza({ nota, precedente, scartata } = {}) {
+export async function creaBozza(opz = {}) {
+  const prima = spesaDelGiro();
+  try {
+    return await preparaBozza(opz);
+  } catch (e) {
+    // Anche un tentativo fallito ha un costo: lo registriamo nel totale del mese
+    const stato = leggiStato();
+    stato.spesa = { mese: meseCorrente(), dollari: spesaDelMese(stato) + spesaDelGiro() - prima };
+    salvaStato(stato);
+    throw e;
+  }
+}
+
+async function preparaBozza({ nota, precedente, scartata } = {}) {
   const stato = leggiStato();
+  // Tetto di spesa: oltre il budget del mese non si chiama più l'API fino al mese successivo
+  const budget = config.budgetMensileDollari ?? 8;
+  if (spesaDelMese(stato) >= budget) {
+    throw new Error(`budget del mese raggiunto ($${spesaDelMese(stato).toFixed(2)} su $${budget}). Si riparte il mese prossimo, oppure alzate "budgetMensileDollari" in automazione/config.json.`);
+  }
+  const partenza = spesaDelGiro();
+  const SCRITTURA = { ricerche: config.ricercheScrittura ?? 3 };
   const improbabile = settimanaISO() % config.ogniQuanteSettimaneImprobabile === 0;
   const tipo = precedente?.tipo ?? (improbabile ? 'improbabile' : 'reale');
   const link = `${config.sito}/?utm_source=instagram&utm_medium=social`;
@@ -49,7 +69,7 @@ export async function creaBozza({ nota, precedente, scartata } = {}) {
   // Scrittura + verifica indipendente dei fatti. Se la verifica non conferma, si corregge o si cambia tema.
   const scartati = [];
   let cambiatoTema = false;
-  let c = await chiediClaude(prompt(precedente && nota ? correggi(precedente.contenuto, nota) : ''));
+  let c = await chiediClaude(prompt(precedente && nota ? correggi(precedente.contenuto, nota) : ''), SCRITTURA);
   let v;
   for (let giro = 1; ; giro++) {
     v = await verifica(c);
@@ -57,12 +77,12 @@ export async function creaBozza({ nota, precedente, scartata } = {}) {
     if (v.esito === 'ok' || giro >= config.tentativiVerifica) break;
     if (v.esito === 'correggi') {
       const prec = c;
-      c = await chiediClaude(prompt(correggi(c, v.correzione)));
+      c = await chiediClaude(prompt(correggi(c, v.correzione)), SCRITTURA);
       if (c.rifai_immagine === false) c.prompt_immagine = prec.prompt_immagine;
     } else {
       scartati.push(c.tema);
       cambiatoTema = true;
-      c = await chiediClaude(prompt(giro + 1 >= config.tentativiVerifica ? SENZA_EVENTI : ''));
+      c = await chiediClaude(prompt(giro + 1 >= config.tentativiVerifica ? SENZA_EVENTI : ''), SCRITTURA);
     }
   }
   c.verifica = v;
@@ -90,7 +110,10 @@ export async function creaBozza({ nota, precedente, scartata } = {}) {
   const esitoVerifica = c.verifica.esito === 'ok'
     ? `🔎 Fatti verificati su: ${fonti.map(dominio).join(', ') || 'fonti web'}`
     : `⚠️ VERIFICA NON SUPERATA, non pubblicare senza controllare:\n${(c.verifica.problemi || []).map((p) => '• ' + p).join('\n')}`;
-  const testo = [c.post_it, '', c.hashtag.map((h) => '#' + h).join(' '), '', esitoVerifica, ...fonti].join('\n');
+  const costo = spesaDelGiro() - partenza;
+  const delMese = spesaDelMese(stato) + costo;
+  const riga$ = `💰 Costo di questa bozza: circa $${costo.toFixed(2)} · nel mese: $${delMese.toFixed(2)} su $${config.budgetMensileDollari ?? 8}`;
+  const testo = [c.post_it, '', c.hashtag.map((h) => '#' + h).join(' '), '', esitoVerifica, ...fonti, '', riga$].join('\n');
   const testa = `${c.verifica.esito === 'ok' ? '📝' : '⚠️'} Bozza della settimana${tipo === 'improbabile' ? ' (immagine improbabile)' : ''}\n«${c.titolo_it}»${c.durata ? `\n🗓 ${c.durata}` : ''}`;
   const coda = 'Per correggere: rispondi a questo messaggio scrivendo cosa cambiare.';
   const intera = [testa, '', testo, '', coda].join('\n');
@@ -112,6 +135,7 @@ export async function creaBozza({ nota, precedente, scartata } = {}) {
   }
 
   stato.bozza = { id, codice, messageId: msg.message_id, testoId, creata: bozza.creata, promemoria: false };
+  stato.spesa = { mese: meseCorrente(), dollari: delMese };
   stato.storico = [...(stato.storico || []), { id, tema: c.tema, luogo: c.luogo, data: oggiISO() }].slice(-30);
   salvaStato(stato);
   console.log(`Bozza ${id} inviata su Telegram.`);

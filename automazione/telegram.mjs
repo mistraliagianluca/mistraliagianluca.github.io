@@ -126,6 +126,7 @@ async function main() {
       }
     } catch (e) {
       console.error(e);
+      stato.spesa = leggiStato().spesa;
       await scrivi(`⚠️ Qualcosa non è andato: ${e.message.slice(0, 300)}`).catch(() => {});
     }
     salvaStato(stato);

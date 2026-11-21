@@ -54,8 +54,17 @@ export function temiUsati(stato) {
 }
 
 // ---------- Claude ----------
-export async function chiediClaude(prompt, { ricerche = 6, finta = finto } = {}) {
-  if (PROVA) return finta();
+// ---------- Spesa ----------
+// Somma quanto costano le chiamate di questo giro (stima dai token restituiti dall'API).
+let spesaGiro = 0;
+export const spesaDelGiro = () => spesaGiro;
+export const aggiungiSpesa = (dollari) => { spesaGiro += dollari; };
+export const meseCorrente = () => new Date().toISOString().slice(0, 7);
+export const spesaDelMese = (stato) => (stato.spesa?.mese === meseCorrente() ? stato.spesa.dollari : 0);
+
+export async function chiediClaude(prompt, { ricerche = 3, finta = finto } = {}) {
+  if (PROVA) { aggiungiSpesa(0.1); return finta(); }
+  const modello = env('ANTHROPIC_MODEL', config.modelloTesti);
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -64,14 +73,21 @@ export async function chiediClaude(prompt, { ricerche = 6, finta = finto } = {})
       'content-type': 'application/json',
     },
     body: JSON.stringify({
-      model: env('ANTHROPIC_MODEL', config.modelloTesti),
-      max_tokens: 16000,
+      model: modello,
+      max_tokens: 8000,
       tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: ricerche }],
       messages: [{ role: 'user', content: prompt }],
     }),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(`Claude: ${res.status} ${JSON.stringify(data.error ?? data).slice(0, 400)}`);
+  const u = data.usage || {};
+  const [pin, pout] = config.prezzi?.[modello] || [4, 20];
+  const tokIn = (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) * 1.25 + (u.cache_read_input_tokens || 0) * 0.1;
+  const nRicerche = u.server_tool_use?.web_search_requests || 0;
+  const costo = (tokIn * pin + (u.output_tokens || 0) * pout) / 1e6 + nRicerche * (config.prezzi?.ricercaWeb ?? 0.01);
+  aggiungiSpesa(costo);
+  console.log(`Claude ${modello}: ${u.input_tokens} token in, ${u.output_tokens} out, ${nRicerche} ricerche ≈ $${costo.toFixed(3)}`);
   const testo = data.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n');
   const m = [...testo.matchAll(/```json\s*([\s\S]*?)```/g)].pop();
   const json = m ? m[1] : testo.slice(testo.indexOf('{'), testo.lastIndexOf('}') + 1);
@@ -101,6 +117,7 @@ export async function creaImmagine(istruzione, destinazione) {
   if (!img) throw new Error('Gemini non ha restituito un\'immagine: ' + JSON.stringify(data).slice(0, 300));
   const d = img.inlineData ?? img.inline_data;
   fs.writeFileSync(destinazione, Buffer.from(d.data, 'base64'));
+  aggiungiSpesa(config.prezzi?.immagine ?? 0.07);
   return destinazione;
 }
 
