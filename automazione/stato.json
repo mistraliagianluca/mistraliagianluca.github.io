@@ -1,11 +1,11 @@
 {
-  "offset": 926428049,
+  "offset": 926428050,
   "bozza": {
     "id": "2026-11-21-matera-natale-sassi-presepe-vivente-camper",
     "codice": "c9172535fb",
-    "messageId": 35,
-    "testoId": 36,
-    "creata": "2026-11-21T22:02:42.157Z",
+    "messageId": 39,
+    "testoId": 40,
+    "creata": "2026-11-21T22:07:12.885Z",
     "promemoria": false
   },
   "storico": [
@@ -40,6 +40,12 @@
       "tema": "Natale a Matera: Presepe Vivente nel Sasso Caveoso, mercatini e luminarie, in un weekend lungo",
       "luogo": "Matera (Basilicata), a circa un'ora da Bari (1h-1h15 in camper)",
       "data": "2026-11-21"
+    },
+    {
+      "id": "2026-11-21-matera-natale-sassi-presepe-vivente-camper",
+      "tema": "Natale a Matera: Presepe Vivente nel Sasso Caveoso, mercatini e luminarie, in un weekend lungo, con un giro a Gravina in Puglia",
+      "luogo": "Matera (Basilicata), a circa un'ora da Bari (1h-1h15 in camper)",
+      "data": "2026-11-21"
     }
   ],
   "pubblicati": [
@@ -52,6 +58,6 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 0.6949259999999999
+    "dollari": 1.2844659999999999
   }
 }
