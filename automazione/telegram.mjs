@@ -82,15 +82,15 @@ async function main() {
       if (u.callback_query) {
         const q = u.callback_query;
         if (String(q.message?.chat?.id) !== nostra) continue;
-        const [azione, id] = String(q.data).split(':');
+        const [azione, codice] = String(q.data).split(':');
         const chi = q.from?.first_name || 'il team';
-        if (!stato.bozza || stato.bozza.id !== id) {
+        if (!stato.bozza || ![stato.bozza.codice, stato.bozza.id].includes(codice)) {
           await telegram('answerCallbackQuery', { callback_query_id: q.id, text: 'Questa bozza non è più attiva.' });
           continue;
         }
         if (azione === 'pub') {
           await telegram('answerCallbackQuery', { callback_query_id: q.id, text: 'Pubblico…' });
-          await pubblica(stato, id, chi);
+          await pubblica(stato, stato.bozza.id, chi);
         } else if (azione === 'rig') {
           await telegram('answerCallbackQuery', { callback_query_id: q.id, text: 'Preparo un\'altra proposta, qualche minuto…' });
           await creaBozza();

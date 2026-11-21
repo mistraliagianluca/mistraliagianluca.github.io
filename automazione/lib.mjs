@@ -38,7 +38,7 @@ export function settimanaISO(d = new Date()) {
 }
 export const slug = (s) =>
   String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'post';
+    .replace(/[^a-z0-9]+/g, '-').slice(0, 60).replace(/^-+|-+$/g, '') || 'post';
 
 /** Temi già pubblicati (dagli articoli del Diario) e già proposti (dallo stato). */
 export function temiUsati(stato) {
