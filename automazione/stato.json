@@ -1,17 +1,22 @@
 {
-  "offset": 926428037,
+  "offset": 926428040,
   "bozza": {
     "id": "2026-11-21-cassano-murge-sagra-cardoncello-foresta-mercadante-camper",
     "codice": "c823c5a1e0",
-    "messageId": 14,
-    "testoId": 15,
-    "creata": "2026-11-21T21:19:34.226Z",
+    "messageId": 18,
+    "testoId": 19,
+    "creata": "2026-11-21T21:31:34.671Z",
     "promemoria": false
   },
   "storico": [
     {
       "id": "2026-11-21-selva-di-fasano-camper-apulia-for-christmas-2026",
       "tema": "Ponte dell'Immacolata in camper nella Selva di Fasano per Apulia for Christmas, il mercatino di Natale nel borgo di trulli di Tenuta Monacelle (5-8 dicembre 2026)",
+      "data": "2026-11-21"
+    },
+    {
+      "id": "2026-11-21-cassano-murge-sagra-cardoncello-foresta-mercadante-camper",
+      "tema": "Weekend del 28-29 novembre alla Sagra del Fungo Cardoncello e della Carne di Cinghiale di Cassano delle Murge, ultima tappa di Cardoncello on the road, con una passeggiata nella Foresta Mercadante",
       "data": "2026-11-21"
     },
     {
