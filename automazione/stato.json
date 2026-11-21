@@ -1,11 +1,11 @@
 {
-  "offset": 926428044,
+  "offset": 926428045,
   "bozza": {
-    "id": "2026-11-21-cassano-murge-sagra-cardoncello-foresta-mercadante-camper",
-    "codice": "c823c5a1e0",
-    "messageId": 24,
-    "testoId": 25,
-    "creata": "2026-11-21T21:39:04.193Z",
+    "id": "2026-11-21-ndocciata-agnone-camper-dicembre-2026",
+    "codice": "0c0a42fdf2",
+    "messageId": 29,
+    "testoId": 30,
+    "creata": "2026-11-21T21:52:22.283Z",
     "promemoria": false
   },
   "storico": [
@@ -27,6 +27,12 @@
     {
       "id": "2026-11-21-cassano-murge-sagra-cardoncello-foresta-mercadante-camper",
       "tema": "Weekend del 28-29 novembre alla Sagra del Fungo Cardoncello e della Carne di Cinghiale di Cassano delle Murge, ultima tappa di Cardoncello on the road, con una passeggiata nella Foresta Mercadante",
+      "data": "2026-11-21"
+    },
+    {
+      "id": "2026-11-21-ndocciata-agnone-camper-dicembre-2026",
+      "tema": "Weekend lungo in camper in Alto Molise per la Grande 'Ndocciata di Agnone, la sfilata di fiaccole giganti di sabato 12 dicembre 2026, più borghi e boschi dei dintorni",
+      "luogo": "Agnone (Isernia, Molise)",
       "data": "2026-11-21"
     }
   ]
