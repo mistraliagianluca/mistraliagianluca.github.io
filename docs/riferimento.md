@@ -3,7 +3,7 @@
 > ⚙️ **Non modificare questo file a mano.** Lo rigenera il workflow *Documentazione* a ogni push, leggendo i file veri del progetto.
 > Se qualcosa qui è sbagliato, è sbagliato il file da cui viene: correggi quello.
 
-Ultimo aggiornamento: 2026-11-22 16:48 UTC
+Ultimo aggiornamento: 2026-11-22 16:51 UTC
 
 ## Workflow di GitHub Actions
 
@@ -78,7 +78,7 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 | Articolo | Pubblicato | Fine evento | Stato |
 | --- | --- | --- | --- |
 | `lecce-black-friday-camper-primavera-pupi` | 2026-11-22 | — | in vetrina |
-| `matera-natale-sassi-presepe-vivente-camper` | 2026-11-21 | 2026-11-21 | evento concluso |
+| `matera-natale-sassi-presepe-vivente-camper` | 2026-11-21 | 2026-12-21 | in vetrina |
 | `ndocciata-agnone-camper-dicembre-2026` | 2026-11-21 | — | in vetrina |
 
 ## Struttura del repository
