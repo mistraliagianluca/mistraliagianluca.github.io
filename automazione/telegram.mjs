@@ -132,6 +132,30 @@ async function main() {
     salvaStato(stato);
   }
 
+  // Post della settimana: lo prepara il bot stesso, dal giorno e dall'ora in config (ora italiana),
+  // una sola volta a settimana. Così un solo workflow tocca lo stato e nessun giro ne cancella un altro.
+  const ps = config.postSettimanale ?? { giorno: 1, ora: 9 };
+  const roma = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Rome' }));
+  const giornoRoma = roma.getDay() || 7; // 1 = lunedì … 7 = domenica
+  const lunedi = new Date(roma); lunedi.setDate(roma.getDate() - (giornoRoma - 1));
+  const settimana = `${lunedi.getFullYear()}-${String(lunedi.getMonth() + 1).padStart(2, '0')}-${String(lunedi.getDate()).padStart(2, '0')}`;
+  const eOra = giornoRoma > ps.giorno || (giornoRoma === ps.giorno && roma.getHours() >= ps.ora);
+  if (nostra && eOra && stato.settimanale !== settimana) {
+    stato.settimanale = settimana; // segnato PRIMA di provare: se fallisce non si riprova ogni minuto (e non si spende)
+    salvaStato(stato);
+    const giaFatta = (stato.storico || []).some((x) => x.data >= settimana);
+    if (!giaFatta) {
+      try {
+        await creaBozza();
+        Object.assign(stato, leggiStato());
+      } catch (e) {
+        console.error(e);
+        stato.spesa = leggiStato().spesa;
+        await scrivi(`⚠️ Non sono riuscito a preparare il post della settimana: ${e.message.slice(0, 300)}\nPer riprovare scrivi /nuovo.`).catch(() => {});
+      }
+    }
+  }
+
   // Promemoria se la bozza aspetta da troppo
   if (nostra && stato.bozza && !stato.bozza.promemoria) {
     const ore = (Date.now() - Date.parse(stato.bozza.creata)) / 3.6e6;

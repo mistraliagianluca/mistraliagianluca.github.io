@@ -9,6 +9,11 @@
   "ogniQuanteSettimaneImprobabile": 4,
   "temiDaEvitareUltimi": 12,
   "oreProMemoria": 48,
+  "_postSettimanale": "Giorno (1 = lunedì … 7 = domenica) e ora italiana da cui il bot prepara la bozza della settimana, una volta sola",
+  "postSettimanale": {
+    "giorno": 1,
+    "ora": 9
+  },
   "tentativiVerifica": 2,
   "ricercheScrittura": 3,
   "ricercheVerifica": 4,

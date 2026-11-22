@@ -1,51 +1,18 @@
-# Sito Mistralia (MVP)
+# Mistralia · sito e automazione
 
-Sito di una pagina, bilingue (`/` italiano, `/en/` inglese), fatto con [Astro](https://astro.build) e pubblicato gratis su GitHub Pages.
+Sito www.mistralia.co (noleggio del camper Kentucky da Bari), post settimanale automatico e bot Telegram di approvazione.
 
-## Messa online in produzione (una volta sola)
+## 📖 Documentazione: [`docs/`](docs/README.md)
 
-Il nuovo sito sostituisce quello attuale su `www.mistralia.co`. Da fare nel repository GitHub del sito attuale:
+| Voglio… | Pagina |
+| --- | --- |
+| Approvare i post dal gruppo Telegram | [Uso quotidiano](docs/02-uso-quotidiano.md) |
+| Cambiare prezzi, promo, foto, testi | [Il sito](docs/03-sito.md) |
+| Capire come è fatto il sistema | [Architettura](docs/01-architettura.md) |
+| Gestire account, chiavi e token | [Sicurezza](docs/05-sicurezza.md) |
+| Modificare il codice o caricare un aggiornamento | [Sviluppo](docs/06-sviluppo.md) |
+| Risolvere un problema | [Problemi e soluzioni](docs/07-problemi.md) |
+| Vedere orari, impostazioni e prezzi in vigore | [Riferimento tecnico](docs/riferimento.md) (generato in automatico) |
+| Sapere cosa è cambiato | [Registro delle modifiche](docs/registro-modifiche.md) |
 
-1. **Salva il vecchio sito** in un ramo, per poter tornare indietro: `git checkout -b sito-vecchio && git push -u origin sito-vecchio && git checkout main`
-2. **Svuota `main` e copia dentro il contenuto di questa cartella** (compresi `.github/` e `.gitignore`; non serve `node_modules`):
-   `git rm -r -q . && cp -R /percorso/di/mistralia-site/. . && rm -rf node_modules dist .astro`
-3. **Controlla `public/CNAME`**: deve contenere lo stesso dominio del file `CNAME` che avevi prima (`www.mistralia.co` oppure `mistralia.co`).
-4. Su GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-5. `git add -A && git commit -m "Nuovo sito" && git push`
-6. Nella scheda **Actions** parte "Pubblica sito": dopo circa 2 minuti il sito è online. In Settings → Pages verifica che il dominio personalizzato sia ancora impostato e che "Enforce HTTPS" sia attivo.
-
-Per tornare al vecchio sito: Settings → Pages → Source: "Deploy from a branch" → ramo `sito-vecchio`.
-
-Per provarlo sul tuo computer: `npm install`, poi `npm run dev`, poi apri http://localhost:4321.
-
-## Cosa si modifica e dove
-
-| Cosa | File | Note |
-| --- | --- | --- |
-| Promo (es. Black Friday) | `src/data/promo.md` | Il banner compare e sparisce da solo nelle date indicate; lo sconto vale solo per i noleggi nel periodo scelto. Per spegnerla: `attiva: false` |
-| Prezzi, piani, cauzioni, km, quota obbligatoria di pulizia e preparazione (€200), extra, stagioni | `src/data/prezzi.json` | Le stagioni sono una lettera per giorno (B/M/A). Sono caricati novembre–dicembre 2026 e tutto il 2027, copiati dal calendario Yescapa. Se manca un anno, il sito usa l'ultimo presente |
-| Contatti, indirizzo di ritiro (Modugno), orari, kit incluso, regole, FAQ, foto, calendario | `src/data/info.json` | `galleria` = numeri delle foto in ordine; `fotoApertura` = foto grande in alto: un numero della galleria oppure il nome di un file copiato in `public/assets/gallery/` (ora `SER.JPG`; finché il file non c'è, il sito usa la foto n. 2) |
-| Testi del sito | `src/i18n/it.json` e `src/i18n/en.json` | Stesse chiavi nei due file |
-| Articoli del Diario | `src/content/diario/*.it.md` e `*.en.md` | Li scriverà l'automazione settimanale. Gli articoli `esempio-*` non vengono pubblicati (hanno `esempio: true`): la sezione Diario compare da sola al primo articolo vero |
-
-Tutti i file si possono modificare anche dal sito o dall'app di GitHub (icona della matita): al salvataggio il sito si ricompila da solo.
-
-## Calendario delle date occupate
-
-1. Su Google Calendar crea il calendario **"Mistralia – occupato"** e segna come eventi i giorni già venduti, anche quelli presi da Yescapa o Indie.
-2. In *Impostazioni del calendario → Autorizzazioni di accesso* attiva **Rendi disponibile pubblicamente** e scegli *Mostra solo disponibilità (nascondi dettagli)*.
-3. In *Integra calendario* copia l'**URL dell'incorporamento** e incollalo in `calendarioEmbedUrl` dentro `src/data/info.json`.
-
-## Da completare (cerca `DA_CONFERMARE` nei file)
-
-Le FAQ ancora da confermare non vengono mostrate sul sito finché contengono `DA_CONFERMARE`. La promo è spenta (`attiva: false`).
-
-
-- supplemento al giorno dei piani Plus e Premium e la loro cauzione, km inclusi al giorno, importo della quota obbligatoria (€200 su Yescapa, €150 nel testo dell'annuncio) (`prezzi.json`)
-- età minima e anni di patente, condizioni di cancellazione per le prenotazioni dirette (FAQ in `info.json`)
-- una foto "da copertina" del Kentucky in Puglia, da usare come `fotoApertura`
-- facoltativo: chiedere al grafico il logo in SVG o PNG trasparente ad alta risoluzione; quelli inclusi sono ritagliati dall'immagine JPG
-
-## Come funziona il calcolatore
-
-Per ogni notte tra ritiro e riconsegna applica il prezzo della sua stagione e aggiunge il supplemento del piano; l'eventuale sconto promo vale solo su questa parte. Poi aggiunge la quota obbligatoria di pulizia finale, preparazione e check-in (€200) e gli extra scelti (lenzuola, asciugamani, barbecue, transfer). Il noleggio minimo è di 2 o 3 giorni secondo il periodo del ritiro. Il pulsante apre WhatsApp con un messaggio già scritto (date, piano, persone, prezzo stimato, nome e note) nella lingua del cliente.
+> Chi cambia codice o configurazione aggiorna la documentazione nello stesso push: vedi [la regola](docs/06-sviluppo.md#regola-documentazione).

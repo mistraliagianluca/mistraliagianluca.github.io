@@ -1,9 +1,9 @@
-# Ogni lunedì prepara la bozza del post e la manda al gruppo Telegram.
+# Prepara SUBITO una bozza e la manda al gruppo Telegram (solo a mano).
+# La bozza del lunedì la prepara il Bot Telegram (vedi postSettimanale in automazione/config.json).
+# Per una bozza in più è meglio scrivere /nuovo nel gruppo.
 name: Post settimanale
 
 on:
-  schedule:
-    - cron: '7 8 * * 1'   # lunedì alle 9:07 (ora solare italiana)
   workflow_dispatch:       # per lanciarlo a mano dalla scheda Actions
 
 permissions:
@@ -25,7 +25,6 @@ jobs:
           node-version: 22
       - run: node automazione/genera.mjs
         env:
-          UNA_AL_GIORNO: '1'   # se due timer partono lo stesso giorno, la seconda bozza non viene fatta
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

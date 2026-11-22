@@ -6,6 +6,9 @@ on:
     branches: [main]
     paths-ignore:
       - 'automazione/**'
+      - 'docs/**'
+      - 'README.md'
+      - 'CLAUDE.md'
   workflow_dispatch:
   schedule:
     # Ogni notte: così il banner della promo e i prezzi restano aggiornati anche senza modifiche

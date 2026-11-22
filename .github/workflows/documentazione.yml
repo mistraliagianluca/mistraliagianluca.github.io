@@ -1,0 +1,46 @@
+# A ogni push su main: rigenera docs/riferimento.md dai file veri del progetto
+# e controlla che chi ha cambiato codice o configurazione abbia aggiornato docs/registro-modifiche.md.
+# Se il controllo fallisce compare una ❌ rossa in Actions: il sito NON si blocca, ma va sistemata la documentazione.
+name: Documentazione
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '41 3 * * *'   # ogni notte: aggiorna l'elenco degli articoli pubblicati dal bot
+
+permissions:
+  contents: write
+
+concurrency:
+  group: documentazione
+  cancel-in-progress: false
+
+jobs:
+  documentazione:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Controlla che il registro delle modifiche sia aggiornato
+        if: github.event_name == 'push'
+        run: node automazione/documentazione.mjs --controlla "${{ github.event.before }}" "${{ github.sha }}"
+      - name: Rigenera il riferimento tecnico
+        if: always()
+        run: node automazione/documentazione.mjs
+      - name: Salva il riferimento aggiornato
+        if: always()
+        run: |
+          git config user.name "Mistralia bot"
+          git config user.email "bot@mistralia.co"
+          git add docs/riferimento.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Documentazione: riferimento aggiornato"
+            git pull --rebase --autostash
+            git push
+          fi
