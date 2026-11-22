@@ -1,10 +1,11 @@
 ---
 titolo: "'Ndocciata di Agnone in camper: il fuoco del 12 dicembre"
-data: 2026-11-21
 lingua: it
-chiave: "ndocciata-agnone-camper-dicembre-2026"
-immagine: "/assets/diario/ndocciata-agnone-camper-dicembre-2026.jpg"
+chiave: ndocciata-agnone-camper-dicembre-2026
+data: 2026-11-21
+nascosto: true
 estratto: "Sabato 12 dicembre Agnone si accende con la Grande 'Ndocciata. Da Bari sono circa 3 ore e mezza-4 ore: ecco come viverla in 4-5 giorni con il Kentucky, tra aree sosta gratuite e borghi di montagna."
+immagine: /assets/diario/ndocciata-agnone-camper-dicembre-2026.jpg
 immagineAI: true
 ---
 
