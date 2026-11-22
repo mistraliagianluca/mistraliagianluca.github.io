@@ -98,7 +98,8 @@ titolo_en: "Black Friday: 15% off spring rentals"
 ```
 
 - Lo sconto si applica **solo** a notti e piano, non alla quota obbligatoria né agli extra.
-- Il sito si ricostruisce **ogni notte**, quindi il banner compare e sparisce da solo nelle date giuste anche se nessuno tocca niente.
+- Banner e riga dello sconto sono già nella pagina, nascosti: è il **browser del visitatore** a mostrarli solo tra *Banner visibile dal* e *fino al*. Compaiono e spariscono da soli a mezzanotte, senza bisogno di ricostruire il sito.
+- Per vedere subito il banner (per esempio per una prova), metti come *Banner visibile dal* la data di oggi.
 - Per una nuova promo cambia i valori e metti `attiva: true` (nel pannello: l'interruttore *Promo attiva*).
 - Salvando dal pannello i commenti `#` del file spariscono: le spiegazioni restano qui e nei suggerimenti dei campi.
 

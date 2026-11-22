@@ -13,6 +13,11 @@
 
 ---
 
+## 2026-11-22 · Date della promo salvate dal pannello
+- Cosa: `src/lib/site.ts` legge le date della promo sempre come AAAA-MM-GG. Il pannello le salva senza virgolette e il sito le riceveva come `2026-11-22T00:00:00.000Z`: il banner restava nascosto il primo giorno e la data "fino al" poteva risultare non valida.
+- Perché: la promo Black Friday attivata dal pannello con inizio 22/11 non compariva.
+- Da fare: niente; dopo il push il banner compare subito.
+
 ## 2026-11-22 · Pannello www.mistralia.co/admin
 - Cosa: pannello Sveltia CMS (`public/admin/`) per modificare dai moduli prezzi, stagioni, minimi, piani, quota, extra, promo, contatti, ritiro, kit, regole, FAQ e foto; ogni Salva fa un commit e ripubblica il sito. Le stagioni in `prezzi.json` sono ora **periodi** (`periodi`: dal, al, stagione) al posto delle lettere giorno per giorno: il sito li converte da solo e il risultato è identico. Galleria e foto di apertura in `info.json` sono percorsi d'immagine (il vecchio formato a numeri resta accettato). Il "da €X" dei post segue il prezzo più basso di `prezzi.json`.
 - Perché: cambiare i parametri senza toccare file JSON, anche dal telefono.

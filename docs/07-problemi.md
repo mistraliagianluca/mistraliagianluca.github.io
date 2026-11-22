@@ -42,7 +42,7 @@ flowchart TD
 | `git push` rifiutato (*rejected… fetch first*) | Il bot ha fatto commit nel frattempo | `git pull`, poi `git push` |
 | `git status` mostra `node_modules/` o `dist/` | Manca o è incompleto `.gitignore` (il Finder non copia i file nascosti) | Ripristina `.gitignore` (vedi `docs/riferimento.md` → struttura) e `git rm -r --cached node_modules dist .astro` |
 | Il sito ha perso il dominio | Cancellato `public/CNAME` o cambiato in Settings → Pages | Ripristina `public/CNAME` con `www.mistralia.co` e controlla Settings → Pages |
-| Il banner della promo non compare | `attiva: false`, date fuori periodo, oppure la ricostruzione notturna non è ancora partita | Controlla `promo.md`; per forzare: Actions → *Pubblica sito* → Run workflow |
+| Il banner della promo non compare | `attiva: false`, data di oggi fuori da *Banner visibile dal/fino al*, oppure *Pubblica sito* non è ancora finito dopo il Save | Controlla la promo nel pannello e il giro di *Pubblica sito* in Actions; ricarica la pagina con Cmd+Shift+R. Prima del 22/11/2026 c'era anche un bug con le date salvate dal pannello, ora corretto |
 
 ## Prima di chiedere aiuto, raccogli:
 

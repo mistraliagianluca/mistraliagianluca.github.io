@@ -24,7 +24,13 @@ export const paths = {
   post: (lang: Lang, chiave: string) => u(lang === 'it' ? `/diario/${chiave}/` : `/en/journal/${chiave}/`),
 };
 
-const iso = (v: unknown) => (v instanceof Date ? v.toISOString().slice(0, 10) : String(v ?? ''));
+// Data come AAAA-MM-GG. Il pannello /admin salva le date senza virgolette e il sito le riceve come
+// "2026-11-22T00:00:00.000Z": senza il taglio a 10 caratteri il banner resterebbe nascosto il primo giorno.
+const iso = (v: unknown) => {
+  if (v instanceof Date) return v.toISOString().slice(0, 10);
+  const m = String(v ?? '').match(/^\d{4}-\d{2}-\d{2}/);
+  return m ? m[0] : '';
+};
 
 /** Promo letta da src/data/promo.md, con date normalizzate (AAAA-MM-GG). */
 export function getPromo() {
