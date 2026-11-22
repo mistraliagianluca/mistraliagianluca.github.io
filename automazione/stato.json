@@ -1,11 +1,11 @@
 {
-  "offset": 926428053,
+  "offset": 926428054,
   "bozza": {
-    "id": "2026-11-22-luci-d-artista-salerno-in-camper-2026",
-    "codice": "506411ff50",
-    "messageId": 45,
-    "testoId": 46,
-    "creata": "2026-11-22T14:57:33.728Z",
+    "id": "2026-11-22-lecce-fiera-dei-pupi-natale-barocco-camper",
+    "codice": "2b77e1f2d1",
+    "messageId": 48,
+    "testoId": 49,
+    "creata": "2026-11-22T15:09:28.641Z",
     "promemoria": false
   },
   "storico": [
@@ -52,6 +52,12 @@
       "tema": "Luci d'Artista a Salerno in camper: 31 installazioni luminose, videomapping e area camper sul Lungomare Marconi",
       "luogo": "Salerno (Campania)",
       "data": "2026-11-22"
+    },
+    {
+      "id": "2026-11-22-lecce-fiera-dei-pupi-natale-barocco-camper",
+      "tema": "Fiera dei Pupi di Lecce (5-27 dicembre 2026): presepi in cartapesta e terracotta nel Chiostro dei Teatini e Natale barocco in centro storico",
+      "luogo": "Lecce (Puglia), a circa 2 ore (a seconda del traffico) di guida da Bari",
+      "data": "2026-11-22"
     }
   ],
   "pubblicati": [
@@ -70,6 +76,6 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 1.931374
+    "dollari": 2.722728
   }
 }
