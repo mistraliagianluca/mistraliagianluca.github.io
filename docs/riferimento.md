@@ -3,7 +3,7 @@
 > ⚙️ **Non modificare questo file a mano.** Lo rigenera il workflow *Documentazione* a ogni push, leggendo i file veri del progetto.
 > Se qualcosa qui è sbagliato, è sbagliato il file da cui viene: correggi quello.
 
-Ultimo aggiornamento: 2026-11-22 15:47 UTC
+Ultimo aggiornamento: 2026-11-22 15:57 UTC
 
 ## Workflow di GitHub Actions
 
@@ -71,7 +71,7 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 
 ## Promo (`src/data/promo.md`)
 
-- Attiva: **true** · Black Friday −15% · banner dal 2026-11-22 al 2026-12-01 · noleggi dal 2027-03-01 al 2027-05-31
+- Attiva: **false** · Black Friday −15% · banner dal 2026-11-22 al 2026-12-01 · noleggi dal 2027-03-01 al 2027-05-31
 
 ## Articoli pubblicati nel Diario
 
