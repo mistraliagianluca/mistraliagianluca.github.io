@@ -1,25 +1,16 @@
 {
-  "_leggimi": "Contatti, kit incluso, ritiro, regole, FAQ e foto. Si modificano dal pannello www.mistralia.co/admin (o a mano). Le voci con DA_CONFERMARE sono provvisorie e non vengono mostrate.",
   "whatsapp": "393756473839",
   "telefoni": [
     "+39 375 647 3839",
     "+39 375 647 3829"
   ],
   "email": "info@mistralia.co",
-  "ragioneSociale": "Mistralia srls",
-  "sedeLegale": "Via Andrea Gabrieli 4, 70125 Bari (BA)",
-  "piva": "09082950727",
-  "rea": "BA-670566",
   "ritiro": {
-    "_nota": "Indirizzo di ritiro e riconsegna: è quello mostrato ai clienti e su Google Maps",
     "indirizzo": "Strada Statale 96, km 115,500 – 70026 Modugno (BA)",
     "mappaUrl": "https://www.google.com/maps/search/?api=1&query=Strada+Statale+96+km+115%2C500+70026+Modugno+BA",
-    "orari": "9:00–12:00 · 14:00–18:00"
+    "orari": "9:00–12:00 · 14:00–18:00",
+    "_nota": "Indirizzo di ritiro e riconsegna: è quello mostrato ai clienti e su Google Maps"
   },
-  "calendarioEmbedUrl": "",
-  "_calendario": "Incolla qui il link 'Incorpora' del Google Calendar pubblico 'Mistralia - occupato' (Impostazioni calendario > Integra calendario). Vuoto = il sito mostra un invito a scrivere su WhatsApp.",
-  "goatcounter": "",
-  "_goatcounter": "Facoltativo: codice del sito su goatcounter.com (statistiche gratuite senza cookie). Esempio: mistralia",
   "galleria": [
     "/assets/gallery/1.jpg",
     "/assets/gallery/2.jpg",
@@ -43,6 +34,7 @@
     "/assets/gallery/20.jpg"
   ],
   "fotoApertura": "/assets/gallery/SER.jpg",
+  "fotoAperturaRiserva": "/assets/gallery/2.jpg",
   "kit": [
     {
       "titolo": {
@@ -120,8 +112,8 @@
         "en": "Comfort"
       },
       "voci": {
-        "it": "TV e multimedia, aria condizionata in cabina e cellula, riscaldamento a gasolio, 2 bombole del gas in vetroresina da 10 kg",
-        "en": "TV and multimedia, air conditioning in cab and living area, diesel heating, 2 lightweight fibreglass 10 kg gas bottles"
+        "it": "Aria condizionata in cabina e cellula, riscaldamento a gasolio, 2 bombole del gas da 10 kg",
+        "en": "Air conditioning in cab and living area, diesel heating, 2x 10 kg gas bottles"
       }
     }
   ],
@@ -179,11 +171,11 @@
     {
       "it": [
         "Che patente serve?",
-        "Basta la patente B. DA_CONFERMARE: età minima e anni di patente."
+        "Basta la patente B. 21: età minima e anni di patente."
       ],
       "en": [
         "Which licence do I need?",
-        "A standard car licence (category B). TO_CONFIRM: minimum age and years of licence."
+        "A standard car licence (category B). 21: minimum age and years of licence."
       ]
     },
     {
@@ -267,6 +259,12 @@
       ]
     }
   ],
-  "fotoAperturaRiserva": "/assets/gallery/2.jpg",
-  "_fotoApertura": "Foto grande in cima: percorso di un'immagine in public/assets/gallery/. Se il file non c'è, il sito usa fotoAperturaRiserva."
+  "ragioneSociale": "Mistralia srls",
+  "sedeLegale": "Via Andrea Gabrieli 4, 70125 Bari (BA)",
+  "piva": "09082950727",
+  "rea": "BA-670566",
+  "_calendario": "Incolla qui il link 'Incorpora' del Google Calendar pubblico 'Mistralia - occupato' (Impostazioni calendario > Integra calendario). Vuoto = il sito mostra un invito a scrivere su WhatsApp.",
+  "_fotoApertura": "Foto grande in cima: percorso di un'immagine in public/assets/gallery/. Se il file non c'è, il sito usa fotoAperturaRiserva.",
+  "_goatcounter": "Facoltativo: codice del sito su goatcounter.com (statistiche gratuite senza cookie). Esempio: mistralia",
+  "_leggimi": "Contatti, kit incluso, ritiro, regole, FAQ e foto. Si modificano dal pannello www.mistralia.co/admin (o a mano). Le voci con DA_CONFERMARE sono provvisorie e non vengono mostrate."
 }
