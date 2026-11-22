@@ -6,6 +6,8 @@ chiave: "lecce-black-friday-camper-primavera-pupi"
 immagine: "/assets/diario/lecce-black-friday-camper-primavera-pupi.jpg"
 estratto: "−15% sui noleggi del Kentucky che iniziano tra il 1° marzo e il 31 maggio 2027. Si prenota dal sito dal 24 novembre al 1° dicembre. La meta la scegli tu."
 immagineAI: true
+stato: "🟢 in vetrina"
+ordine: "1-2026-11-22"
 ---
 
 Venerdì 27 novembre è il Black Friday e noi partiamo prima: da martedì 24 novembre a martedì 1° dicembre. L'offerta è semplice. Uno sconto sul Kentucky, per partire in primavera.

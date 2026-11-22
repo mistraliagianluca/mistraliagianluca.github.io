@@ -1,12 +1,14 @@
 ---
 titolo: "'Ndocciata di Agnone in camper: il fuoco del 12 dicembre"
 lingua: it
-chiave: ndocciata-agnone-camper-dicembre-2026
+chiave: "ndocciata-agnone-camper-dicembre-2026"
 data: 2026-11-21
 nascosto: false
 estratto: "Sabato 12 dicembre Agnone si accende con la Grande 'Ndocciata. Da Bari sono circa 3 ore e mezza-4 ore: ecco come viverla in 4-5 giorni con il Kentucky, tra aree sosta gratuite e borghi di montagna."
-immagine: /assets/diario/ndocciata-agnone-camper-dicembre-2026.jpg
+immagine: "/assets/diario/ndocciata-agnone-camper-dicembre-2026.jpg"
 immagineAI: true
+stato: "🟢 in vetrina"
+ordine: "1-2026-11-21"
 ---
 
 Sabato 12 dicembre 2026, alle 18, Agnone accende la **Grande 'Ndocciata**. Le 'ndocce sono fiaccole di abete bianco che possono superare i tre metri. Sfilano lungo il corso, portate da uomini con le cappe nere della tradizione contadina, e finiscono nel falò della fratellanza. È uno dei riti del fuoco più spettacolari d'Europa ed è riconosciuto Patrimonio d'Italia per la Tradizione. E sì, fa freddo. Per questo il nostro camper ha il riscaldamento.
