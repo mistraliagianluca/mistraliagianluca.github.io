@@ -35,8 +35,8 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 100px; }
-body { margin: 0; font-family: var(--body); color: var(--ink); background: var(--sand); line-height: 1.6; font-size: 17px; }
+html { scroll-behavior: smooth; scroll-padding-top: 110px; overflow-x: clip; }
+body { overflow-x: clip; margin: 0; font-family: var(--body); color: var(--ink); background: var(--sand); line-height: 1.6; font-size: 17px; }
 img { max-width: 100%; height: auto; display: block; }
 a { color: var(--mint-dark); }
 h1, h2, h3 { font-family: var(--display); line-height: 1.1; margin: 0 0 0.5em; color: var(--green); }
@@ -56,8 +56,8 @@ section { padding: 72px 0; }
 .btn-ghost { border-color: var(--ink); color: var(--ink); background: transparent; }
 .btn svg { width: 1.2em; height: 1.2em; }
 
-/* Promo */
-.promo { background: var(--yellow); color: var(--green); text-align: center; padding: 10px 16px; font-weight: 600; font-size: 0.95rem; }
+/* Promo: dentro l'intestazione fissa, quindi resta visibile anche scorrendo */
+.promo { background: var(--yellow); color: var(--green); text-align: center; padding: 6px 16px; font-weight: 700; font-size: 0.88rem; line-height: 1.3; }
 .promo[hidden] { display: none; }
 .promo small { font-weight: 400; opacity: 0.85; margin-left: 0.5em; }
 
@@ -65,10 +65,12 @@ section { padding: 72px 0; }
 .site-header { position: sticky; top: 0; z-index: 20; background: rgba(250, 251, 246, 0.94); backdrop-filter: blur(8px); }
 /* Le tre strisce del logo */
 .stripes { height: 9px; background: linear-gradient(var(--orange) 0 33.3%, var(--yellow) 33.3% 66.6%, var(--teal) 66.6%); }
-.site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 80px; gap: 16px; }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+@media (min-width: 821px) { .site-header .wrap { height: 76px; } }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); transition: opacity 0.25s ease; }
 .site-header.brand-hidden .brand { opacity: 0; pointer-events: none; }
-.brand .badge { height: 62px; width: auto; }
+.brand .badge { height: 48px; width: auto; }
+@media (min-width: 821px) { .brand .badge { height: 58px; } }
 .brand .word { height: 34px; width: auto; }
 @media (max-width: 520px) { .brand .word { display: none; } }
 .nav { display: flex; align-items: center; gap: 22px; }
@@ -82,9 +84,9 @@ section { padding: 72px 0; }
 .site-footer a { color: var(--yellow); }
 .site-footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; }
 
-/* Bottone WhatsApp fisso su mobile */
+/* Bottone WhatsApp fisso, sempre visibile: è l'unico "Scrivici su WhatsApp" del sito */
 .wa-float { position: fixed; right: 16px; bottom: 16px; z-index: 30; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-@media (min-width: 821px) { .wa-float { display: none; } }
+@media (max-width: 420px) { .wa-float { padding: 0.75em 1.1em; } }
 
 /* Articolo */
 .post { padding: 48px 0 72px; }

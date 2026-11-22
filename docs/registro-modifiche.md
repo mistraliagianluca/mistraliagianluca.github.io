@@ -13,6 +13,31 @@
 
 ---
 
+## 2026-11-22 · Nuovo layout della home, prima per il telefono
+- Cosa: `src/components/Home.astro` riscritta con layout compatto:
+  - niente più scorrimento laterale (`overflow-x: clip`; tabella dei piani sostituita da tre colonne);
+  - Diario spostato subito dopo "Perché", con card basse su telefono;
+  - kit con icone, scelte per gruppo con il campo `icona` in `info.json` e nel pannello;
+  - prezzi in molto meno spazio, con la quota fissa indicata una sola volta e gli extra in una riga;
+  - calcolatore con le date affiancate senza sovrapposizioni e la riconsegna che parte dal ritiro, proposta con il noleggio minimo; riquadro promo con angoli più piccoli; calendario delle disponibilità dentro il calcolatore;
+  - galleria con 2–3 anteprime e un visore a tutto schermo per tutte le foto;
+  - un solo pulsante WhatsApp fisso, ora anche su computer (tolti quelli in apertura, disponibilità, contatti e 404);
+  - banner della promo dentro l'intestazione fissa, quindi sempre visibile.
+
+  Testo "20 anni e non sentirli" sostituito da "Affidabile e controllato", per la regola di non citare l'età del camper. Altezza su telefono da circa 11.900 a 6.900 px.
+- Perché: richieste di Gianluca sull'esperienza da telefono (scorrimento laterale, pagina troppo lunga, Diario non raggiunto, quota da €200 ripetuta, date sovrapposte).
+- Da fare: controllare il sito dal telefono. Le icone del kit si cambiano dal pannello.
+
+## 2026-11-22 · Sottotitolo del Diario
+- Cosa: sottotitolo della sezione Diario di bordo da "Idee per il tuo viaggio in Puglia, ogni settimana" a "Idee per partire in camper da Bari, ogni settimana" (in inglese "Ideas for a campervan trip from Bari, every week"), in `src/i18n/`.
+- Perché: i post propongono anche altre regioni e mete raggiungibili in traghetto.
+- Da fare: niente.
+
+## 2026-11-22 · Articoli archiviati raggiungibili e pagina 404 di Mistralia
+- Cosa: un articolo con `nascosto: true` (interruttore *Archivia* nel pannello) esce dalla home ma la sua pagina resta raggiungibile dal link, con l'avviso "in archivio" e `noindex`; prima la pagina spariva. Nuova pagina `src/pages/404.astro` ("Questa pagina non c'è più", con Diario, calcolatore e WhatsApp, in italiano o inglese secondo il link) per articoli eliminati e link sbagliati. Nel pannello lo stato si chiama "⚫ archiviato". `Base.astro` accetta `noindex`.
+- Perché: nessun link condiviso sui social deve finire su una pagina d'errore.
+- Da fare: per un articolo sbagliato usare *Delete*, per uno non più adatto *Archivia*.
+
 ## 2026-11-22 · Ordine degli articoli nel pannello
 - Cosa: nel pannello *Diario di bordo* prima gli articoli in vetrina, poi quelli conclusi o nascosti, ognuno dal più recente. Il bot (`traduzioni.mjs`) tiene aggiornati `stato` e `ordine` nei file italiani; il pannello ordina per `ordine` decrescente e mostra lo stato nell'elenco. Provato il pannello in modalità cartella locale: elenco, ordine e salvataggio dei prezzi funzionano.
 - Perché: vedere subito cosa è online.

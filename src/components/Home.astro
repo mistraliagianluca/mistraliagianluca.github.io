@@ -78,6 +78,26 @@ const jsonLd = {
   address: { '@type': 'PostalAddress', streetAddress: 'Strada Statale 96, km 115,500', postalCode: '70026', addressLocality: 'Modugno', addressRegion: 'BA', addressCountry: 'IT' },
   priceRange: `€${prezzoMinimo}–€${Math.max(...Object.values(prezzi.prezzoGiorno))} / giorno`,
 };
+const extraFm = (n: number) => n.toLocaleString(lang === 'it' ? 'it-IT' : 'en-GB');
+const galleria = info.galleria.map((v) => u(fotoGalleria(v)));
+
+// Icone (tratto semplice, 24×24) per "Perché" e per i gruppi del kit. Ogni gruppo del kit può scegliere la sua
+// icona nel pannello (campo "icona"); se manca si usa quella nella stessa posizione di questo elenco.
+const ICONE: Record<string, string> = {
+  carburante: 'M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12M4 10h10M14 8h2a2 2 0 0 1 2 2v6a1.5 1.5 0 0 0 3 0V8l-3-3',
+  benvenuto: 'M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 2v3M12 2v3',
+  sicurezza: 'M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6l8-3zM9 12l2 2 4-4',
+  energia: 'M13 2L4 14h7l-1 8 9-12h-7l1-8z',
+  cucina: 'M3 11h18M5 11v6a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-6M9 7c0-1.5 1-2 1-3.5M14 7c0-1.5 1-2 1-3.5M1 11h2M21 11h2',
+  relax: 'M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z',
+  igiene: 'M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z',
+  comfort: 'M12 2v20M4 6l16 12M20 6L4 18M9 3l3 2 3-2M9 21l3-2 3 2',
+  incluso: 'M20 6L9 17l-5-5',
+  affidabile: 'M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4 2.5-2.5z',
+  spazio: 'M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 15h18M3 18v2M21 18v2M6 10V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3',
+};
+const ORDINE_KIT = ['carburante', 'benvenuto', 'sicurezza', 'energia', 'cucina', 'relax', 'igiene', 'comfort'];
+const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
 ---
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
@@ -85,21 +105,20 @@ const jsonLd = {
 <section class="hero">
   <div class="wrap hero-grid">
     <img class="hero-logo" src={u('/assets/brand/logo.png')} alt="Mistralia" width="900" height="677" />
+    <div class="hero-photo">
+      <img src={u(heroSrc)} alt="Kentucky" width="1264" height="848" fetchpriority="high" />
+      <div class="hero-badge">
+        <strong>{lang === 'it' ? 'Tutto incluso' : 'All inclusive'}</strong>
+        <span>{lang === 'it' ? 'tranne le lenzuola' : 'except the sheets'}</span>
+      </div>
+    </div>
     <div class="hero-text">
       <p class="eyebrow">{t(lang, 'kicker')}</p>
       <h1>{t(lang, 'hero_title')}</h1>
       <p class="hero-sub">{t(lang, 'hero_sub')}</p>
       <div class="hero-ctas">
         <a class="btn btn-primary" href="#calcola">{t(lang, 'cta_quote')}</a>
-        <a class="btn btn-wa" href={waUrl} target="_blank" rel="noopener">{t(lang, 'cta_whatsapp')}</a>
-      </div>
-      <p class="from-price">{t(lang, 'from_price', { p: prezzoMinimo })}</p>
-    </div>
-    <div class="hero-photo">
-      <img src={u(heroSrc)} alt="Kentucky" width="1264" height="848" fetchpriority="high" />
-      <div class="hero-badge">
-        <strong>{lang === 'it' ? 'Tutto incluso' : 'All inclusive'}</strong>
-        <span>{lang === 'it' ? 'tranne le lenzuola' : 'except the sheets'}</span>
+        <span class="from-price">{t(lang, 'from_price', { p: prezzoMinimo })}</span>
       </div>
     </div>
   </div>
@@ -108,40 +127,58 @@ const jsonLd = {
 <!-- PERCHÉ -->
 <section id="perche" class="why">
   <div class="wrap">
-    <h2>{t(lang, 'why_title')}</h2>
-    <div class="cards3">
-      {[1, 2, 3].map((n) => (
-        <article class="card">
-          <span class="card-num">{n}</span>
-          <h3>{t(lang, `why_${n}_t`)}</h3>
-          <p>{t(lang, `why_${n}_b`)}</p>
-        </article>
+    <h2 class="sr-only">{t(lang, 'why_title')}</h2>
+    <ul class="why-list">
+      {[['incluso', 1], ['affidabile', 2], ['spazio', 3]].map(([ic, n]) => (
+        <li>
+          <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icona(String(ic))} /></svg></span>
+          <div><h3>{t(lang, `why_${n}_t`)}</h3><p>{t(lang, `why_${n}_b`)}</p></div>
+        </li>
       ))}
-    </div>
+    </ul>
   </div>
 </section>
+
+<!-- DIARIO (in alto: è la parte che cambia ogni settimana) -->
+{posts.length > 0 && (
+  <section id="diario" class="journal">
+    <div class="wrap">
+      <div class="head-row">
+        <h2>{t(lang, 'journal_title')}</h2>
+        <p class="section-sub">{t(lang, 'journal_sub')}</p>
+      </div>
+      <div class="posts">
+        {posts.map((p) => (
+          <a class="post-card" href={paths.post(lang, p.data.chiave)} data-scadenza={isoData(p.data.scadenza)} hidden>
+            <img src={u(p.data.immagine)} alt="" loading="lazy" width="400" height="225" />
+            <div>
+              <small>{fmtDate(p.data.data, lang)}</small>
+              <h3>{p.data.titolo}</h3>
+              <p>{p.data.estratto}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
 
 <!-- COSA È INCLUSO -->
 <section id="incluso" class="included">
   <div class="wrap">
     <h2>{t(lang, 'included_title')}</h2>
     <p class="section-sub">{t(lang, 'included_sub')}</p>
-    <div class="kit">
-      {info.kit.map((k) => (
-        <div class="kit-item">
-          <h3>{k.titolo[lang]}</h3>
-          <p>{k.voci[lang]}</p>
-        </div>
+    <ul class="kit">
+      {info.kit.map((k: any, i: number) => (
+        <li>
+          <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icona(k.icona ?? ORDINE_KIT[i % ORDINE_KIT.length])} /></svg></span>
+          <div><h3>{k.titolo[lang]}</h3><p>{k.voci[lang]}</p></div>
+        </li>
       ))}
-    </div>
+    </ul>
     <div class="prep">
-      <div>
-        <h3>{t(lang, 'prep_title')}</h3>
-        <p>{t(lang, 'prep_sub', { p: prezzi.servizio.importo })}</p>
-      </div>
-      <ul class="checklist">
-        {info.preparazione[lang].map((v) => <li>{v}</li>)}
-      </ul>
+      <h3>{t(lang, 'prep_title')}</h3>
+      <ul class="ticks">{info.preparazione[lang].map((v) => <li>{v}</li>)}</ul>
     </div>
   </div>
 </section>
@@ -151,44 +188,40 @@ const jsonLd = {
   <div class="wrap">
     <h2>{t(lang, 'prices_title')}</h2>
     <p class="section-sub">{t(lang, 'prices_sub')}</p>
-    <h3 class="step-title">{t(lang, 'step1_title')}</h3>
-    <div class="season-rows">
+
+    <h3 class="step">{t(lang, 'step1_title')}</h3>
+    <div class="seasons">
       {seasons.map((s) => (
-        <div class={`season-row season-${s}`}>
-          <div class="season-name"><i></i>{t(lang, `season_${s}`)} <span>{t(lang, 'season_label')}</span></div>
-          <div class="season-dates"><small>{t(lang, 'periods_label', { y: annoPeriodi })}</small>{periodi[s].join(' · ')}</div>
-          <div class="season-price"><strong>€{prezzi.prezzoGiorno[s]}</strong><small>{t(lang, 'per_day')}</small></div>
+        <div class={`season season-${s}`}>
+          <div class="season-top"><span><i></i>{t(lang, `season_${s}`)}</span><strong>€{prezzi.prezzoGiorno[s]}<small>/{t(lang, 'per_day_short')}</small></strong></div>
+          <p>{periodi[s].join(' · ')}</p>
         </div>
       ))}
     </div>
-    <p class="price-notes">{t(lang, 'min_days')} {t(lang, prezzi.kmInclusiGiorno ? 'km_note' : 'km_note_only', { km: prezzi.kmInclusiGiorno ?? '', price: prezzi.prezzoKmExtra.toLocaleString(lang === 'it' ? 'it-IT' : 'en-GB', { minimumFractionDigits: 2 }) })}</p>
+    <p class="note">{t(lang, 'periods_label', { y: annoPeriodi })} · {t(lang, 'min_days')} {t(lang, prezzi.kmInclusiGiorno ? 'km_note' : 'km_note_only', { km: prezzi.kmInclusiGiorno ?? '', price: prezzi.prezzoKmExtra.toLocaleString(lang === 'it' ? 'it-IT' : 'en-GB', { minimumFractionDigits: 2 }) })}</p>
 
-    <h3 class="step-title">{t(lang, 'step2_title')}</h3>
-    <p class="step-sub">{t(lang, 'step2_sub')} {t(lang, 'insurance_note')}</p>
-    <div class="plan-table-wrap">
-      <table class="plan-table">
-        <thead>
-          <tr><th></th>{prezzi.piani.map((p) => <th class={`pt-${p.id}`}>{t(lang, planKey(p.id))}</th>)}</tr>
-        </thead>
-        <tbody>
-          <tr><th>{t(lang, 'plan_supplement')}</th>{prezzi.piani.map((p) => <td>{p.supplementoGiorno ? `+€${p.supplementoGiorno} ${t(lang, 'per_day')}` : t(lang, 'plan_included')}</td>)}</tr>
-          <tr><th>{t(lang, 'plan_excess')}</th>{prezzi.piani.map((p) => <td>{p.franchigia === 'azzerata' ? t(lang, 'excess_waived') : t(lang, 'excess_standard')}</td>)}</tr>
-          <tr><th>{t(lang, 'plan_deposit')}</th>{prezzi.piani.map((p) => <td>€{p.cauzione.toLocaleString(lang === 'it' ? 'it-IT' : 'en-GB')}</td>)}</tr>
-          <tr><th>{t(lang, 'plan_driver')}</th>{prezzi.piani.map((p) => <td>{(p as any).secondoGuidatore ? t(lang, 'driver_yes') : t(lang, 'driver_no')}</td>)}</tr>
-        </tbody>
-      </table>
+    <h3 class="step">{t(lang, 'step2_title')}</h3>
+    <div class="plans">
+      {prezzi.piani.map((p: any) => (
+        <div class={`plan plan-${p.id}`}>
+          <h4>{t(lang, planKey(p.id))}</h4>
+          <p class="plan-price">{p.supplementoGiorno ? <>+€{p.supplementoGiorno}<small>/{t(lang, 'per_day_short')}</small></> : t(lang, 'plan_included')}</p>
+          <dl>
+            <dt>{t(lang, 'plan_excess')}</dt><dd>{p.franchigia === 'azzerata' ? t(lang, 'excess_waived') : t(lang, 'excess_standard')}</dd>
+            <dt>{t(lang, 'plan_deposit')}</dt><dd>€{extraFm(p.cauzione)}</dd>
+            <dt>{t(lang, 'plan_driver_short')}</dt><dd>{p.secondoGuidatore ? '✓' : '—'}</dd>
+          </dl>
+        </div>
+      ))}
     </div>
+    <p class="note">{t(lang, 'insurance_note')}</p>
 
-    <h3 class="step-title">{t(lang, 'step3_title')}</h3>
-    <div class="fee-box">
+    <h3 class="step">{t(lang, 'step3_title')}</h3>
+    <div class="fee">
       <div><strong>{prezzi.servizio[lang]}</strong><small>{t(lang, 'per_rental_once')}</small></div>
       <b>€{prezzi.servizio.importo}</b>
     </div>
-
-    <h3 class="step-title">{t(lang, 'options_title')}</h3>
-    <ul class="options">
-      {prezzi.extra.map((e) => <li><span>{e[lang]}</span><strong>€{e.importo}</strong></li>)}
-    </ul>
+    <p class="extras"><span>{t(lang, 'options_title')}:</span> {prezzi.extra.map((e, i) => <>{i > 0 && ' · '}{e[lang]} <strong>€{e.importo}</strong></>)}</p>
   </div>
 </section>
 
@@ -198,7 +231,7 @@ const jsonLd = {
     <h2>{t(lang, 'calc_title')}</h2>
     {promo.attiva && (
       <p class="calc-promo" hidden data-from={promo.mostraDal} data-to={promo.mostraAl}>
-        {promo.titolo[lang]} · {t(lang, 'promo_valid', { a: fmtDate(promo.noleggiDal, lang), b: fmtDate(promo.noleggiAl, lang) })}
+        <strong>{promo.titolo[lang]}</strong> {t(lang, 'promo_valid', { a: fmtDate(promo.noleggiDal, lang), b: fmtDate(promo.noleggiAl, lang) })}
       </p>
     )}
     <form class="calc" id="calc" novalidate>
@@ -232,85 +265,63 @@ const jsonLd = {
         <p class="calc-hint">{t(lang, 'calc_hint')}</p>
       </div>
     </form>
+
+    <div id="disponibilita" class="avail">
+      {info.calendarioEmbedUrl ? (
+        <details>
+          <summary>{t(lang, 'avail_show')}</summary>
+          <p class="note">{t(lang, 'avail_sub')}</p>
+          <iframe class="calendar" src={info.calendarioEmbedUrl} title={t(lang, 'avail_title')} loading="lazy"></iframe>
+        </details>
+      ) : (
+        <p class="note">{t(lang, 'avail_missing')}</p>
+      )}
+    </div>
   </div>
 </section>
 
-<!-- DISPONIBILITÀ -->
-<section id="disponibilita" class="availability">
-  <div class="wrap">
-    <h2>{t(lang, 'avail_title')}</h2>
-    {info.calendarioEmbedUrl ? (
-      <>
-        <p class="section-sub">{t(lang, 'avail_sub')}</p>
-        <iframe class="calendar" src={info.calendarioEmbedUrl} title={t(lang, 'avail_title')} loading="lazy"></iframe>
-      </>
-    ) : (
-      <div class="avail-missing">
-        <p>{t(lang, 'avail_missing')}</p>
-        <a class="btn btn-wa" href={waUrl} target="_blank" rel="noopener">{t(lang, 'cta_whatsapp')}</a>
-      </div>
-    )}
-  </div>
-</section>
-
-<!-- GALLERIA -->
+<!-- GALLERIA: anteprima + visore a tutto schermo -->
 <section id="galleria" class="gallery-section">
   <div class="wrap">
-    <h2>{t(lang, 'gallery_title')}</h2>
+    <div class="head-row">
+      <h2>{t(lang, 'gallery_title')}</h2>
+      <button type="button" class="btn btn-ghost gal-open" data-i="0">{t(lang, 'gallery_all', { n: galleria.length })}</button>
+    </div>
     <div class="gallery">
-      {info.galleria.map((v, i) => (
-        <a href={u(fotoGalleria(v))} target="_blank" rel="noopener">
-          <img src={u(fotoGalleria(v))} alt={`Kentucky ${i + 1}`} loading="lazy" width="400" height="300" />
-        </a>
+      {galleria.slice(0, 3).map((src, i) => (
+        <button type="button" class="gal-thumb" data-i={i} aria-label={`${t(lang, 'gallery_photo')} ${i + 1}`}>
+          <img src={src} alt="" loading="lazy" width="400" height="300" />
+        </button>
       ))}
     </div>
   </div>
+  <dialog class="lightbox" aria-label={t(lang, 'gallery_title')}>
+    <img class="lb-img" alt="" />
+    <button type="button" class="lb-btn lb-prev" aria-label={t(lang, 'gallery_prev')}>‹</button>
+    <button type="button" class="lb-btn lb-next" aria-label={t(lang, 'gallery_next')}>›</button>
+    <button type="button" class="lb-btn lb-close" aria-label={t(lang, 'gallery_close')}>×</button>
+    <p class="lb-count"></p>
+  </dialog>
+  <script type="application/json" id="gal-data" set:html={JSON.stringify(galleria)} />
 </section>
-
-<!-- DIARIO -->
-{posts.length > 0 && (
-  <section id="diario" class="journal">
-    <div class="wrap">
-      <h2>{t(lang, 'journal_title')}</h2>
-      <p class="section-sub">{t(lang, 'journal_sub')}</p>
-      <div class="cards3">
-        {posts.map((p) => (
-          <a class="post-card" href={paths.post(lang, p.data.chiave)} data-scadenza={isoData(p.data.scadenza)} hidden>
-            <img src={u(p.data.immagine)} alt="" loading="lazy" width="400" height="225" />
-            <div>
-              <small>{fmtDate(p.data.data, lang)}</small>
-              <h3>{p.data.titolo}</h3>
-              <p>{p.data.estratto}</p>
-              <span class="read-more">{t(lang, 'journal_all')} →</span>
-            </div>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-)}
 
 <!-- RITIRO E RICONSEGNA -->
 <section id="ritiro" class="pickup">
   <div class="wrap">
     <h2>{t(lang, 'pickup_title')}</h2>
     <div class="pickup-grid">
-      <div class="pickup-card">
+      <div>
         <h3>{t(lang, 'pickup_where')}</h3>
-        <p>{info.ritiro.indirizzo}</p>
-        <a class="btn btn-ghost" href={info.ritiro.mappaUrl} target="_blank" rel="noopener">{t(lang, 'contacts_map')}</a>
-      </div>
-      <div class="pickup-card">
+        <p>{info.ritiro.indirizzo}<br /><a href={info.ritiro.mappaUrl} target="_blank" rel="noopener">{t(lang, 'contacts_map')} →</a></p>
         <h3>{t(lang, 'pickup_hours')}</h3>
         <p class="hours">{info.ritiro.orari}</p>
       </div>
-      <div class="pickup-card">
+      <div>
         <h3>{t(lang, 'pickup_return')}</h3>
-        <ul class="checklist">{info.riconsegna[lang].map((v) => <li>{v}</li>)}</ul>
+        <ul class="ticks">{info.riconsegna[lang].map((v) => <li>{v}</li>)}</ul>
       </div>
     </div>
-    <h3 class="rules-title">{t(lang, 'rules_title')}</h3>
-    <ul class="rules">{info.regole.map((r) => <li>{r[lang]}</li>)}</ul>
+    <ul class="rules" aria-label={t(lang, 'rules_title')}>{info.regole.map((r) => <li>{r[lang]}</li>)}</ul>
   </div>
 </section>
 
@@ -330,15 +341,12 @@ const jsonLd = {
 <!-- CONTATTI -->
 <section id="contatti" class="contacts">
   <div class="wrap contacts-grid">
-    <div class="contacts-logo"><img src={u('/assets/brand/logo.png')} alt="Mistralia" width="900" height="677" loading="lazy" /></div>
+    <img class="contacts-logo" src={u('/assets/brand/logo.png')} alt="Mistralia" width="900" height="677" loading="lazy" />
     <div>
       <h2>{t(lang, 'contacts_title')}</h2>
-      <h3>{t(lang, 'contacts_where')}</h3>
-      <p>{info.ritiro.indirizzo}<br /><a href={info.ritiro.mappaUrl} target="_blank" rel="noopener">{t(lang, 'contacts_map')}</a></p>
-      <h3>{t(lang, 'contacts_phone')}</h3>
       <p>{info.telefoni.map((tel) => (<><a href={`tel:${tel.replace(/\s/g, '')}`}>{tel}</a><br /></>))}
         <a href={`mailto:${info.email}`}>{info.email}</a></p>
-      <a class="btn btn-wa" href={waUrl} target="_blank" rel="noopener">{t(lang, 'cta_whatsapp')}</a>
+      <p class="note">{t(lang, 'contacts_wa_note')}</p>
     </div>
   </div>
 </section>
@@ -379,6 +387,22 @@ const jsonLd = {
 
   // Le date non possono essere nel passato
   form.querySelectorAll<HTMLInputElement>('input[type=date]').forEach((i) => (i.min = today));
+
+  // Scelto il ritiro, la riconsegna parte da lì: minimo il giorno dopo e, se vuota, proposta con il noleggio minimo
+  const inA = form.elements.namedItem('a') as HTMLInputElement;
+  const inB = form.elements.namedItem('b') as HTMLInputElement;
+  inA.addEventListener('change', () => {
+    if (!inA.value) return;
+    inB.min = addDay(inA.value);
+    if (!inB.value || inB.value <= inA.value) {
+      const exc = (D.minimoEccezioni || []).find((e: any) => inA.value >= e.dal && inA.value <= e.al);
+      const minDays = exc ? exc.giorni : D.minimoGiorni[seasonOf(inA.value)];
+      let d = inA.value;
+      for (let i = 0; i < minDays; i++) d = addDay(d);
+      inB.value = d;
+    }
+    update();
+  });
 
   const years = Object.keys(D.stagioni).filter((k) => /^\d{4}$/.test(k)).sort();
   function seasonOf(iso: string): Season {
@@ -471,153 +495,229 @@ const jsonLd = {
   update();
 </script>
 
+<script>
+  // Galleria: anteprima di 3 foto, tutte le altre nel visore a tutto schermo (frecce, tastiera, swipe)
+  const foto: string[] = JSON.parse(document.getElementById('gal-data')?.textContent || '[]');
+  const dlg = document.querySelector<HTMLDialogElement>('.lightbox');
+  if (dlg && foto.length) {
+    const img = dlg.querySelector<HTMLImageElement>('.lb-img')!;
+    const count = dlg.querySelector<HTMLElement>('.lb-count')!;
+    let i = 0;
+    const show = (n: number) => {
+      i = (n + foto.length) % foto.length;
+      img.src = foto[i];
+      count.textContent = `${i + 1} / ${foto.length}`;
+      new Image().src = foto[(i + 1) % foto.length]; // precarica la successiva
+    };
+    document.querySelectorAll<HTMLElement>('.gal-thumb, .gal-open').forEach((b) =>
+      b.addEventListener('click', () => { show(Number(b.dataset.i || 0)); dlg.showModal(); }));
+    dlg.querySelector('.lb-prev')!.addEventListener('click', () => show(i - 1));
+    dlg.querySelector('.lb-next')!.addEventListener('click', () => show(i + 1));
+    dlg.querySelector('.lb-close')!.addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(i - 1);
+      if (e.key === 'ArrowRight') show(i + 1);
+    });
+    let x0 = 0;
+    dlg.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    dlg.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) show(dx < 0 ? i + 1 : i - 1);
+    });
+  }
+</script>
+
 <style>
-  .hero { padding: 36px 0 72px; }
-  .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; grid-template-areas: 'logo photo' 'text photo'; gap: 20px 48px; align-items: center; }
-  .hero-logo { grid-area: logo; width: min(360px, 80%); align-self: end; }
-  .hero-text { grid-area: text; align-self: start; }
-  .hero-photo { grid-area: photo; }
-  .hero-sub { font-size: 1.2rem; color: var(--muted); max-width: 30em; }
-  .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 12px; }
-  .from-price { font-family: var(--display); font-size: 1.4rem; color: var(--green); font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; }
-  .hero-photo { position: relative; }
-  .hero-photo img { border-radius: 28px; aspect-ratio: 3/2; object-fit: cover; width: 100%; box-shadow: var(--shadow); }
-  .hero-photo::before { content: ''; position: absolute; width: 78%; aspect-ratio: 1; right: -6%; top: -14%; border-radius: 50%; background: radial-gradient(circle at 50% 62%, var(--yellow) 0 30%, var(--peach) 31% 100%); z-index: -1; }
-  .hero-photo::after { content: ''; position: absolute; left: -48px; right: -48px; top: 56px; height: 30px; background: linear-gradient(var(--orange) 0 33.3%, var(--yellow) 33.3% 66.6%, var(--teal) 66.6%); z-index: -1; clip-path: polygon(0 0, 100% 0, calc(100% - 30px) 100%, 30px 100%); }
-  .hero-badge { position: absolute; left: -14px; top: -20px; background: var(--orange); color: var(--white); padding: 14px 20px; border-radius: 16px; box-shadow: var(--shadow); transform: rotate(-3deg); display: flex; flex-direction: column; line-height: 1.2; }
-  .hero-badge strong { font-family: var(--display); font-size: 1.5rem; text-transform: uppercase; letter-spacing: 0.02em; }
-  @media (max-width: 820px) {
-    .hero-grid { grid-template-columns: 1fr; grid-template-areas: 'logo' 'photo' 'text'; gap: 28px; }
-    .hero-logo { width: min(300px, 78%); justify-self: center; }
-    .hero-photo { margin: 18px 0 0 18px; }
-    .hero-badge { left: -8px; }
+  /* Layout compatto, pensato prima per il telefono. Regola: niente scorrimento laterale, mai. */
+  section { padding: 44px 0; }
+  @media (min-width: 821px) { section { padding: 64px 0; } }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .head-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-bottom: 16px; }
+  .head-row h2, .head-row .section-sub { margin: 0; }
+  .note { color: var(--muted); font-size: 0.9rem; margin: 10px 0 0; }
+  .ico { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--teal-soft); color: var(--green); }
+  .ico svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Apertura */
+  .hero { padding: 20px 0 36px; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: 1fr; grid-template-areas: 'logo' 'photo' 'text'; gap: 18px; }
+  .hero-logo { grid-area: logo; width: min(210px, 58%); justify-self: center; }
+  .hero-photo { grid-area: photo; position: relative; margin: 10px 6px 0; }
+  .hero-text { grid-area: text; }
+  .hero-text h1 { font-size: clamp(2.4rem, 9vw, 4.6rem); margin-bottom: 0.25em; }
+  .hero-sub { font-size: 1.05rem; color: var(--muted); max-width: 30em; margin: 0; }
+  .hero-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: 18px; }
+  .from-price { font-family: var(--display); font-size: 1.35rem; color: var(--green); font-weight: 600; text-transform: uppercase; }
+  .hero-photo img { border-radius: 22px; aspect-ratio: 3/2; object-fit: cover; width: 100%; box-shadow: var(--shadow); }
+  .hero-photo::before { content: ''; position: absolute; width: 70%; aspect-ratio: 1; right: -4%; top: -12%; border-radius: 50%; background: radial-gradient(circle at 50% 62%, var(--yellow) 0 30%, var(--peach) 31% 100%); z-index: -1; }
+  .hero-badge { position: absolute; left: -6px; top: -12px; background: var(--orange); color: var(--white); padding: 8px 14px; border-radius: 12px; box-shadow: var(--shadow); transform: rotate(-3deg); display: flex; flex-direction: column; line-height: 1.15; font-size: 0.85rem; }
+  .hero-badge strong { font-family: var(--display); font-size: 1.2rem; text-transform: uppercase; }
+  @media (min-width: 821px) {
+    .hero { padding: 32px 0 56px; }
+    .hero-grid { grid-template-columns: 1fr 1fr; grid-template-areas: 'logo photo' 'text photo'; gap: 16px 48px; align-items: center; }
+    .hero-logo { width: min(300px, 70%); justify-self: start; align-self: end; }
+    .hero-text { align-self: start; }
+    .hero-sub { font-size: 1.15rem; }
+    .hero-badge { padding: 12px 18px; left: -14px; top: -18px; }
+    /* le tre strisce del logo dietro la foto (la sezione taglia ciò che esce: niente scorrimento laterale) */
+    .hero-photo::after { content: ''; position: absolute; left: -40px; right: -40px; top: 56px; height: 26px; background: linear-gradient(var(--orange) 0 33.3%, var(--yellow) 33.3% 66.6%, var(--teal) 66.6%); z-index: -1; clip-path: polygon(0 0, 100% 0, calc(100% - 26px) 100%, 26px 100%); }
+    .hero-badge strong { font-size: 1.45rem; }
   }
 
-  .why { background: var(--white); }
-  .cards3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  @media (max-width: 820px) { .cards3 { grid-template-columns: 1fr; } }
-  .card { background: var(--sand); border-radius: var(--radius); padding: 28px; }
-  .card-num { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--orange); color: var(--white); font-family: var(--display); font-weight: 600; margin-bottom: 14px; }
-  .card p { color: var(--muted); margin: 0; }
+  /* Perché: tre righe compatte con icona */
+  .why { background: var(--white); padding: 28px 0; }
+  .why-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
+  .why-list li { display: flex; gap: 14px; align-items: flex-start; }
+  .why-list h3 { margin: 0 0 2px; font-size: 1.05rem; }
+  .why-list p { margin: 0; color: var(--muted); font-size: 0.93rem; line-height: 1.45; }
+  @media (min-width: 821px) { .why-list { grid-template-columns: repeat(3, 1fr); gap: 28px; } }
 
-  .kit { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  @media (max-width: 980px) { .kit { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 560px) { .kit { grid-template-columns: 1fr; } }
-  .kit-item { background: var(--white); border-radius: var(--radius); padding: 20px; border-top: 5px solid var(--teal); }
-  .kit-item:nth-child(3n+2) { border-top-color: var(--yellow); }
-  .kit-item:nth-child(3n) { border-top-color: var(--orange); }
-  .kit-item h3 { margin-bottom: 0.3em; }
-  .kit-item p { margin: 0; color: var(--muted); font-size: 0.95rem; }
-  .prep { margin-top: 28px; background: var(--green); color: var(--white); border-radius: var(--radius); padding: 28px; display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px; align-items: center; }
-  .prep h3 { color: var(--yellow); }
-  .prep p { margin: 0; color: #d7e7e2; }
-  .prep .checklist li::before { background: var(--yellow); color: var(--green); }
-  @media (max-width: 820px) { .prep { grid-template-columns: 1fr; } }
-  .options { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px 24px; }
-  .options li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--line); padding: 8px 0; }
-  .extras-pick { grid-column: 1 / -1; border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
-  .extras-pick legend { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; padding: 0; }
-  .check { flex-direction: row !important; align-items: center; gap: 8px !important; font-weight: 400 !important; }
-  .calc .check input { width: 18px; height: 18px; padding: 0; flex: none; accent-color: var(--green); }
-  .check small { color: var(--muted); margin-left: auto; }
-  @media (max-width: 560px) { .extras-pick { grid-template-columns: 1fr; } }
-  .pickup { background: var(--white); }
-  .pickup-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  @media (max-width: 820px) { .pickup-grid { grid-template-columns: 1fr; } }
-  .pickup-card { background: var(--bg); border-radius: var(--radius); padding: 24px; }
-  .pickup-card .checklist { grid-template-columns: 1fr; }
-  .hours { font-family: var(--display); font-size: 1.8rem; color: var(--green); margin: 0; }
-  .rules-title { margin-top: 28px; }
-  .rules { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
-  .rules li { background: var(--cream); border: 1.5px solid var(--peach); border-radius: 999px; padding: 8px 16px; font-weight: 700; color: var(--green); }
-  .checklist { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 32px; }
-  @media (max-width: 820px) { .checklist { grid-template-columns: 1fr; } }
-  .checklist li { padding-left: 34px; position: relative; }
-  .checklist li::before { content: '✓'; position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--mint-soft); color: var(--mint-dark); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; }
-  .not-included { margin-top: 28px; padding: 14px 18px; background: var(--white); border-left: 4px solid var(--terra); border-radius: 8px; }
-
-  .prices { background: var(--white); }
-  .step-title { font-family: var(--display); font-weight: 600; font-size: 1.5rem; margin: 40px 0 12px; padding-top: 28px; border-top: 1.5px solid var(--line); }
-  .step-title:first-of-type { border-top: 0; padding-top: 0; margin-top: 8px; }
-  .step-sub { color: var(--muted); margin: -4px 0 16px; max-width: 46em; }
-  .season-rows { display: grid; gap: 10px; }
-  .season-row { display: grid; grid-template-columns: 190px 1fr auto; gap: 20px; align-items: center; padding: 16px 22px; border-radius: var(--radius); background: var(--teal-soft); }
-  .season-row.season-M { background: var(--yellow-soft); }
-  .season-row.season-A { background: var(--orange-soft); }
-  .season-name { font-weight: 800; font-size: 1.1rem; color: var(--green); display: flex; align-items: center; gap: 8px; }
-  .season-name span { font-weight: 400; color: var(--muted); font-size: 0.95rem; }
-  .season-name i { width: 12px; height: 12px; border-radius: 50%; background: var(--teal); flex: none; }
-  .season-M .season-name i { background: var(--yellow); }
-  .season-A .season-name i { background: var(--orange); }
-  .season-dates { font-size: 0.98rem; }
-  .season-dates small { display: block; color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
-  .season-price { text-align: right; white-space: nowrap; }
-  .season-price strong { font-family: var(--display); font-size: 2.2rem; color: var(--green); line-height: 1; display: block; }
-  .season-price small { color: var(--muted); }
-  @media (max-width: 720px) { .season-row { grid-template-columns: 1fr auto; } .season-dates { grid-column: 1 / -1; grid-row: 2; } }
-  .plan-table-wrap { overflow-x: auto; }
-  .plan-table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 520px; }
-  .plan-table th, .plan-table td { padding: 14px 16px; text-align: center; border-bottom: 1px solid var(--line); }
-  .plan-table tbody th { text-align: left; font-weight: 400; color: var(--muted); }
-  .plan-table thead th { font-family: var(--display); font-size: 1.4rem; color: var(--white); background: var(--green); font-weight: 600; letter-spacing: 0.03em; }
-  .plan-table thead th:first-child { background: none; }
-  .plan-table thead th:nth-child(2) { border-radius: 14px 0 0 0; }
-  .plan-table thead th:last-child { border-radius: 0 14px 0 0; }
-  .plan-table td { font-weight: 700; }
-  .fee-box { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--green); color: var(--white); border-radius: var(--radius); padding: 18px 22px; }
-  .fee-box small { display: block; color: #d7e7e2; }
-  .fee-box b { font-family: var(--display); font-size: 2.2rem; color: var(--yellow); }
-  .price-notes { color: var(--muted); font-size: 0.95rem; margin-top: 20px; }
-
-  .calc-promo { background: var(--sun); display: inline-block; padding: 6px 14px; border-radius: 999px; font-weight: 600; font-size: 0.95rem; }
-  .calc-promo[hidden] { display: none; }
+  /* Diario: card orizzontali e basse su telefono */
+  .journal { background: var(--bg); }
+  .posts { display: grid; gap: 12px; }
+  .post-card { text-decoration: none; color: var(--ink); background: var(--white); border-radius: 14px; overflow: hidden; display: grid; grid-template-columns: 112px 1fr; box-shadow: 0 2px 10px rgba(12, 75, 66, 0.06); }
   .post-card[hidden] { display: none; }
-  .calc { display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px; margin-top: 20px; }
-  @media (max-width: 820px) { .calc { grid-template-columns: 1fr; } }
-  .calc-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-content: start; }
-  .calc-fields label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 0.95rem; }
-  .calc-fields .wide, .plan-pick { grid-column: 1 / -1; }
-  .calc input, .calc select, .calc textarea { font: inherit; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--white); width: 100%; }
+  .post-card img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: auto; min-height: 96px; }
+  .post-card div { padding: 10px 14px; min-width: 0; }
+  .post-card small { color: var(--muted); font-size: 0.8rem; }
+  .post-card h3 { font-size: 1rem; margin: 2px 0 4px; line-height: 1.25; }
+  .post-card p { display: none; }
+  @media (min-width: 821px) {
+    .posts { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .post-card { grid-template-columns: 1fr; }
+    .post-card img { aspect-ratio: 16/9; height: auto; }
+    .post-card div { padding: 16px 18px; }
+    .post-card p { display: block; color: var(--muted); font-size: 0.93rem; margin: 0; }
+  }
+
+  /* Kit di partenza: elenco con icone, due colonne su schermo grande */
+  .kit { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+  .kit li { display: flex; gap: 12px; align-items: flex-start; }
+  .kit li:nth-child(3n+2) .ico { background: var(--yellow-soft); }
+  .kit li:nth-child(3n) .ico { background: var(--orange-soft); }
+  .kit h3 { font-size: 1rem; margin: 0 0 1px; }
+  .kit p { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
+  @media (min-width: 640px) { .kit { grid-template-columns: 1fr 1fr; gap: 18px 32px; } }
+  @media (min-width: 1000px) { .kit { grid-template-columns: repeat(4, 1fr); } }
+  .prep { margin-top: 22px; background: var(--green); color: var(--white); border-radius: 16px; padding: 16px 18px; }
+  .prep h3 { color: var(--yellow); margin: 0 0 8px; font-size: 1rem; }
+  .ticks { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.92rem; }
+  .ticks li::before { content: '✓ '; font-weight: 800; color: var(--teal); }
+  .prep .ticks li::before { color: var(--yellow); }
+
+  /* Prezzi */
+  .prices { background: var(--white); }
+  .step { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 26px 0 10px; }
+  .step:first-of-type { margin-top: 4px; }
+  .seasons { display: grid; gap: 8px; }
+  .season { border-radius: 14px; padding: 10px 14px; background: var(--teal-soft); }
+  .season-M { background: var(--yellow-soft); }
+  .season-A { background: var(--orange-soft); }
+  .season-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .season-top span { font-weight: 800; color: var(--green); display: flex; align-items: center; gap: 8px; }
+  .season-top i { width: 10px; height: 10px; border-radius: 50%; background: var(--teal); }
+  .season-M i { background: var(--yellow); }
+  .season-A i { background: var(--orange); }
+  .season-top strong { font-family: var(--display); font-size: 1.7rem; color: var(--green); line-height: 1; }
+  .season-top small, .plan-price small { font-family: var(--body); font-size: 0.8rem; color: var(--muted); font-weight: 400; }
+  .season p { margin: 2px 0 0; font-size: 0.85rem; color: var(--muted); line-height: 1.4; }
+  @media (min-width: 821px) { .seasons { grid-template-columns: repeat(3, 1fr); gap: 12px; } .season { padding: 14px 18px; } }
+
+  .plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .plan { border: 1.5px solid var(--line); border-radius: 14px; padding: 10px 8px; text-align: center; min-width: 0; }
+  .plan-plus { border-color: var(--teal); background: var(--teal-soft); }
+  .plan h4 { font-family: var(--display); font-size: 1.15rem; margin: 0; color: var(--green); letter-spacing: 0.03em; text-transform: uppercase; }
+  .plan-price { font-family: var(--display); font-size: 1.35rem; color: var(--green); margin: 2px 0 6px; font-weight: 600; }
+  .plan dl { margin: 0; font-size: 0.8rem; line-height: 1.25; }
+  .plan dt { color: var(--muted); margin-top: 6px; }
+  .plan dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+  @media (min-width: 821px) { .plans { gap: 16px; } .plan { padding: 16px; } .plan dl { font-size: 0.92rem; } }
+
+  .fee { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--green); color: var(--white); border-radius: 14px; padding: 12px 16px; }
+  .fee strong { display: block; font-size: 0.95rem; }
+  .fee small { color: #d7e7e2; font-size: 0.82rem; }
+  .fee b { font-family: var(--display); font-size: 1.9rem; color: var(--yellow); }
+  .extras { font-size: 0.9rem; color: var(--muted); margin: 10px 0 0; }
+  .extras span { font-weight: 700; color: var(--green); }
+  .extras strong { color: var(--ink); }
+
+  /* Calcolatore */
+  .calc-promo { background: var(--yellow); color: var(--green); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; font-size: 0.93rem; line-height: 1.35; }
+  .calc-promo strong { display: block; }
+  .calc-promo[hidden] { display: none; }
+  .calc { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; margin-top: 12px; }
+  @media (min-width: 821px) { .calc { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px; } }
+  .calc-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-content: start; }
+  .calc-fields label { display: flex; flex-direction: column; gap: 4px; font-weight: 600; font-size: 0.9rem; min-width: 0; }
+  .calc-fields .wide, .plan-pick, .extras-pick { grid-column: 1 / -1; }
+  .calc input, .calc select, .calc textarea { font: inherit; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--white); width: 100%; min-width: 0; max-width: 100%; }
+  .calc input[type=date] { -webkit-appearance: none; appearance: none; min-height: 46px; padding: 8px 10px; }
   .calc input:focus, .calc select:focus, .calc textarea:focus { outline: 3px solid var(--mint-soft); border-color: var(--mint); }
-  .plan-pick { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
-  .plan-pick legend { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; padding: 0; }
-  .pill { flex-direction: row !important; align-items: center; gap: 8px !important; padding: 10px 16px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--white); cursor: pointer; font-weight: 500 !important; }
-  .calc .pill input { width: 18px; height: 18px; padding: 0; flex: none; accent-color: var(--mint-dark); }
-  .pill:has(input:checked) { border-color: var(--mint-dark); background: var(--mint-soft); }
-  .calc-result { background: var(--white); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); align-self: start; }
-  .calc-lines :global(div), .calc-total, .calc-deposit { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; }
-  .calc-lines :global(div) { color: var(--muted); font-size: 0.95rem; }
+  .plan-pick, .extras-pick { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+  .plan-pick legend, .extras-pick legend { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; padding: 0; }
+  .pill { flex-direction: row !important; align-items: center; gap: 6px !important; padding: 8px 14px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--white); cursor: pointer; font-weight: 500 !important; }
+  .calc .pill input, .calc .check input { width: 18px; height: 18px; padding: 0; flex: none; accent-color: var(--green); }
+  .pill:has(input:checked) { border-color: var(--green); background: var(--mint-soft); }
+  .extras-pick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; }
+  .check { flex-direction: row !important; align-items: center; gap: 8px !important; font-weight: 400 !important; }
+  .check small { color: var(--muted); margin-left: auto; }
+  @media (max-width: 420px) { .extras-pick { grid-template-columns: 1fr; } }
+  .calc-result { background: var(--white); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); align-self: start; }
+  .calc-lines :global(div), .calc-total, .calc-deposit { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; }
+  .calc-lines :global(div) { color: var(--muted); font-size: 0.92rem; }
   .calc-lines :global(.discount) { color: var(--terra); font-weight: 600; }
-  .calc-total { border-top: 1.5px solid var(--line); margin-top: 8px; padding-top: 14px; font-weight: 600; }
-  .calc-total strong { font-family: var(--display); font-size: 2.2rem; color: var(--green); }
-  .calc-deposit { font-size: 0.9rem; color: var(--muted); }
+  .calc-total { border-top: 1.5px solid var(--line); margin-top: 6px; padding-top: 10px; font-weight: 600; align-items: baseline; }
+  .calc-total strong { font-family: var(--display); font-size: 2rem; color: var(--green); }
+  .calc-deposit { font-size: 0.85rem; color: var(--muted); }
   .calc-error { color: var(--terra); font-weight: 600; }
-  .calc-send { width: 100%; justify-content: center; margin-top: 16px; }
-  .calc-hint { font-size: 0.85rem; color: var(--muted); margin-bottom: 0; }
+  .calc-send { width: 100%; justify-content: center; margin-top: 12px; }
+  .calc-hint { font-size: 0.82rem; color: var(--muted); margin-bottom: 0; }
+  .avail { margin-top: 14px; }
+  .avail summary { cursor: pointer; font-weight: 700; color: var(--green); }
+  .calendar { width: 100%; height: 460px; border: 0; border-radius: 14px; background: var(--sand); margin-top: 10px; }
 
-  .availability { background: var(--white); }
-  .calendar { width: 100%; height: 520px; border: 0; border-radius: var(--radius); background: var(--sand); }
-  .avail-missing { background: var(--mint-soft); border-radius: var(--radius); padding: 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
-  .avail-missing p { margin: 0; max-width: 36em; }
+  /* Galleria */
+  .gallery-section { background: var(--white); }
+  .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .gal-thumb { padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 12px; overflow: hidden; }
+  .gal-thumb img { aspect-ratio: 4/3; object-fit: cover; width: 100%; transition: transform 0.2s ease; }
+  .gal-thumb:hover img { transform: scale(1.03); }
+  .gal-thumb:nth-child(3) { display: none; }
+  @media (min-width: 821px) { .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; } .gal-thumb:nth-child(3) { display: block; } }
+  .gal-open { padding: 0.55em 1.1em; font-size: 0.92rem; }
+  .lightbox { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(6, 30, 26, 0.96); }
+  .lightbox[open] { display: grid; place-items: center; }
+  .lightbox::backdrop { background: rgba(6, 30, 26, 0.96); }
+  .lb-img { max-width: 100vw; max-height: 86dvh; object-fit: contain; }
+  .lb-btn { position: absolute; border: 2px solid rgba(255, 255, 255, 0.85); background: rgba(6, 30, 26, 0.6); color: #fff; width: 48px; height: 48px; border-radius: 50%; font-size: 2rem; line-height: 1; cursor: pointer; display: grid; place-items: center; }
+  .lb-prev { left: 10px; top: 50%; transform: translateY(-50%); }
+  .lb-next { right: 10px; top: 50%; transform: translateY(-50%); }
+  .lb-close { right: 10px; top: 10px; }
+  .lb-count { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; color: #fff; margin: 0; font-size: 0.9rem; }
 
-  .gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-  .gallery img { aspect-ratio: 4/3; object-fit: cover; width: 100%; border-radius: 12px; }
-  @media (max-width: 820px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+  /* Ritiro e regole */
+  .pickup { background: var(--bg); }
+  .pickup-grid { display: grid; gap: 4px 32px; }
+  @media (min-width: 821px) { .pickup-grid { grid-template-columns: 1fr 1fr; } }
+  .pickup h3 { font-size: 1rem; margin: 10px 0 4px; }
+  .pickup p { margin: 0; }
+  .pickup .ticks { flex-direction: column; gap: 4px; }
+  .hours { font-family: var(--display); font-size: 1.5rem; color: var(--green); }
+  .rules { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .rules li { background: var(--cream); border: 1.5px solid var(--peach); border-radius: 999px; padding: 5px 12px; font-weight: 700; color: var(--green); font-size: 0.88rem; }
 
-  .journal { background: var(--white); }
-  .post-card { text-decoration: none; color: var(--ink); background: var(--sand); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
-  .post-card img { aspect-ratio: 16/9; object-fit: cover; width: 100%; }
-  .post-card div { padding: 20px; }
-  .post-card small { color: var(--muted); }
-  .post-card p { color: var(--muted); font-size: 0.95rem; }
-  .read-more { color: var(--mint-dark); font-weight: 600; }
+  /* FAQ */
+  .faq details { border-bottom: 1px solid var(--line); padding: 12px 0; max-width: 760px; }
+  .faq summary { cursor: pointer; font-weight: 600; }
+  .faq details p { color: var(--muted); margin: 8px 0 0; }
 
-  .faq details { border-bottom: 1px solid var(--line); padding: 16px 0; max-width: 760px; }
-  .faq summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
-  .faq details p { color: var(--muted); margin: 10px 0 0; }
-
+  /* Contatti */
   .contacts { background: var(--cream); }
-  .contacts-grid { display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: center; }
-  .contacts-logo { max-width: 260px; }
-  @media (max-width: 820px) { .contacts-grid { grid-template-columns: 1fr; } }
+  .contacts-grid { display: grid; grid-template-columns: 96px 1fr; gap: 20px; align-items: center; }
+  .contacts-logo { width: 96px; }
+  .contacts h2 { margin-bottom: 0.3em; }
+  .contacts p { margin: 0 0 6px; }
+  @media (min-width: 821px) { .contacts-grid { grid-template-columns: 180px 1fr; gap: 40px; } .contacts-logo { width: 180px; } }
+
 </style>

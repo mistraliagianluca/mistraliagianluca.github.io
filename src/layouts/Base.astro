@@ -11,8 +11,10 @@ interface Props {
   /** true solo sulla home italiana: reindirizza i browser non italiani a /en/ alla prima visita */
   langRedirect?: boolean;
   image?: string;
+  /** true = la pagina non va indicizzata dai motori di ricerca (articoli archiviati, pagina 404) */
+  noindex?: boolean;
 }
-const { lang, title, description, altPath, langRedirect = false, image = '/assets/gallery/2.jpg' } = Astro.props;
+const { lang, title, description, altPath, langRedirect = false, image = '/assets/gallery/2.jpg', noindex = false } = Astro.props;
 const other: Lang = lang === 'it' ? 'en' : 'it';
 const home = paths.home(lang);
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
@@ -29,6 +31,7 @@ const waUrl = `https://wa.me/${info.whatsapp}?text=${waText}`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang={lang} href={canonical} />
     <link rel="alternate" hreflang={other} href={origin + altPath} />
@@ -57,13 +60,13 @@ const waUrl = `https://wa.me/${info.whatsapp}?text=${waText}`;
     )}
   </head>
   <body>
-    {promo.attiva && (
-      <div class="promo" hidden data-from={promo.mostraDal} data-to={promo.mostraAl}>
-        {promo.titolo[lang]}
-        <small>{t(lang, 'promo_until', { d: fmtDate(promo.mostraAl, lang) })}</small>
-      </div>
-    )}
     <header class="site-header">
+      {promo.attiva && (
+        <div class="promo" hidden data-from={promo.mostraDal} data-to={promo.mostraAl}>
+          {promo.titolo[lang]}
+          <small>{t(lang, 'promo_until', { d: fmtDate(promo.mostraAl, lang) })}</small>
+        </div>
+      )}
       <div class="wrap">
         <a class="brand" href={home} aria-label="Mistralia">
           <img class="badge" src={u('/assets/brand/logo-badge.png')} alt="" width="600" height="261" />

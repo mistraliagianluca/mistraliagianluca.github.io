@@ -174,6 +174,20 @@ collections:
             fields:
               - { name: titolo, label: Titolo, widget: object, fields: [ { name: it, label: Italiano, widget: string }, { name: en, label: Inglese, widget: string } ] }
               - { name: voci, label: Cosa comprende, widget: object, fields: [ { name: it, label: Italiano, widget: text }, { name: en, label: Inglese, widget: text } ] }
+              - name: icona
+                label: Icona
+                widget: select
+                required: false
+                options:
+                  - { label: "Carburante / viaggio", value: carburante }
+                  - { label: "Benvenuto / caffè", value: benvenuto }
+                  - { label: "Sicurezza", value: sicurezza }
+                  - { label: "Energia", value: energia }
+                  - { label: "Cucina", value: cucina }
+                  - { label: "Esterno e relax", value: relax }
+                  - { label: "Igiene", value: igiene }
+                  - { label: "Comfort / clima", value: comfort }
+                  - { label: "Spunta generica", value: incluso }
           - name: preparazione
             label: Come prepariamo il camper
             widget: object
@@ -223,7 +237,7 @@ collections:
     create: false
     media_folder: /public/assets/diario
     public_folder: /assets/diario
-    # In cima gli articoli in vetrina, sotto quelli conclusi o nascosti, ognuno dal più recente.
+    # In cima gli articoli in vetrina, sotto quelli conclusi o archiviati, ognuno dal più recente.
     # "stato" e "ordine" li aggiorna il bot a ogni giro (automazione/traduzioni.mjs).
     summary: "{{stato}} · {{titolo}} · {{data}}"
     filter: { field: lingua, value: it }
@@ -247,8 +261,8 @@ collections:
         picker_utc: true
         required: false
       - name: nascosto
-        label: Nascondi dal sito
-        hint: "Acceso = l'articolo sparisce dal sito (pagina compresa) ma resta qui e si può riattivare."
+        label: Archivia (togli dalla home)
+        hint: "Acceso = l'articolo esce dalla home ma la pagina resta raggiungibile da chi ha il link, con l'avviso 'in archivio'. Per togliere un articolo sbagliato usa Delete."
         widget: boolean
         required: false
         default: false

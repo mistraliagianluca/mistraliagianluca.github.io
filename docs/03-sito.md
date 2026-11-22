@@ -6,19 +6,24 @@ Il sito è **una pagina sola**, in italiano (`www.mistralia.co/`) e in inglese (
 
 ## Le sezioni della pagina (dall'alto)
 
-| Sezione | Da dove prende i dati |
-| --- | --- |
-| Logo grande e foto di apertura con il badge "Tutto incluso" | `info.json` → `fotoApertura` |
-| Banner della promo (solo se attiva e nelle date giuste) | `promo.md` |
-| Cosa è incluso (kit in 8 gruppi) | `info.json` → `kit` |
-| Prezzi in 3 passi: stagioni, piani, quota fissa ed extra | `prezzi.json` |
-| Calcolatore con richiesta su WhatsApp | `prezzi.json`, `promo.md`, `info.json` → `whatsapp` |
-| Disponibilità (calendario delle date occupate) | `info.json` → `calendarioEmbedUrl` |
-| Galleria | `info.json` → `galleria` |
-| Diario di bordo (compare solo quando c'è almeno un articolo vero) | `src/content/diario/` |
-| Ritiro e riconsegna (Modugno, mappa, orari) | `info.json` → `ritiro` |
-| Domande frequenti | `info.json` → `faq` |
-| Contatti e dati aziendali | `info.json` |
+La pagina è pensata **prima per il telefono**: niente scorrimento laterale (regola fissa del progetto), sezioni basse, testi brevi. Su telefono è alta circa 6.900 pixel (prima del 22/11/2026 erano 11.900).
+
+| Sezione | Cosa mostra | Da dove prende i dati |
+| --- | --- | --- |
+| **Banner promo** | Barra gialla in cima, **dentro l'intestazione fissa**: resta visibile anche scorrendo. Solo se la promo è attiva e nelle date giuste | `promo.md` |
+| **Apertura** | Logo, foto di apertura con il badge "Tutto incluso", titolo, pulsante *Calcola il prezzo* e "da €X al giorno" | `info.json` → `fotoApertura`; prezzo più basso da `prezzi.json` |
+| **Perché il Kentucky** | Tre righe con icona | testi in `src/i18n/` (`why_*`) |
+| **Diario di bordo** | Gli ultimi 3 articoli non scaduti; su telefono card basse con foto piccola e titolo. È in alto apposta, perché più in basso nessuno ci arrivava | `src/content/diario/` |
+| **Kit di partenza** | Elenco con icone (2–4 colonne su schermo grande) e il riquadro *Prima di ogni partenza* | `info.json` → `kit` (campo `icona` facoltativo: se manca, l'icona dipende dalla posizione del gruppo), `preparazione` |
+| **Piani e prezzi** | 1 · stagioni (tre riquadri con prezzo e periodi) · 2 · coperture (tre colonne, senza tabelle larghe) · 3 · quota fissa: **è l'unico posto in cui compare la quota da €200** · extra in una riga | `prezzi.json` |
+| **Calcolatore** | Date affiancate anche su telefono, piano, persone, extra, note, totale e *Invia la richiesta su WhatsApp*. Sotto, il calendario delle date occupate (apribile) | `prezzi.json`, `promo.md`, `info.json` |
+| **Galleria** | 2 foto su telefono, 3 su schermo grande, e il pulsante *Tutte le foto (N)*: apre un visore a tutto schermo con frecce, tastiera, swipe e contatore | `info.json` → `galleria` |
+| **Ritiro e riconsegna** | Indirizzo con link a Maps, orari, come riconsegnarlo, regole | `info.json` → `ritiro`, `riconsegna`, `regole` |
+| **Domande frequenti** | Domande apribili; quelle con `DA_CONFERMARE` sono nascoste | `info.json` → `faq` |
+| **Contatti** | Telefoni ed email | `info.json` |
+| **WhatsApp** | **Un solo pulsante**, fisso in basso a destra e sempre visibile su ogni schermo. L'unico altro pulsante WhatsApp è quello del calcolatore, che manda la richiesta già compilata | `info.json` → `whatsapp` |
+
+**Calcolatore, date:** appena si sceglie il ritiro, la riconsegna non può essere prima del giorno dopo e, se è vuota, viene proposta con il **noleggio minimo** di quel periodo, così il calendario si apre già dalla data giusta e il prezzo compare subito.
 
 ## Il pannello www.mistralia.co/admin
 
@@ -44,7 +49,7 @@ flowchart LR
 
 **Diario di bordo (articoli):** sezione *Diario di bordo* del pannello. Si vede e si modifica **solo la versione italiana**: titolo, anteprima, testo, immagine, **Fine dell'evento**, interruttore **Nascondi** o **Delete**. La **versione inglese si aggiorna da sola** entro pochi minuti: il bot ritraduce i testi cambiati, copia date, immagine e interruttori, ed elimina l'inglese se elimini l'italiano. Nel gruppo Telegram arriva *"🌍 Versione inglese aggiornata"*. Gli articoli nuovi li crea solo il bot.
 
-**Ordine dell'elenco:** in cima gli articoli **🟢 in vetrina**, sotto quelli **⚪ evento concluso** e **⚫ nascosto**, ognuno dal più recente. Lo stato lo aggiorna il bot entro 1–2 minuti da ogni modifica, e a mezzanotte per quelli che scadono. Il pannello ricorda l'ultimo ordinamento scelto con *Sort*: per tornare a questo scegli *Ordine*, decrescente.
+**Ordine dell'elenco:** in cima gli articoli **🟢 in vetrina**, sotto quelli **⚪ evento concluso** e **⚫ archiviato**, ognuno dal più recente. Lo stato lo aggiorna il bot entro 1–2 minuti da ogni modifica, e a mezzanotte per quelli che scadono. Il pannello ricorda l'ultimo ordinamento scelto con *Sort*: per tornare a questo scegli *Ordine*, decrescente.
 
 **Cosa NON si cambia dal pannello:** i testi fissi del sito (`src/i18n/`), i nomi dei piani e le impostazioni dell'automazione. Per questi vedi la tabella qui sotto.
 
@@ -67,11 +72,11 @@ flowchart LR
 | **Promo** (es. Black Friday) | pannello → Promozione · oppure `src/data/promo.md` | vedi [Promo](#promo) |
 | **Numero WhatsApp**, telefoni, email | `src/data/info.json` | `whatsapp` senza `+` e senza spazi (es. `393756473839`) |
 | **Indirizzo e orari di ritiro** | `info.json` → `ritiro` | È l'indirizzo che vedono i clienti, non la sede legale |
-| **Kit incluso, preparazione, riconsegna, regole** | `info.json` | Sempre in italiano **e** inglese |
+| **Kit incluso, preparazione, riconsegna, regole** | pannello → Contatti… · oppure `info.json` | Sempre in italiano **e** inglese. Ogni gruppo del kit ha un'**icona** a scelta (carburante, benvenuto, sicurezza, energia, cucina, relax, igiene, comfort, spunta) |
 | **Domande frequenti** | `info.json` → `faq` | Una FAQ che contiene `DA_CONFERMARE` non viene mostrata |
 | **Foto della galleria** | pannello → Contatti… → *Galleria* · oppure `public/assets/gallery/` + `info.json` → `galleria` | vedi [Foto](#foto) |
 | **Testi fissi** (titoli, pulsanti, frasi) | `src/i18n/it.json` e `src/i18n/en.json` | Stesse chiavi in tutti e due i file |
-| **Articoli del Diario** | pannello → Diario di bordo · oppure `src/content/diario/` | Li scrive il bot; vedi [Articoli scaduti e nascosti](#articoli-scaduti-e-nascosti) |
+| **Articoli del Diario** | pannello → Diario di bordo · oppure `src/content/diario/` | Li scrive il bot; vedi [Articoli scaduti, archiviati ed eliminati](#articoli-scaduti-archiviati-ed-eliminati) |
 | Aspetto, colori, struttura | `src/components/`, `src/layouts/`, `src/styles/global.css` | Solo per chi sviluppa ([Sviluppo](06-sviluppo.md)) |
 
 ### In alternativa: modificare un file con l'editor web di GitHub
@@ -107,21 +112,24 @@ titolo_en: "Black Friday: 15% off spring rentals"
 - Per una nuova promo cambia i valori e metti `attiva: true` (nel pannello: l'interruttore *Promo attiva*).
 - Salvando dal pannello i commenti `#` del file spariscono: le spiegazioni restano qui e nei suggerimenti dei campi.
 
-## Articoli scaduti e nascosti
+## Articoli scaduti, archiviati ed eliminati
+
+**Regola:** nessun link porta a un vicolo cieco. Gli articoli conclusi o archiviati restano raggiungibili dal loro link, e quelli eliminati portano alla pagina "non c'è più" di Mistralia.
 
 ```mermaid
 flowchart LR
     A["Articolo pubblicato<br>con 'Fine dell'evento'"] --> B{"Oggi è dopo<br>la fine?"}
     B -->|No| C["In vetrina nella home<br>(i 3 più recenti)"]
     B -->|Sì| D["Esce dalla home;<br>la pagina resta online<br>con l'avviso 'evento concluso'"]
-    E["Interruttore 'Nascondi'<br>nel pannello"] --> F["Sparisce dal sito<br>(pagina compresa),<br>si può riattivare"]
+    E["Interruttore 'Archivia'<br>nel pannello"] --> F["Esce dalla home;<br>la pagina resta raggiungibile dal link<br>con l'avviso 'in archivio'"]
+    G["Delete<br>nel pannello"] --> H["La pagina non esiste più:<br>chi ha il link vede la<br>pagina 404 di Mistralia"]
 ```
 
 - **Fine dell'evento** (`scadenza`): la scrive il bot quando il post parla di un evento con date, ed è controllata dal verificatore. Per luoghi e itinerari è vuota e l'articolo non scade. Si può correggere dal pannello.
 - Dal giorno dopo la scadenza l'articolo **esce dalla home** e la sua pagina mostra *"Questo evento si è concluso il … · Scopri le prossime idee di viaggio"*. La pagina **resta online** apposta, così i link già condivisi sui social non portano a una pagina inesistente. Lo decide il browser del visitatore in base alla data: non serve ricostruire il sito.
 - La home mostra i **3 articoli più recenti non scaduti**. Se sono tutti scaduti, la sezione Diario sparisce.
-- **Nascondi** (`nascosto: true`): l'articolo sparisce del tutto dal sito ma il file resta, e si può riaccendere. Serve per un articolo sbagliato o non più adatto.
-- **Elimina** (*Delete* nel pannello): toglie per sempre l'articolo dal repository (resta nella storia di git); il bot elimina anche la versione inglese. L'immagine in `public/assets/diario/` resta e si può cancellare dalla libreria media del pannello.
+- **Archivia** (`nascosto: true`, interruttore *Archivia* nel pannello): l'articolo **esce dalla home** ma la sua pagina **resta raggiungibile** da chi ha il link, ad esempio dai social, con l'avviso *"Questo articolo è in archivio e non è più in evidenza · Scopri le prossime idee di viaggio"*. Non compare in nessun elenco e Google non la indicizza (`noindex`). Si può riattivare spegnendo l'interruttore.
+- **Elimina** (*Delete* nel pannello): per un articolo **sbagliato** da togliere davvero. Toglie l'articolo dal repository (resta nella storia di git), e il bot elimina anche la versione inglese. Chi apre il vecchio link vede la **pagina 404 di Mistralia**: *"Questa pagina non c'è più"*, con i pulsanti per il Diario, il calcolatore e WhatsApp, in italiano o in inglese secondo il link. L'immagine in `public/assets/diario/` resta e si può cancellare dalla libreria media del pannello.
 - **Versione inglese:** non va mai modificata a mano, perché viene riscritta a ogni modifica dell'italiano. Si corregge l'italiano e la traduzione segue. Dettagli in [Automazione → Traduzioni](04-automazione.md#versione-inglese-degli-articoli).
 - I **post social** non vengono toccati: è normale che i post di eventi passati restino sul profilo.
 

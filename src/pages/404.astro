@@ -1,0 +1,39 @@
+---
+// Pagina mostrata da GitHub Pages per ogni indirizzo che non esiste (articoli eliminati, link sbagliati).
+// È una sola pagina per tutte e due le lingue: lo script sotto mostra il testo inglese se il link era sotto /en/.
+import Base from '../layouts/Base.astro';
+import { t, paths, u } from '../lib/site';
+---
+<Base lang="it" title={t('it', 'nf_meta')} description={t('it', 'nf_text')} altPath={paths.home('en')} noindex>
+  <section class="nf">
+    <div class="wrap">
+      <img class="nf-logo" src={u('/assets/brand/logo.png')} alt="Mistralia" width="240" />
+      {(['it', 'en'] as const).map((l) => (
+        <div class="nf-testo" data-lingua={l} hidden={l === 'en'}>
+          <h1>{t(l, 'nf_title')}</h1>
+          <p>{t(l, 'nf_text')}</p>
+          <div class="nf-azioni">
+            <a class="btn btn-primary" href={`${paths.home(l)}#diario`}>{t(l, 'nf_journal')}</a>
+            <a class="btn" href={`${paths.home(l)}#calcola`}>{t(l, 'cta_quote')}</a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<script>
+  if (location.pathname.startsWith('/en/')) {
+    document.documentElement.lang = 'en';
+    document.querySelectorAll<HTMLElement>('.nf-testo').forEach((d) => (d.hidden = d.dataset.lingua !== 'en'));
+  }
+</script>
+
+<style>
+  .nf { padding: 64px 0 80px; text-align: center; }
+  .nf-logo { width: min(240px, 60vw); height: auto; margin: 0 auto 24px; display: block; }
+  .nf h1 { margin-bottom: 12px; }
+  .nf p { max-width: 520px; margin: 0 auto 28px; }
+  .nf-azioni { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .nf-testo[hidden] { display: none; }
+</style>
