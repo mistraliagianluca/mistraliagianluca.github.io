@@ -1,13 +1,6 @@
 {
-  "offset": 926428056,
-  "bozza": {
-    "id": "2026-11-22-lecce-black-friday-camper-primavera-pupi",
-    "codice": "392ddf11ec",
-    "messageId": 56,
-    "testoId": 57,
-    "creata": "2026-11-22T15:55:23.508Z",
-    "promemoria": false
-  },
+  "offset": 926428057,
+  "bozza": null,
   "storico": [
     {
       "id": "2026-11-21-selva-di-fasano-camper-apulia-for-christmas-2026",
@@ -83,6 +76,12 @@
       "id": "2026-11-21-matera-natale-sassi-presepe-vivente-camper",
       "chiave": "matera-natale-sassi-presepe-vivente-camper",
       "data": "2026-11-21",
+      "da": "Gianluca"
+    },
+    {
+      "id": "2026-11-22-lecce-black-friday-camper-primavera-pupi",
+      "chiave": "lecce-black-friday-camper-primavera-pupi",
+      "data": "2026-11-22",
       "da": "Gianluca"
     }
   ],
