@@ -71,7 +71,7 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 
 ## Promo (`src/data/promo.md`)
 
-- Attiva: **false** · Black Friday −15% · banner dal 2026-11-22 al 2026-12-01 · noleggi dal 2027-03-01 al 2027-05-31
+- Attiva: **true** · Black Friday −15% · banner dal 2026-11-22 al 2026-12-01 · noleggi dal 2027-03-01 al 2027-05-31
 
 ## Articoli pubblicati nel Diario
 
