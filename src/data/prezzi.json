@@ -68,7 +68,7 @@
       "giorni": 2
     }
   ],
-  "kmInclusiGiorno": null,
+  "kmInclusiGiorno": 100,
   "prezzoKmExtra": 0.35,
   "piani": [
     {
@@ -81,14 +81,14 @@
     {
       "id": "plus",
       "supplementoGiorno": 15,
-      "cauzione": 800,
-      "franchigia": "azzerata",
+      "cauzione": 1500,
+      "franchigia": "standard",
       "secondoGuidatore": false
     },
     {
       "id": "premium",
       "supplementoGiorno": 25,
-      "cauzione": 500,
+      "cauzione": 1000,
       "franchigia": "azzerata",
       "secondoGuidatore": true
     }
@@ -100,16 +100,16 @@
   },
   "extra": [
     {
-      "id": "lenzuola",
+      "id": "lenzuola-per-letto",
       "importo": 40,
-      "it": "Lenzuola",
-      "en": "Bed linen"
+      "it": "Lenzuola (Per Letto)",
+      "en": "Bed linen (Per Bed)"
     },
     {
-      "id": "asciugamani",
+      "id": "asciugamani-per-persona",
       "importo": 15,
-      "it": "Asciugamani",
-      "en": "Bath towels"
+      "it": "Asciugamani (Per Persona)",
+      "en": "Bath towels (Per Person)"
     },
     {
       "id": "barbecue",
@@ -120,8 +120,8 @@
     {
       "id": "transfer",
       "importo": 100,
-      "it": "Transfer aeroporto (andata e ritorno)",
-      "en": "Airport transfer (pick-up and drop-off)"
+      "it": "Transfer aeroporto (andata o ritorno)",
+      "en": "Airport transfer (pick-up or drop-off)"
     }
   ],
   "_extra": "Extra facoltativi, prezzo per noleggio",
