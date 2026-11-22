@@ -34,6 +34,9 @@ flowchart TD
 | *budget del mese raggiunto* | La spesa stimata del mese ha superato `budgetMensileDollari` | Aspetta il mese successivo o alza il valore in `config.json` (con una riga nel registro) |
 | Spesa Claude molto più alta del previsto | Ricerche web lunghe, troppi tentativi, modello costoso | Controlla console.anthropic.com → Usage; riduci `ricercheScrittura`, `ricercheVerifica`, `tentativiVerifica`; usa Sonnet. Vedi [Costi](04-automazione.md#costi-e-tetto-di-spesa) |
 | Il testo della bozza si interrompe a metà ("Per cor…") | Didascalia della foto oltre i 1024 caratteri | Risolto il 21/11/2026: il testo lungo arriva in un messaggio separato |
+| Il pannello `/admin` non accetta il token o non salva (*401*, *403*, *Bad credentials*) | Token scaduto, revocato o senza *Contents: Read and write* su questo repository | Rifai il token (vedi [Il sito → pannello](03-sito.md#il-pannello-wwwmistraliacoadmin)), poi *Sign Out* e di nuovo *Sign In Using Access Token* |
+| Il pannello dice che il file è cambiato nel frattempo | Qualcuno (tu dal Mac o dall'editor web) ha modificato lo stesso file | Ricarica la pagina del pannello e rifai la modifica |
+| Pagina `/admin` bianca | unpkg.com non raggiungibile o bloccato dal browser | Riprova più tardi; nel frattempo usa l'editor web di GitHub |
 | **Pubblica sito** rosso dopo una modifica a un `.json` | Errore di formato (virgola, virgolette, parentesi) | Il sito online resta com'era. Apri il file su GitHub: l'errore indica la riga. Correggi o annulla la modifica |
 | **Documentazione** rossa ❌ | Push con modifiche al codice senza una riga in `docs/registro-modifiche.md` | Aggiungi la riga (e aggiorna le pagine di `docs/`), poi un nuovo push |
 | `git push` rifiutato (*rejected… fetch first*) | Il bot ha fatto commit nel frattempo | `git pull`, poi `git push` |

@@ -3,7 +3,7 @@
 > ⚙️ **Non modificare questo file a mano.** Lo rigenera il workflow *Documentazione* a ogni push, leggendo i file veri del progetto.
 > Se qualcosa qui è sbagliato, è sbagliato il file da cui viene: correggi quello.
 
-Ultimo aggiornamento: 2026-11-22 15:10 UTC
+Ultimo aggiornamento: 2026-11-22 15:28 UTC
 
 ## Workflow di GitHub Actions
 
@@ -56,7 +56,18 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 - Quota obbligatoria: €200 (Pulizia finale, preparazione e check-in)
 - Extra: Lenzuola €40 · Asciugamani €15 · Barbecue €25 · Transfer aeroporto (andata e ritorno) €100
 - Piani: basic +€0/giorno, cauzione €2000 · plus +€15/giorno, cauzione €800 · premium +€25/giorno, cauzione €500
-- Stagioni caricate per gli anni: 2026, 2027
+
+| Dal | Al | Stagione |
+| --- | --- | --- |
+| 2026-11-01 | 2026-11-02 | media |
+| 2026-11-03 | 2027-03-24 | bassa |
+| 2027-03-25 | 2027-03-30 | alta |
+| 2027-03-31 | 2027-05-28 | media |
+| 2027-05-29 | 2027-09-05 | alta |
+| 2027-09-06 | 2027-10-04 | media |
+| 2027-10-05 | 2027-10-28 | bassa |
+| 2027-10-29 | 2027-11-01 | media |
+| 2027-11-02 | 2027-12-31 | bassa |
 
 ## Promo (`src/data/promo.md`)
 
@@ -64,8 +75,7 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 
 ## Articoli pubblicati nel Diario
 
-- `matera-natale-sassi-presepe-vivente-camper`
-- `ndocciata-agnone-camper-dicembre-2026`
+Nessuno.
 
 ## Struttura del repository
 
@@ -99,6 +109,9 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 │   ├── registro-modifiche.md
 │   └── riferimento.md
 ├── public/
+│   ├── admin/
+│   │   ├── config.yml
+│   │   └── index.html
 │   ├── assets/
 │   │   ├── brand/
 │   │   │   ├── favicon.png

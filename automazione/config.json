@@ -20,6 +20,7 @@
   "budgetMensileDollari": 8,
   "oreMaxDaBari": 4,
   "sito": "https://www.mistralia.co",
+  "_prezzoDa": "Usato solo se non si riesce a leggere src/data/prezzi.json: normalmente il prezzo \"da\" è il più basso di prezzoGiorno",
   "prezzoDa": 77,
   "_prezzi": "Dollari per milione di token (input, output) e per singola ricerca/immagine: servono solo a calcolare la spesa mostrata su Telegram.",
   "prezzi": {

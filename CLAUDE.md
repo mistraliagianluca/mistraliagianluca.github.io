@@ -3,7 +3,7 @@
 Progetto: sito www.mistralia.co (Astro su GitHub Pages) + post settimanale automatico (Claude, Gemini) + bot Telegram di approvazione. Documentazione completa in `docs/` (inizia da `docs/README.md`).
 
 ## Regole obbligatorie
-1. **Documentazione a ogni modifica.** Ogni cambiamento a codice o configurazione (`.github/workflows/`, `automazione/*.mjs|*.md|config.json`, `src/components|layouts|lib|pages|styles/`, `src/content.config.ts`, `astro.config.mjs`, `package.json`, `.gitignore`) deve aggiornare nello stesso commit:
+1. **Documentazione a ogni modifica.** Ogni cambiamento a codice o configurazione (`.github/workflows/`, `automazione/*.mjs|*.md|config.json`, `src/components|layouts|lib|pages|styles/`, `src/content.config.ts`, `astro.config.mjs`, `package.json`, `.gitignore`, `public/admin/`) deve aggiornare nello stesso commit:
    - le pagine di `docs/` che descrivono quella parte;
    - `docs/registro-modifiche.md`, con una voce in cima (data · cosa · perché · cosa deve fare chi usa il sistema).
    Il workflow *Documentazione* fallisce se il registro manca. `docs/riferimento.md` è generato: non scriverlo a mano.
@@ -14,4 +14,5 @@ Progetto: sito www.mistralia.co (Astro su GitHub Pages) + post settimanale autom
 6. **Costi:** ogni modifica che aumenta chiamate, ricerche o tentativi va stimata e scritta nel registro. Tetto interno: `budgetMensileDollari` in `automazione/config.json`.
 7. **Non modificare il sito** (struttura, testi, dati) se non è richiesto esplicitamente.
 8. Tono dei contenuti: niente età del camper, niente prezzi diversi da "da €X al giorno", eventi solo se verificati. Regole complete in `automazione/prompt.md`.
-9. Nei documenti condivisi del team si nominano solo Gianluca e Andrea; gli altri membri sono "Persona A/B".
+9. I dati in `src/data/` li modifica Gianluca dal pannello `/admin` (Sveltia CMS, `public/admin/config.yml`): se cambi la struttura di un file in `src/data/`, aggiorna anche `config.yml` e verifica che il pannello lo carichi senza avvisi.
+10. Nei documenti condivisi del team si nominano solo Gianluca e Andrea; gli altri membri sono "Persona A/B".

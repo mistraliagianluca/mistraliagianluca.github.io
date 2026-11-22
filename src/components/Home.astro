@@ -1,7 +1,7 @@
 ---
 import fs from 'node:fs';
 import { getCollection } from 'astro:content';
-import { t, paths, prezzi, info, getPromo, prezzoMinimo, fmtDate, u, type Lang } from '../lib/site';
+import { t, paths, prezzi, info, getPromo, prezzoMinimo, fmtDate, u, fotoGalleria, type Lang } from '../lib/site';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -14,15 +14,16 @@ const posts = (await getCollection('diario', ({ data }) => data.lingua === lang 
 
 const seasons = ['B', 'M', 'A'] as const;
 
-// Foto di apertura: numero della galleria oppure nome di un file in public/assets/gallery/
+// Foto di apertura: percorso di un'immagine (o vecchio numero della galleria); se il file non c'è, la foto di riserva.
+// Maiuscole e minuscole nel nome del file non contano (SER.JPG = SER.jpg).
 const galDir = 'public/assets/gallery';
-let heroSrc = `/assets/gallery/${info.fotoAperturaRiserva}.jpg`;
-if (typeof info.fotoApertura === 'number') heroSrc = `/assets/gallery/${info.fotoApertura}.jpg`;
-else {
-  const wanted = String(info.fotoApertura).toLowerCase();
-  const found = fs.existsSync(galDir) ? fs.readdirSync(galDir).find((x) => x.toLowerCase() === wanted) : undefined;
-  if (found) heroSrc = `/assets/gallery/${found}`;
-}
+const trovaFoto = (v: string | number) => {
+  const p = fotoGalleria(v);
+  const nome = p.split('/').pop()!.toLowerCase();
+  const found = fs.existsSync(galDir) ? fs.readdirSync(galDir).find((x) => x.toLowerCase() === nome) : undefined;
+  return found ? `/assets/gallery/${found}` : null;
+};
+const heroSrc = trovaFoto(info.fotoApertura) ?? fotoGalleria(info.fotoAperturaRiserva);
 
 // Periodi di ogni stagione, ricavati dal calendario dell'ultimo anno in prezzi.json
 const stagioni = prezzi.stagioni as any;
@@ -255,9 +256,9 @@ const jsonLd = {
   <div class="wrap">
     <h2>{t(lang, 'gallery_title')}</h2>
     <div class="gallery">
-      {info.galleria.map((n) => (
-        <a href={u(`/assets/gallery/${n}.jpg`)} target="_blank" rel="noopener">
-          <img src={u(`/assets/gallery/${n}.jpg`)} alt={`Kentucky ${n}`} loading="lazy" width="400" height="300" />
+      {info.galleria.map((v, i) => (
+        <a href={u(fotoGalleria(v))} target="_blank" rel="noopener">
+          <img src={u(fotoGalleria(v))} alt={`Kentucky ${i + 1}`} loading="lazy" width="400" height="300" />
         </a>
       ))}
     </div>

@@ -53,6 +53,7 @@ flowchart TB
 | **Claude** | Scrive testi e articoli, cerca sul web, **verifica i fatti** in una seconda chiamata indipendente | API Anthropic, modello in `automazione/config.json` | ~$2 / milione di token + $0,01 a ricerca |
 | **Gemini** | Crea l'immagine partendo dalle foto vere del Kentucky | API Google, modello in `config.json` | ~$0,07 a immagine |
 | **Telegram** | Gruppo "Mistralia" + bot: anteprime e approvazioni | app Telegram | gratis |
+| **Pannello `/admin`** | Moduli per modificare i dati del sito; ogni Salva è un commit | `public/admin/` ([Sveltia CMS](https://sveltiacms.app)) | gratis |
 | **WhatsApp** | Il cliente invia la richiesta di preventivo già compilata dal calcolatore | numero in `src/data/info.json` | gratis |
 
 GitHub Actions è gratuito senza limiti di minuti perché il repository è **pubblico**. Attenzione: pubblico vuol dire che **chiunque può leggere** i file del repository, comprese le bozze non pubblicate. Le chiavi invece no: stanno nei Secrets. Vedi [Sicurezza](05-sicurezza.md#repository-pubblico).
@@ -113,7 +114,7 @@ Il sito **non** prende pagamenti e **non** blocca date in automatico. La disponi
 
 ```mermaid
 flowchart LR
-    A["Modifica un file<br>(Mac, GitHub Desktop<br>o editor web)"] --> B["push su main"]
+    A["Modifica dal pannello /admin<br>oppure un file (Mac,<br>GitHub Desktop, editor web)"] --> B["commit su main"]
     B --> C["Pubblica sito<br>build Astro"]
     C -->|ok| D["Online in ~2 minuti"]
     C -->|errore| E["❌ in Actions<br>il sito resta com'era"]
@@ -126,13 +127,13 @@ Le modifiche alla sola cartella `automazione/`, a `docs/` e ai file README non a
 
 | Dato | File | Chi lo cambia |
 | --- | --- | --- |
-| Prezzi, stagioni, minimi, piani, extra | `src/data/prezzi.json` | il team (a mano) |
-| Contatti, ritiro, kit, regole, FAQ, foto | `src/data/info.json` | il team (a mano) |
-| Promo del momento | `src/data/promo.md` | il team (a mano) |
+| Prezzi, stagioni (periodi), minimi, piani, extra | `src/data/prezzi.json` | Gianluca, dal pannello `/admin` |
+| Contatti, ritiro, kit, regole, FAQ, foto | `src/data/info.json` | Gianluca, dal pannello `/admin` |
+| Promo del momento | `src/data/promo.md` | Gianluca, dal pannello `/admin` |
 | Testi fissi del sito | `src/i18n/it.json`, `src/i18n/en.json` | il team (a mano) |
 | Articoli del Diario | `src/content/diario/*.it.md` / `*.en.md` | il bot, con ✅ Pubblica |
 | Immagini degli articoli | `public/assets/diario/` | il bot |
-| Foto della galleria | `public/assets/gallery/` | il team (a mano) |
+| Foto della galleria | `public/assets/gallery/` | Gianluca, dal pannello `/admin` |
 | Bozze (anche quelle scartate) | `automazione/bozze/<data-tema>/` | il bot |
 | Memoria del bot | `automazione/stato.json` | il bot (**non modificare a mano**) |
 | Istruzioni a Claude | `automazione/prompt.md`, `automazione/verifica.md` | chi gestisce il tono e le regole |

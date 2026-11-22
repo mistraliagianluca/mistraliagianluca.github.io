@@ -20,27 +20,57 @@ Il sito è **una pagina sola**, in italiano (`www.mistralia.co/`) e in inglese (
 | Domande frequenti | `info.json` → `faq` |
 | Contatti e dati aziendali | `info.json` |
 
+## Il pannello www.mistralia.co/admin
+
+Il modo consigliato per cambiare **prezzi, stagioni, promo, contatti, kit, regole, FAQ e foto** è il pannello: moduli con campi, menu e calendari al posto dei file. Premi **Salva**, il pannello fa il commit su GitHub al posto tuo e *Pubblica sito* mette online la modifica in circa 2 minuti.
+
+```mermaid
+flowchart LR
+    A["www.mistralia.co/admin<br>modifichi un campo"] --> B["Salva"]
+    B --> C["Commit su GitHub<br>(src/data/… o foto)"]
+    C --> D["Pubblica sito<br>~2 minuti"]
+    D --> E["Modifica online"]
+```
+
+**Accesso (una volta per browser):**
+1. Crea un token GitHub dedicato al pannello: github.com → foto profilo → **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
+   - Name `pannello-admin`; Expiration 1 anno
+   - Repository access: **Only select repositories** → `mistraliagianluca.github.io`
+   - Permissions → Repository permissions → **Contents: Read and write** (Metadata si aggiunge da solo), nient'altro
+   - Salvalo nel password manager e annotalo in [Sicurezza](05-sicurezza.md#inventario-dei-segreti).
+2. Apri **www.mistralia.co/admin** → **Sign In Using Access Token** → incolla il token. Il browser lo ricorda: le volte successive entri direttamente.
+
+**Uso:** *Dati del sito* → scegli **Prezzi, stagioni e condizioni**, **Promozione** oppure **Contatti, ritiro, kit, regole, FAQ e foto** → modifica → **Save**. Le foto si caricano dal campo *Galleria* (anche dal telefono), si trascinano per cambiare l'ordine e finiscono in `public/assets/gallery/`.
+
+**Cosa NON si cambia dal pannello:** i testi fissi del sito (`src/i18n/`), i nomi dei piani, gli articoli del Diario (li gestisce il bot) e le impostazioni dell'automazione. Per questi vedi la tabella qui sotto.
+
+**Da sapere:**
+- Il pannello è solo per Gianluca: per entrare serve un token con accesso in scrittura al repository. Chi apre `/admin` senza token vede solo la schermata di accesso, e la pagina non compare su Google (`noindex`).
+- Ogni Salva è un commit visibile nella storia del repository, quindi si può sempre tornare indietro ([Sviluppo → Tornare indietro](06-sviluppo.md#tornare-indietro)).
+- Se lavori anche dal Mac, fai `git pull` prima di modificare, perché il pannello cambia i file su GitHub.
+- Il pannello è [Sveltia CMS](https://sveltiacms.app), gratuito e open source, caricato da unpkg.com. La configurazione dei campi è in `public/admin/config.yml`: se la cambi, aggiorna questa pagina e il registro delle modifiche.
+
 ## Cosa si modifica e dove
 
 | Voglio cambiare… | File | Come |
 | --- | --- | --- |
-| **Prezzo al giorno** di una stagione | `src/data/prezzi.json` → `prezzoGiorno` | `B` bassa, `M` media, `A` alta |
-| **In che stagione** è un giorno | `src/data/prezzi.json` → `stagioni` → anno → mese | Una lettera per giorno del mese (`B`, `M` o `A`). Il mese `"7"` di luglio ha 31 lettere |
+| **Prezzo al giorno** di una stagione | pannello → Prezzi · oppure `src/data/prezzi.json` → `prezzoGiorno` | `B` bassa, `M` media, `A` alta |
+| **In che stagione** è un giorno | pannello → Prezzi → *Stagioni (periodi)* · oppure `prezzi.json` → `periodi` | Elenco di periodi `dal`–`al` con la stagione. I giorni non coperti valgono come media; un anno senza periodi usa quelli dell'ultimo anno presente. **Per un anno nuovo aggiungi i suoi periodi** |
 | **Noleggio minimo** | `prezzi.json` → `minimoGiorni`, `minimoEccezioni` | Le eccezioni valgono per i ritiri tra `dal` e `al` |
 | **Piani** (supplemento, cauzione, franchigia) | `prezzi.json` → `piani` | `supplementoGiorno` in euro al giorno |
 | **Quota obbligatoria** (pulizia, preparazione, check-in) | `prezzi.json` → `servizio` | Si paga una volta per noleggio |
 | **Extra** (lenzuola, asciugamani, barbecue, transfer) | `prezzi.json` → `extra` | Prezzo per noleggio |
-| **Promo** (es. Black Friday) | `src/data/promo.md` | vedi [Promo](#promo) |
+| **Promo** (es. Black Friday) | pannello → Promozione · oppure `src/data/promo.md` | vedi [Promo](#promo) |
 | **Numero WhatsApp**, telefoni, email | `src/data/info.json` | `whatsapp` senza `+` e senza spazi (es. `393756473839`) |
 | **Indirizzo e orari di ritiro** | `info.json` → `ritiro` | È l'indirizzo che vedono i clienti, non la sede legale |
 | **Kit incluso, preparazione, riconsegna, regole** | `info.json` | Sempre in italiano **e** inglese |
 | **Domande frequenti** | `info.json` → `faq` | Una FAQ che contiene `DA_CONFERMARE` non viene mostrata |
-| **Foto della galleria** | `public/assets/gallery/` + `info.json` → `galleria` | vedi [Foto](#foto) |
+| **Foto della galleria** | pannello → Contatti… → *Galleria* · oppure `public/assets/gallery/` + `info.json` → `galleria` | vedi [Foto](#foto) |
 | **Testi fissi** (titoli, pulsanti, frasi) | `src/i18n/it.json` e `src/i18n/en.json` | Stesse chiavi in tutti e due i file |
 | **Articoli del Diario** | `src/content/diario/` | Li scrive il bot; vedi [Sviluppo](06-sviluppo.md#togliere-un-articolo) per toglierli |
 | Aspetto, colori, struttura | `src/components/`, `src/layouts/`, `src/styles/global.css` | Solo per chi sviluppa ([Sviluppo](06-sviluppo.md)) |
 
-### Modificare un file senza computer (editor web di GitHub)
+### In alternativa: modificare un file con l'editor web di GitHub
 
 1. Apri `github.com/mistraliagianluca/mistraliagianluca.github.io` e vai al file, per esempio `src/data/prezzi.json`.
 2. Premi l'icona della **matita ✏️** in alto a destra.
@@ -53,7 +83,7 @@ Le modifiche a prezzi, promo, testi e foto **non** richiedono una riga nel regis
 
 ## Promo
 
-Il file `src/data/promo.md` contiene una sola promo alla volta:
+Una sola promo alla volta. Nel pannello è la scheda **Promozione**; nel file `src/data/promo.md` i campi sono questi:
 
 ```yaml
 attiva: false               # true = accesa, false = spenta subito
@@ -69,14 +99,15 @@ titolo_en: "Black Friday: 15% off spring rentals"
 
 - Lo sconto si applica **solo** a notti e piano, non alla quota obbligatoria né agli extra.
 - Il sito si ricostruisce **ogni notte**, quindi il banner compare e sparisce da solo nelle date giuste anche se nessuno tocca niente.
-- Per una nuova promo cambia i valori e metti `attiva: true`.
+- Per una nuova promo cambia i valori e metti `attiva: true` (nel pannello: l'interruttore *Promo attiva*).
+- Salvando dal pannello i commenti `#` del file spariscono: le spiegazioni restano qui e nei suggerimenti dei campi.
 
 ## Foto
 
-- La galleria mostra le foto `public/assets/gallery/1.jpg`, `2.jpg`, … nell'ordine scritto in `info.json` → `galleria` (es. `[3, 1, 2]`).
-- **Aggiungere una foto:** caricala in `public/assets/gallery/` con il numero successivo (es. `21.jpg`) e aggiungi `21` alla lista `galleria`. Formato orizzontale, JPG, meglio sotto i 500 KB.
-- **Foto di apertura** (quella grande in alto): `info.json` → `fotoApertura`. Può essere un numero della galleria o il nome di un file in `public/assets/gallery/` (ora `SER.JPG`; maiuscole e minuscole non contano). Se il file non c'è, il sito usa `fotoAperturaRiserva`.
-- Le foto `1.jpg` e `2.jpg` servono anche a Gemini come **riferimento del camper** per le immagini dei post (`automazione/config.json` → `fotoRiferimento`). Se le cambiate, scegliete foto in cui il Kentucky si veda bene e intero.
+- **Dal pannello:** campo *Galleria* → **carica** le foto o scegli tra quelle già caricate → trascina per l'ordine → Salva. Le foto finiscono in `public/assets/gallery/`. Usa foto orizzontali in JPG, meglio sotto i 500 KB.
+- **Foto di apertura** (quella grande in alto): campo *Foto grande in cima* (`info.json` → `fotoApertura`, oggi `/assets/gallery/SER.jpg`). Se il file non c'è, il sito usa la *Foto di riserva* (`fotoAperturaRiserva`). Maiuscole e minuscole nel nome del file non contano.
+- In `info.json` la galleria è un elenco di percorsi (`"/assets/gallery/7.jpg"`). Per compatibilità il sito accetta anche il vecchio formato a numeri (`7`).
+- Le foto `1.jpg` e `2.jpg` servono anche a Gemini come **riferimento del camper** per le immagini dei post (`automazione/config.json` → `fotoRiferimento`). **Non cancellarle**; se le sostituisci, scegli foto in cui il Kentucky si veda bene e intero.
 
 ## Calendario
 

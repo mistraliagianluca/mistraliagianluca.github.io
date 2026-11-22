@@ -23,6 +23,8 @@ flowchart LR
     WF --> API3["Telegram Bot API"]
     PM --> CJ["cron-job.org<br>(token GitHub con il<br>solo permesso Actions)"]
     CJ -->|"avvia i workflow"| WF
+    PM -->|"login una volta<br>per browser"| ADM["Pannello /admin<br>(token pannello-admin)"]
+    ADM -->|"commit dei dati<br>del sito"| REPO["Repository"]
 ```
 
 GitHub non mostra mai più il valore di un Secret, nemmeno a chi l'ha inserito, e nei log lo sostituisce con `***`. Per cambiare un Secret: *Settings → Secrets and variables → Actions → nome del secret → Update*.
@@ -36,12 +38,14 @@ GitHub non mostra mai più il valore di un Secret, nemmeno a chi l'ha inserito, 
 | `GEMINI_API_KEY` | Chiave Gemini | aistudio.google.com → Get API key | password manager + GitHub Secret | spende sulla fatturazione Google → **budget con avviso** in Google Cloud → Billing; consigliato limitare la chiave alla sola *Generative Language API* | nessuna | AI Studio → API keys → elimina → nuova → aggiorna il Secret |
 | `TELEGRAM_CHAT_ID` | Identificativo del gruppo (inizia con `-100`) | comando `/id` nel gruppo | GitHub Secret | non è una chiave: dice al bot qual è il gruppo "giusto" | — | se il gruppo cambia, rifai `/id` e aggiorna |
 | Token GitHub `cron-job` | Permette a cron-job.org di avviare i workflow | GitHub → Developer settings → Fine-grained tokens | password manager + cron-job.org | **solo** Actions read/write **solo** su questo repository: non può modificare il sito né leggere i Secrets | **1 anno**: annotare la data e rinnovare prima | GitHub → Fine-grained tokens → *Revoke* → nuovo → aggiorna i 2 timer su cron-job.org |
+| Token GitHub `pannello-admin` | Permette al pannello www.mistralia.co/admin di salvare le modifiche | GitHub → Developer settings → Fine-grained tokens | password manager + memoria del browser in cui fai il login al pannello | **Contents read/write solo** su questo repository: può modificare **qualunque file** del repository (non i Secrets, non le impostazioni) | **1 anno**: annotare la data e rinnovare prima | GitHub → Fine-grained tokens → *Revoke* → nuovo → rifai il login nel pannello |
 | `GITHUB_TOKEN` | Token automatico dei workflow | lo crea GitHub a ogni giro | — | quelli scritti in `permissions:` di ogni workflow | scade a fine giro | — |
 
 **Registro delle chiavi:** aggiungi una riga a ogni creazione, rinnovo o revoca.
 
 | Data | Chiave | Azione | Chi |
 | --- | --- | --- | --- |
+| _da compilare_ | Token GitHub `pannello-admin` (Contents read/write, solo questo repository) | creato; **segnare qui la data di scadenza** | Gianluca |
 | 2026-11-22 | Token GitHub `cron-job` (Actions read/write, solo questo repository) | creato e inserito su cron-job.org; **segnare qui la data di scadenza** | Gianluca |
 | 2026-11-21 | `TELEGRAM_BOT_TOKEN`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, `TELEGRAM_CHAT_ID` | create e inserite nei Secrets | Gianluca |
 
@@ -86,6 +90,8 @@ Il vantaggio è che GitHub Actions è gratuito senza limiti. Se un giorno serve 
 
 Quando qualcuno lascia il team: toglilo dal gruppo Telegram, dai collaboratori GitHub e dalle console. Se conosceva qualche chiave, **ruotala**.
 
+**Il token del pannello resta nel browser.** Fai il login al pannello solo sui tuoi dispositivi. Su un computer non tuo, alla fine esci dal pannello (*Sign Out*). Se perdi il telefono o il computer, revoca il token.
+
 ## Cosa fare se una chiave è uscita
 
 ```mermaid
@@ -106,5 +112,6 @@ Se la chiave è finita in un **commit**, cancellare il file non basta: resta nel
 - [ ] I limiti di spesa esterni sono ancora impostati.
 - [ ] I membri del gruppo Telegram sono tutti del team.
 - [ ] I collaboratori GitHub sono quelli giusti, e la 2FA è attiva.
+- [ ] La scadenza del token `pannello-admin` è lontana più di un mese.
 - [ ] La scadenza del token `cron-job` è lontana più di un mese (se scade, il bot smette di rispondere: cron-job.org mostrerà errori 401).
 - [ ] `git log -p | grep -iE "sk-ant|AIza|[0-9]{8,}:[A-Za-z0-9_-]{30,}"` non trova chiavi nella storia del repository.

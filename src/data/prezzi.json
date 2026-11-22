@@ -1,5 +1,5 @@
 {
-  "_leggimi": "Prezzi e stagioni presi dal calendario Yescapa (novembre 2026). Modifica i numeri e salva: il sito si aggiorna da solo. Le voci con DA_CONFERMARE sono provvisorie.",
+  "_leggimi": "Prezzi, stagioni e condizioni. Si modificano dal pannello www.mistralia.co/admin (o a mano): al salvataggio il sito si aggiorna da solo in circa 2 minuti. Le voci con DA_CONFERMARE sono provvisorie.",
   "prezzoGiorno": {
     "B": 77,
     "M": 105,
@@ -81,25 +81,52 @@
       "giorni": 2
     }
   ],
-  "stagioni": {
-    "_leggimi": "Una lettera per ogni giorno del mese: B bassa, M media, A alta. Se un anno manca si usa l'ultimo anno presente.",
-    "2026": {
-      "11": "MMBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-      "12": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+  "periodi": [
+    {
+      "dal": "2026-11-01",
+      "al": "2026-11-02",
+      "stagione": "M"
     },
-    "2027": {
-      "01": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-      "02": "BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-      "03": "BBBBBBBBBBBBBBBBBBBBBBBBAAAAAAM",
-      "04": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
-      "05": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMAAA",
-      "06": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-      "07": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-      "08": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-      "09": "AAAAAMMMMMMMMMMMMMMMMMMMMMMMMM",
-      "10": "MMMMBBBBBBBBBBBBBBBBBBBBBBBBMMM",
-      "11": "MBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-      "12": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+    {
+      "dal": "2026-11-03",
+      "al": "2027-03-24",
+      "stagione": "B"
+    },
+    {
+      "dal": "2027-03-25",
+      "al": "2027-03-30",
+      "stagione": "A"
+    },
+    {
+      "dal": "2027-03-31",
+      "al": "2027-05-28",
+      "stagione": "M"
+    },
+    {
+      "dal": "2027-05-29",
+      "al": "2027-09-05",
+      "stagione": "A"
+    },
+    {
+      "dal": "2027-09-06",
+      "al": "2027-10-04",
+      "stagione": "M"
+    },
+    {
+      "dal": "2027-10-05",
+      "al": "2027-10-28",
+      "stagione": "B"
+    },
+    {
+      "dal": "2027-10-29",
+      "al": "2027-11-01",
+      "stagione": "M"
+    },
+    {
+      "dal": "2027-11-02",
+      "al": "2027-12-31",
+      "stagione": "B"
     }
-  }
+  ],
+  "_periodi": "Stagione di ogni periodo: B bassa, M media, A alta. I giorni non coperti da nessun periodo valgono come media; un anno senza periodi usa quelli dell'ultimo anno presente."
 }

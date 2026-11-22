@@ -9,7 +9,7 @@ Questa cartella spiega **tutto** il sistema digitale di Mistralia: il sito www.m
 | Sei… | Leggi | Tempo |
 | --- | --- | --- |
 | **Nel gruppo Telegram** e devi approvare i post | [Uso quotidiano](02-uso-quotidiano.md) | 10 min |
-| Chi deve **cambiare prezzi, promo, foto o testi** del sito | [Il sito](03-sito.md) | 15 min |
+| Chi deve **cambiare prezzi, stagioni, promo, foto o contatti** (dal pannello www.mistralia.co/admin) | [Il sito](03-sito.md) | 15 min |
 | Chi deve capire **come è fatto** il sistema | [Architettura](01-architettura.md) | 15 min |
 | Chi gestisce **account, chiavi e accessi** | [Sicurezza, chiavi e token](05-sicurezza.md) | 15 min |
 | Chi **modifica il codice** o carica aggiornamenti | [Sviluppo](06-sviluppo.md) | 20 min |

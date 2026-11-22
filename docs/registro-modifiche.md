@@ -13,6 +13,11 @@
 
 ---
 
+## 2026-11-22 · Pannello www.mistralia.co/admin
+- Cosa: pannello Sveltia CMS (`public/admin/`) per modificare dai moduli prezzi, stagioni, minimi, piani, quota, extra, promo, contatti, ritiro, kit, regole, FAQ e foto; ogni Salva fa un commit e ripubblica il sito. Le stagioni in `prezzi.json` sono ora **periodi** (`periodi`: dal, al, stagione) al posto delle lettere giorno per giorno: il sito li converte da solo e il risultato è identico. Galleria e foto di apertura in `info.json` sono percorsi d'immagine (il vecchio formato a numeri resta accettato). Il "da €X" dei post segue il prezzo più basso di `prezzi.json`.
+- Perché: cambiare i parametri senza toccare file JSON, anche dal telefono.
+- Da fare: creare il token `pannello-admin` e fare il login ([istruzioni](03-sito.md#il-pannello-wwwmistraliacoadmin)); annotare la scadenza in [Sicurezza](05-sicurezza.md#inventario-dei-segreti); per un anno nuovo, aggiungere i suoi periodi.
+
 ## 2026-11-22 · Sveglia cron-job.org e post del lunedì fatto dal bot
 - Cosa: sveglia esterna cron-job.org ogni minuto per *Bot Telegram* (il timer di GitHub resta come riserva); la bozza del lunedì la prepara il bot stesso dal lunedì alle 9, una volta a settimana (`postSettimanale` in `config.json`, `settimanale` in `stato.json`); se fallisce non riprova da solo; il workflow *Post settimanale* non ha più un orario e si usa solo a mano.
 - Perché: il timer di GitHub ritardava di ore; con una sveglia ogni minuto un workflow separato per il lunedì poteva essere cancellato da un giro del bot.

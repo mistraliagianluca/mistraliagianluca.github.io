@@ -1,6 +1,6 @@
 import it from '../i18n/it.json';
 import en from '../i18n/en.json';
-import prezzi from '../data/prezzi.json';
+import prezziFile from '../data/prezzi.json';
 import info from '../data/info.json';
 import * as promoFile from '../data/promo.md';
 
@@ -40,6 +40,31 @@ export function getPromo() {
     titolo: { it: String(f.titolo_it ?? ''), en: String(f.titolo_en ?? '') },
   };
 }
+
+/**
+ * Le stagioni si scrivono come periodi (dal, al, stagione) in prezzi.json, comodi da modificare nel pannello /admin.
+ * Il sito lavora con una lettera per giorno, divisa per anno e mese ({ "2027": { "03": "BBB…AAA" } }):
+ * qui i periodi vengono trasformati in quel formato. I giorni non coperti valgono "M".
+ */
+function stagioniDaPeriodi(periodi: { dal: string; al: string; stagione: string }[] = []) {
+  const out: Record<string, Record<string, string[]>> = {};
+  for (const p of periodi) {
+    const fine = new Date(String(p.al).slice(0, 10) + 'T12:00:00Z');
+    for (let d = new Date(String(p.dal).slice(0, 10) + 'T12:00:00Z'); d <= fine; d.setUTCDate(d.getUTCDate() + 1)) {
+      const y = String(d.getUTCFullYear()), m = String(d.getUTCMonth() + 1).padStart(2, '0');
+      const giorni = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0)).getUTCDate();
+      out[y] ??= {};
+      out[y][m] ??= Array(giorni).fill('M');
+      out[y][m][d.getUTCDate() - 1] = p.stagione;
+    }
+  }
+  return Object.fromEntries(Object.entries(out).map(([y, mesi]) => [y, Object.fromEntries(Object.entries(mesi).map(([m, g]) => [m, g.join('')]))]));
+}
+
+const prezzi = { ...prezziFile, stagioni: stagioniDaPeriodi((prezziFile as any).periodi) };
+
+/** Percorso di un'immagine della galleria: accetta il percorso (/assets/gallery/x.jpg) o il vecchio numero (7). */
+export const fotoGalleria = (v: string | number) => (typeof v === 'number' || /^\d+$/.test(String(v)) ? `/assets/gallery/${v}.jpg` : String(v));
 
 export { prezzi, info };
 

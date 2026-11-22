@@ -47,7 +47,7 @@ git commit -m "Cosa ho cambiato e perché"
 git push
 ```
 
-**Perché `git pull` prima di tutto:** il bot fa commit da solo (stato, bozze, articoli) ogni volta che lavora. Se non scarichi le sue modifiche, il tuo `push` viene rifiutato. Se succede, fai `git pull` e poi di nuovo `git push`.
+**Perché `git pull` prima di tutto:** il bot fa commit da solo (stato, bozze, articoli) ogni volta che lavora, e anche il pannello `/admin` fa commit quando salvi. Se non scarichi le sue modifiche, il tuo `push` viene rifiutato. Se succede, fai `git pull` e poi di nuovo `git push`.
 
 ## Caricare un aggiornamento ricevuto da Claude
 
@@ -111,9 +111,9 @@ npm run build        # la stessa compilazione che fa GitHub: deve finire con "Co
 1. le pagine di `docs/` che descrivono quello che è cambiato;
 2. il file [`docs/registro-modifiche.md`](registro-modifiche.md), aggiungendo **in cima** una riga con la data, cosa è cambiato, perché e cosa deve fare chi usa il sistema.
 
-**Cosa conta come "codice o configurazione"** (e fa scattare il controllo): `.github/workflows/`, i file in `automazione/` (`.mjs`, `prompt.md`, `verifica.md`, `config.json`), `src/components/`, `src/layouts/`, `src/lib/`, `src/pages/`, `src/styles/`, `src/content.config.ts`, `astro.config.mjs`, `package.json`, `.gitignore`.
+**Cosa conta come "codice o configurazione"** (e fa scattare il controllo): `.github/workflows/`, i file in `automazione/` (`.mjs`, `prompt.md`, `verifica.md`, `config.json`), `src/components/`, `src/layouts/`, `src/lib/`, `src/pages/`, `src/styles/`, `src/content.config.ts`, `astro.config.mjs`, `package.json`, `.gitignore`, `public/admin/` (configurazione del pannello).
 
-**Non** fanno scattare il controllo: prezzi, promo, info, testi (`src/data/`, `src/i18n/`), foto, articoli del Diario e lo stato del bot.
+**Non** fanno scattare il controllo: prezzi, promo, info, testi (`src/data/`, `src/i18n/`), foto, articoli del Diario e lo stato del bot, quindi nemmeno i salvataggi dal pannello.
 
 **Cosa succede in automatico a ogni push** (workflow *Documentazione*):
 - `docs/riferimento.md` viene **rigenerato** dai file veri: workflow, orari, segreti, impostazioni, prezzi, promo, articoli, struttura. Non va mai scritto a mano.

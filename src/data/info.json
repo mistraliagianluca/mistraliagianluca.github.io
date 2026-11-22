@@ -1,5 +1,5 @@
 {
-  "_leggimi": "Contatti, kit incluso, ritiro, regole e FAQ. Le voci con DA_CONFERMARE sono provvisorie.",
+  "_leggimi": "Contatti, kit incluso, ritiro, regole, FAQ e foto. Si modificano dal pannello www.mistralia.co/admin (o a mano). Le voci con DA_CONFERMARE sono provvisorie e non vengono mostrate.",
   "whatsapp": "393756473839",
   "telefoni": [
     "+39 375 647 3839",
@@ -21,28 +21,28 @@
   "goatcounter": "",
   "_goatcounter": "Facoltativo: codice del sito su goatcounter.com (statistiche gratuite senza cookie). Esempio: mistralia",
   "galleria": [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20
+    "/assets/gallery/1.jpg",
+    "/assets/gallery/2.jpg",
+    "/assets/gallery/3.jpg",
+    "/assets/gallery/4.jpg",
+    "/assets/gallery/5.jpg",
+    "/assets/gallery/6.jpg",
+    "/assets/gallery/7.jpg",
+    "/assets/gallery/8.jpg",
+    "/assets/gallery/9.jpg",
+    "/assets/gallery/10.jpg",
+    "/assets/gallery/11.jpg",
+    "/assets/gallery/12.jpg",
+    "/assets/gallery/13.jpg",
+    "/assets/gallery/14.jpg",
+    "/assets/gallery/15.jpg",
+    "/assets/gallery/16.jpg",
+    "/assets/gallery/17.jpg",
+    "/assets/gallery/18.jpg",
+    "/assets/gallery/19.jpg",
+    "/assets/gallery/20.jpg"
   ],
-  "fotoApertura": "SER.JPG",
+  "fotoApertura": "/assets/gallery/SER.jpg",
   "kit": [
     {
       "titolo": {
@@ -267,6 +267,6 @@
       ]
     }
   ],
-  "fotoAperturaRiserva": 2,
-  "_fotoApertura": "Foto grande in cima. Può essere un numero della galleria (es. 7) oppure il nome di un file copiato in public/assets/gallery/ (es. SER.JPG, maiuscole o minuscole è uguale). Se il file non c'è, il sito usa la foto di riserva."
+  "fotoAperturaRiserva": "/assets/gallery/2.jpg",
+  "_fotoApertura": "Foto grande in cima: percorso di un'immagine in public/assets/gallery/. Se il file non c'è, il sito usa fotoAperturaRiserva."
 }

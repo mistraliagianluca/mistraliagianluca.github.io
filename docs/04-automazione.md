@@ -49,7 +49,7 @@ flowchart TD
 - **Mete:** raggiungibili in circa 4 ore di guida da Bari (Puglia, Basilicata, Campania, Calabria, Molise, Abruzzo) o con un **traghetto diretto da Bari** (Grecia, Albania, Montenegro, Croazia). Deve alternare le regioni e indicare il tempo di viaggio. Il limite di ore è `oreMaxDaBari` in `config.json`.
 - **Traghetti:** solo se ha verificato che nel periodo c'è una linea da Bari che **imbarca camper**. Cita la compagnia e la durata della traversata, senza prezzi.
 - **Durata del viaggio:** entro 2 ore → weekend lungo; 3–4 ore → 4–7 giorni; traghetto ed estero → 7–10 giorni, d'estate due settimane. Da giugno a settembre privilegia viaggi lunghi in periodi poco affollati (giugno, inizio luglio, settembre); nel resto dell'anno weekend lunghi e ponti. Niente gite di un giorno.
-- **Fatti sul camper:** solo quelli scritti nel prompt. **Mai citare età o anno del camper**, mai prezzi diversi da "da €77 al giorno".
+- **Fatti sul camper:** solo quelli scritti nel prompt. **Mai citare età o anno del camper**, mai prezzi diversi da "da €X al giorno", dove X è il prezzo più basso in `src/data/prezzi.json`: se cambi i prezzi dal pannello, i post si aggiornano da soli.
 - **Date di eventi:** solo se verificate in una fonte trovata al momento.
 - **Temi già usati:** riceve gli ultimi 12 temi, con il luogo, e non deve ripeterli.
 - **Immagine:** "reale" (il Kentucky nel luogo) oppure, una settimana su 4, "improbabile" (il Kentucky in un posto impossibile e simpatico).

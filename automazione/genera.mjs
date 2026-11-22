@@ -7,6 +7,13 @@ import path from 'node:path';
 import { AUTO, config, leggiStato, salvaStato, oggiISO, settimanaISO, slug, temiUsati, chiediClaude, creaImmagine, telegram, chatId, spesaDelGiro, spesaDelMese, meseCorrente } from './lib.mjs';
 
 const BOZZE = path.join(AUTO, 'bozze');
+// "Da €X al giorno": il prezzo più basso di src/data/prezzi.json, così segue i prezzi cambiati dal pannello /admin
+const prezzoDa = () => {
+  try {
+    const p = JSON.parse(fs.readFileSync(path.join(AUTO, '..', 'src/data/prezzi.json'), 'utf8'));
+    return Math.min(...Object.values(p.prezzoGiorno).map(Number));
+  } catch { return config.prezzoDa; }
+};
 const oggi = () => new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
 /** Seconda chiamata a Claude, indipendente: cerca sul web ogni fatto su eventi e luoghi. */
@@ -55,7 +62,7 @@ async function preparaBozza({ nota, precedente, scartata } = {}) {
 
   const prompt = (notaPrompt) => fs.readFileSync(path.join(AUTO, 'prompt.md'), 'utf8')
     .replaceAll('{{OGGI}}', oggi())
-    .replaceAll('{{PREZZO_DA}}', String(config.prezzoDa))
+    .replaceAll('{{PREZZO_DA}}', String(prezzoDa()))
     .replaceAll('{{ORE_MAX}}', String(config.oreMaxDaBari ?? 4))
     .replaceAll('{{LINK}}', link)
     .replaceAll('{{TEMI_USATI}}', [...temiUsati(stato), ...scartati].map((t) => `"${t}"`).join(', ') || 'nessuno')
