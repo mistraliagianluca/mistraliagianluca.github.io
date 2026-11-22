@@ -1,10 +1,11 @@
 ---
-titolo: "Natale a Matera in camper: Sassi, presepe vivente e mercatini"
-data: 2026-11-21
+titolo: 'Natale a Matera in camper: Sassi, presepe vivente e mercatini'
 lingua: it
-chiave: "matera-natale-sassi-presepe-vivente-camper"
-immagine: "/assets/diario/matera-natale-sassi-presepe-vivente-camper.jpg"
+chiave: matera-natale-sassi-presepe-vivente-camper
+data: 2026-11-21
+nascosto: true
 estratto: "Presepe Vivente, mercatini e un giro a Gravina: dicembre a Matera è un weekend lungo perfetto da fare in camper, a poco più di un'ora da Bari."
+immagine: /assets/diario/matera-natale-sassi-presepe-vivente-camper.jpg
 immagineAI: true
 ---
 
