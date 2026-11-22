@@ -3,7 +3,7 @@
 > ⚙️ **Non modificare questo file a mano.** Lo rigenera il workflow *Documentazione* a ogni push, leggendo i file veri del progetto.
 > Se qualcosa qui è sbagliato, è sbagliato il file da cui viene: correggi quello.
 
-Ultimo aggiornamento: 2026-11-22 18:41 UTC
+Ultimo aggiornamento: 2026-11-22 18:42 UTC
 
 ## Workflow di GitHub Actions
 
@@ -51,7 +51,7 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 
 ## Prezzi in vigore (`src/data/prezzi.json`)
 
-- Prezzo al giorno: bassa €77 · media €105 · alta €150
+- Prezzo al giorno: bassa €78 · media €105 · alta €150
 - Noleggio minimo: bassa 2 giorni · media 3 · alta 3 · eccezioni: 2026-11-01→2026-12-31: 3 giorni; 2027-09-12→2027-10-01: 2 giorni
 - Quota obbligatoria: €200 (Pulizia finale, preparazione e check-in)
 - Extra: Lenzuola €40 · Asciugamani €15 · Barbecue €25 · Transfer aeroporto (andata e ritorno) €100
@@ -71,11 +71,15 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 
 ## Promo (`src/data/promo.md`)
 
-- Attiva: **false** · Black Friday −15% · banner dal 2026-11-24 al 2026-12-01 · noleggi dal 2027-03-01 al 2027-05-31
+- Attiva: **true** · Black Friday −15% · banner dal 2026-11-22 al 2026-12-01 · noleggi dal 2027-03-01 al 2027-05-31
 
 ## Articoli pubblicati nel Diario
 
-Nessuno.
+| Articolo | Pubblicato | Fine evento | Stato |
+| --- | --- | --- | --- |
+| `lecce-black-friday-camper-primavera-pupi` | 2026-11-22 | — | in vetrina |
+| `matera-natale-sassi-presepe-vivente-camper` | 2026-11-21 | 2026-12-21 | in vetrina |
+| `ndocciata-agnone-camper-dicembre-2026` | 2026-11-21 | — | in vetrina |
 
 ## Struttura del repository
 
@@ -88,6 +92,9 @@ Nessuno.
 │       └── telegram.yml
 ├── automazione/
 │   ├── bozze/ …
+│   ├── riferimento/
+│   │   ├── kentucky-1.jpg
+│   │   └── kentucky-2.jpg
 │   ├── config.json
 │   ├── documentazione.mjs
 │   ├── foto-galleria.mjs
