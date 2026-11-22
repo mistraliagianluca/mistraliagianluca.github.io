@@ -6,6 +6,7 @@ chiave: "ndocciata-agnone-camper-dicembre-2026"
 immagine: "/assets/diario/ndocciata-agnone-camper-dicembre-2026.jpg"
 estratto: "On Saturday 12 December, Agnone lights up for the Grand 'Ndocciata. It's about 3.5-4 hours from Bari. Here's how to do it in 4-5 days with the Kentucky, with free camper stops and mountain villages."
 immagineAI: true
+origine: "c5aed79b46db"
 ---
 
 On Saturday 12 December 2026, at 6 pm, Agnone lights the **Grand 'Ndocciata**. The 'ndocce are fir-wood torches that can be over three metres tall. They are carried down the main street by men in the black capes of the local farming tradition, and end up in a final bonfire known as the bonfire of brotherhood. It's one of the most spectacular fire rituals in Europe and is recognised as part of Italy's traditional heritage. And yes, it's cold. That's why our camper has heating.
