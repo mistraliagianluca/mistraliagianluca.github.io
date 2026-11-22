@@ -74,9 +74,10 @@ const waUrl = `https://wa.me/${info.whatsapp}?text=${waText}`;
         </a>
         <nav class="nav">
           <a class="nav-link" href={`${home}#prezzi`}>{t(lang, 'nav_prices')}</a>
-          <a class="nav-link" href={`${home}#disponibilita`}>{t(lang, 'nav_availability')}</a>
+          {info.calendarioEmbedUrl && <a class="nav-link" href={`${home}#disponibilita`}>{t(lang, 'nav_availability')}</a>}
           <a class="nav-link nav-journal" href={`${home}#diario`} hidden>{t(lang, 'nav_journal')}</a>
           <a class="nav-link" href={`${home}#contatti`}>{t(lang, 'nav_contacts')}</a>
+          <a class="nav-foto" href={`${home}#galleria`} data-i="0"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" /></svg>{t(lang, 'nav_photos')}</a>
           <a class="lang-btn nav-lang" href={altPath} hreflang={other} aria-label={t(lang, 'lang_switch_label')} data-lang={other}>{t(lang, 'lang_switch')}</a>
         </nav>
       </div>

@@ -13,6 +13,16 @@
 
 ---
 
+## 2026-11-22 · Pulsante Foto nell'intestazione
+- Cosa: pulsante verde "📷 Foto" nell'intestazione fissa, visibile anche su telefono; sulla home apre il visore della galleria, dagli articoli porta a `/#galleria`. Testi `nav_photos` in `src/i18n/`.
+- Perché: le foto sono la cosa che si guarda di più e su telefono il menu era nascosto.
+- Da fare: niente.
+
+## 2026-11-22 · Disponibilità solo quando c'è il calendario
+- Cosa: la voce *Disponibilità* del menu e il riquadro sotto il calcolatore compaiono solo se `info.json` → `calendarioEmbedUrl` è compilato; tolta la riga "il calendario arriva a breve".
+- Perché: senza calendario c'era un link nel menu che portava a una sola riga di testo.
+- Da fare: quando il Google Calendar delle date occupate è pronto, incollare il link nel pannello.
+
 ## 2026-11-22 · Foto galleria: interni con luce del giorno dai vetri
 - Cosa: negli interni Gemini toglie quello che si vede da finestrini, parabrezza e oblò (auto, parcheggi) e lo sostituisce con luce del giorno chiara, senza paesaggi.
 - Perché: il paesaggio visto dall'interno (foto 13) risultava finto, e nella 16 restava il parcheggio.

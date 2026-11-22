@@ -272,17 +272,13 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
       </div>
     </form>
 
-    <div id="disponibilita" class="avail">
-      {info.calendarioEmbedUrl ? (
-        <details>
-          <summary>{t(lang, 'avail_show')}</summary>
-          <p class="note">{t(lang, 'avail_sub')}</p>
-          <iframe class="calendar" src={info.calendarioEmbedUrl} title={t(lang, 'avail_title')} loading="lazy"></iframe>
-        </details>
-      ) : (
-        <p class="note">{t(lang, 'avail_missing')}</p>
-      )}
-    </div>
+    {info.calendarioEmbedUrl && (
+      <details id="disponibilita" class="avail">
+        <summary>{t(lang, 'avail_show')}</summary>
+        <p class="note">{t(lang, 'avail_sub')}</p>
+        <iframe class="calendar" src={info.calendarioEmbedUrl} title={t(lang, 'avail_title')} loading="lazy"></iframe>
+      </details>
+    )}
   </div>
 </section>
 
@@ -516,8 +512,9 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
       count.textContent = `${i + 1} / ${foto.length}`;
       new Image().src = foto[(i + 1) % foto.length]; // precarica la successiva
     };
-    document.querySelectorAll<HTMLElement>('.gal-thumb, .gal-open').forEach((b) =>
-      b.addEventListener('click', () => { show(Number(b.dataset.i || 0)); dlg.showModal(); }));
+    // anteprime, pulsante "Tutte le foto" e pulsante "Foto" nell'intestazione
+    document.querySelectorAll<HTMLElement>('.gal-thumb, .gal-open, .nav-foto').forEach((b) =>
+      b.addEventListener('click', (e) => { e.preventDefault(); show(Number(b.dataset.i || 0)); dlg.showModal(); }));
     dlg.querySelector('.lb-prev')!.addEventListener('click', () => show(i - 1));
     dlg.querySelector('.lb-next')!.addEventListener('click', () => show(i + 1));
     dlg.querySelector('.lb-close')!.addEventListener('click', () => dlg.close());

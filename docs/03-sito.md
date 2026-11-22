@@ -16,8 +16,8 @@ La pagina è pensata **prima per il telefono**: niente scorrimento laterale (reg
 | **Diario di bordo** | Gli ultimi 3 articoli non scaduti; su telefono card basse con foto piccola e titolo. È in alto apposta, perché più in basso nessuno ci arrivava | `src/content/diario/` |
 | **Kit di partenza** | Elenco con icone (2–4 colonne su schermo grande), la nota *"Lenzuola e asciugamani non sono inclusi: puoi aggiungerli tra gli extra"* e il riquadro *Prima di ogni partenza* | `info.json` → `kit` (campo `icona` facoltativo: se manca, l'icona dipende dalla posizione del gruppo), `preparazione` |
 | **Piani e prezzi** | 1 · stagioni (tre riquadri con prezzo e periodi) · 2 · coperture (tre colonne, senza tabelle larghe) · 3 · quota fissa: **è l'unico posto in cui compare la quota da €200** · extra in una riga | `prezzi.json` |
-| **Calcolatore** | Date affiancate anche su telefono, piano, persone (menu alto quanto gli altri campi, numero al centro), extra, note, totale e *Invia la richiesta su WhatsApp*. Sotto, il calendario delle date occupate (apribile) | `prezzi.json`, `promo.md`, `info.json` |
-| **Galleria** | 2 foto su telefono, 3 su schermo grande, e il pulsante *Tutte le foto (N)*: apre un visore a tutto schermo con frecce, tastiera, swipe e contatore | `info.json` → `galleria` |
+| **Calcolatore** | Date affiancate anche su telefono, piano, persone (menu alto quanto gli altri campi, numero al centro), extra, note, totale e *Invia la richiesta su WhatsApp*. Sotto, il calendario delle date occupate (apribile), **solo se è configurato** | `prezzi.json`, `promo.md`, `info.json` |
+| **Galleria** | 2 foto su telefono, 3 su schermo grande, il pulsante *Tutte le foto (N)* e il pulsante verde **📷 Foto** nell'intestazione, sempre visibile anche su telefono. Sulla home tutti e due aprono direttamente il visore; dagli articoli il pulsante Foto porta alla galleria della home. Il visore è apre un visore a tutto schermo con frecce, tastiera, swipe e contatore | `info.json` → `galleria` |
 | **Ritiro e riconsegna** | Indirizzo con link a Maps, orari, come riconsegnarlo, regole | `info.json` → `ritiro`, `riconsegna`, `regole` |
 | **Domande frequenti** | Domande apribili; quelle con `DA_CONFERMARE` sono nascoste | `info.json` → `faq` |
 | **Contatti** | Telefoni ed email | `info.json` |
@@ -170,7 +170,7 @@ Le istruzioni a Gemini chiedono anche che quello che si vede dai finestrini e da
 2. In *Impostazioni del calendario → Autorizzazioni di accesso* attiva **Rendi disponibile pubblicamente** con *Mostra solo disponibilità (nascondi dettagli)*.
 3. In *Integra calendario* copia l'**URL dell'incorporamento** e incollalo in `info.json` → `calendarioEmbedUrl`.
 
-Finché `calendarioEmbedUrl` è vuoto, il sito mostra un invito a scrivere su WhatsApp. Il calendario **non** si sincronizza con Yescapa e Indie: va aggiornato a mano, è una scelta voluta per tenere bassi costi e complessità.
+Finché `calendarioEmbedUrl` è vuoto, sul sito **non compare niente** sulla disponibilità: né la voce *Disponibilità* nel menu, né il riquadro nel calcolatore. Quando incolli il link (anche dal pannello: *Contatti… → Link "incorpora" del Google Calendar*), compaiono tutti e due da soli. Il calendario **non** si sincronizza con Yescapa e Indie: va aggiornato a mano, è una scelta voluta per tenere bassi costi e complessità.
 
 ## Come calcola il prezzo il calcolatore
 
