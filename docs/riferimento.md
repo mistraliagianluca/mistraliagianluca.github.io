@@ -79,7 +79,7 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 | --- | --- | --- | --- |
 | `lecce-black-friday-camper-primavera-pupi` | 2026-11-22 | — | in vetrina |
 | `matera-natale-sassi-presepe-vivente-camper` | 2026-11-21 | — | in vetrina |
-| `ndocciata-agnone-camper-dicembre-2026` | 2026-11-21 | — | in vetrina |
+| `ndocciata-agnone-camper-dicembre-2026` | 2026-11-21 | — | nascosto |
 
 ## Struttura del repository
 
