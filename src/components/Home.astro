@@ -107,10 +107,6 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
     <img class="hero-logo" src={u('/assets/brand/logo.png')} alt="Mistralia" width="900" height="677" />
     <div class="hero-photo">
       <img src={u(heroSrc)} alt="Kentucky" width="1264" height="848" fetchpriority="high" />
-      <div class="hero-badge">
-        <strong>{lang === 'it' ? 'Tutto incluso' : 'All inclusive'}</strong>
-        <span>{lang === 'it' ? 'tranne le lenzuola' : 'except the sheets'}</span>
-      </div>
     </div>
     <div class="hero-text">
       <p class="eyebrow">{t(lang, 'kicker')}</p>
@@ -120,6 +116,15 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
         <a class="btn btn-primary" href="#calcola">{t(lang, 'cta_quote')}</a>
         <span class="from-price">{t(lang, 'from_price', { p: prezzoMinimo })}</span>
       </div>
+      <a class="onboard" href="#incluso">
+        <strong>{t(lang, 'onboard_title')}</strong>
+        <ul>
+          {[['carburante', 'onboard_fuel'], ['cucina', 'onboard_kitchen'], ['energia', 'onboard_offgrid'], ['sicurezza', 'onboard_assist']].map(([ic, k]) => (
+            <li><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icona(ic)} /></svg></span>{t(lang, k)}</li>
+          ))}
+        </ul>
+        <span class="onboard-more">{t(lang, 'onboard_more')} →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -176,6 +181,7 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
         </li>
       ))}
     </ul>
+    <p class="kit-not">{t(lang, 'kit_not_included')}</p>
     <div class="prep">
       <h3>{t(lang, 'prep_title')}</h3>
       <ul class="ticks">{info.preparazione[lang].map((v) => <li>{v}</li>)}</ul>
@@ -551,18 +557,25 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
   .from-price { font-family: var(--display); font-size: 1.35rem; color: var(--green); font-weight: 600; text-transform: uppercase; }
   .hero-photo img { border-radius: 22px; aspect-ratio: 3/2; object-fit: cover; width: 100%; box-shadow: var(--shadow); }
   .hero-photo::before { content: ''; position: absolute; width: 70%; aspect-ratio: 1; right: -4%; top: -12%; border-radius: 50%; background: radial-gradient(circle at 50% 62%, var(--yellow) 0 30%, var(--peach) 31% 100%); z-index: -1; }
-  .hero-badge { position: absolute; left: -6px; top: -12px; background: var(--orange); color: var(--white); padding: 8px 14px; border-radius: 12px; box-shadow: var(--shadow); transform: rotate(-3deg); display: flex; flex-direction: column; line-height: 1.15; font-size: 0.85rem; }
-  .hero-badge strong { font-family: var(--display); font-size: 1.2rem; text-transform: uppercase; }
+  /* "A bordo c'è già tutto": quattro icone sotto il pulsante, al posto del vecchio badge sulla foto */
+  .onboard { display: block; margin-top: 20px; padding: 14px 16px; border-radius: 16px; background: var(--white); box-shadow: 0 2px 12px rgba(12, 75, 66, 0.08); text-decoration: none; color: var(--ink); border-left: 5px solid var(--orange); }
+  .onboard strong { font-family: var(--display); font-size: 1.25rem; color: var(--green); text-transform: uppercase; letter-spacing: 0.02em; display: block; margin-bottom: 8px; }
+  .onboard ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+  .onboard li { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.9rem; line-height: 1.2; }
+  .onboard .ico { width: 34px; height: 34px; border-radius: 10px; }
+  .onboard .ico svg { width: 19px; height: 19px; }
+  .onboard li:nth-child(2) .ico { background: var(--yellow-soft); }
+  .onboard li:nth-child(3) .ico { background: var(--orange-soft); }
+  .onboard-more { display: block; margin-top: 8px; font-size: 0.85rem; font-weight: 700; color: var(--teal); }
+  .onboard li { white-space: nowrap; }
   @media (min-width: 821px) {
     .hero { padding: 32px 0 56px; }
     .hero-grid { grid-template-columns: 1fr 1fr; grid-template-areas: 'logo photo' 'text photo'; gap: 16px 48px; align-items: center; }
     .hero-logo { width: min(300px, 70%); justify-self: start; align-self: end; }
     .hero-text { align-self: start; }
     .hero-sub { font-size: 1.15rem; }
-    .hero-badge { padding: 12px 18px; left: -14px; top: -18px; }
     /* le tre strisce del logo dietro la foto (la sezione taglia ciò che esce: niente scorrimento laterale) */
     .hero-photo::after { content: ''; position: absolute; left: -40px; right: -40px; top: 56px; height: 26px; background: linear-gradient(var(--orange) 0 33.3%, var(--yellow) 33.3% 66.6%, var(--teal) 66.6%); z-index: -1; clip-path: polygon(0 0, 100% 0, calc(100% - 26px) 100%, 26px 100%); }
-    .hero-badge strong { font-size: 1.45rem; }
   }
 
   /* Perché: tre righe compatte con icona */
@@ -600,7 +613,9 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
   .kit p { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
   @media (min-width: 640px) { .kit { grid-template-columns: 1fr 1fr; gap: 18px 32px; } }
   @media (min-width: 1000px) { .kit { grid-template-columns: repeat(4, 1fr); } }
-  .prep { margin-top: 22px; background: var(--green); color: var(--white); border-radius: 16px; padding: 16px 18px; }
+  .kit-not { margin: 16px 0 0; font-size: 0.9rem; color: var(--muted); }
+  .kit-not::before { content: 'ⓘ '; color: var(--orange); font-weight: 800; }
+  .prep { margin-top: 16px; background: var(--green); color: var(--white); border-radius: 16px; padding: 16px 18px; }
   .prep h3 { color: var(--yellow); margin: 0 0 8px; font-size: 1rem; }
   .ticks { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.92rem; }
   .ticks li::before { content: '✓ '; font-weight: 800; color: var(--teal); }
@@ -652,7 +667,11 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
   .calc-fields label { display: flex; flex-direction: column; gap: 4px; font-weight: 600; font-size: 0.9rem; min-width: 0; }
   .calc-fields .wide, .plan-pick, .extras-pick { grid-column: 1 / -1; }
   .calc input, .calc select, .calc textarea { font: inherit; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--white); width: 100%; min-width: 0; max-width: 100%; }
-  .calc input[type=date] { -webkit-appearance: none; appearance: none; min-height: 46px; padding: 8px 10px; }
+  /* stessa altezza per date, testo e menu (su computer il menu era più basso) */
+  .calc input, .calc select { height: 48px; }
+  .calc input[type=date] { -webkit-appearance: none; appearance: none; padding: 8px 10px; }
+  .calc select { text-align: center; text-align-last: center; -webkit-appearance: none; appearance: none; padding: 0 34px; background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230c4b42' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center / 16px; cursor: pointer; }
+  .calc .pill input, .calc .check input { height: 18px; }
   .calc input:focus, .calc select:focus, .calc textarea:focus { outline: 3px solid var(--mint-soft); border-color: var(--mint); }
   .plan-pick, .extras-pick { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
   .plan-pick legend, .extras-pick legend { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; padding: 0; }

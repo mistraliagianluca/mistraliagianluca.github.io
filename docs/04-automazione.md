@@ -50,9 +50,10 @@ flowchart TD
 - **Mete:** raggiungibili in circa 4 ore di guida da Bari (Puglia, Basilicata, Campania, Calabria, Molise, Abruzzo) o con un **traghetto diretto da Bari** (Grecia, Albania, Montenegro, Croazia). Deve alternare le regioni e indicare il tempo di viaggio. Il limite di ore è `oreMaxDaBari` in `config.json`.
 - **Traghetti:** solo se ha verificato che nel periodo c'è una linea da Bari che **imbarca camper**. Cita la compagnia e la durata della traversata, senza prezzi.
 - **Durata del viaggio:** entro 2 ore → weekend lungo; 3–4 ore → 4–7 giorni; traghetto ed estero → 7–10 giorni, d'estate due settimane. Da giugno a settembre privilegia viaggi lunghi in periodi poco affollati (giugno, inizio luglio, settembre); nel resto dell'anno weekend lunghi e ponti. Niente gite di un giorno.
+- **Messaggio:** il camper è **completo di tutto per partire** (pieno, cucina, sosta libera, assistenza 24/7). Lenzuola e asciugamani **non sono inclusi**: mai dire che lo sono, e mai formule come "tutto incluso tranne le lenzuola".
 - **Fatti sul camper:** solo quelli scritti nel prompt. **Mai citare età o anno del camper**, mai prezzi diversi da "da €X al giorno", dove X è il prezzo più basso in `src/data/prezzi.json`: se cambi i prezzi dal pannello, i post si aggiornano da soli.
 - **Date di eventi:** solo se verificate in una fonte trovata al momento.
-- **Scadenza:** se il post parla di un evento con date, Claude scrive anche il campo `scadenza` (ultimo giorno dell'evento). Con Pubblica finisce nell'articolo: dal giorno dopo l'articolo esce dalla home e la pagina dice "evento concluso" ([Il sito → Articoli scaduti](03-sito.md#articoli-scaduti-e-nascosti)).
+- **Scadenza:** se il post parla di un evento con date, Claude scrive anche il campo `scadenza` (ultimo giorno dell'evento). Con Pubblica finisce nell'articolo: dal giorno dopo l'articolo esce dalla home e la pagina dice "evento concluso" ([Il sito → Articoli scaduti](03-sito.md#articoli-scaduti-archiviati-ed-eliminati)).
 - **Temi già usati:** riceve gli ultimi 12 temi, con il luogo, e non deve ripeterli.
 - **Immagine:** "reale" (il Kentucky nel luogo) oppure, una settimana su 4, "improbabile" (il Kentucky in un posto impossibile e simpatico).
 - **Tono:** fresco, frasi corte, massimo 3 emoji, niente finta urgenza e niente recensioni inventate.
@@ -114,7 +115,7 @@ Gli articoli si modificano **solo in italiano**: dal pannello, dall'editor web o
 - Gli articoli pubblicati con ✅ Pubblica nascono già allineati: l'inglese lo scrive Claude insieme all'italiano, con l'impronta.
 - Dopo un aggiornamento il bot ripubblica il sito. Per circa 2 minuti la pagina inglese può mostrare la versione precedente.
 - La spesa delle traduzioni entra nel totale del mese e nel tetto `budgetMensileDollari`.
-- Nello stesso passaggio il bot aggiorna nel file **italiano** due campi per il pannello: `stato` (🟢 in vetrina, ⚪ evento concluso, ⚫ nascosto) e `ordine` (`1-AAAA-MM-GG` per quelli in vetrina, `0-AAAA-MM-GG` per gli altri). Ordinando per `ordine` decrescente compaiono prima quelli in vetrina e poi gli altri, ognuno dal più recente. Non cambiano la traduzione e non ripubblicano il sito.
+- Nello stesso passaggio il bot aggiorna nel file **italiano** due campi per il pannello: `stato` (🟢 in vetrina, ⚪ evento concluso, ⚫ archiviato) e `ordine` (`1-AAAA-MM-GG` per quelli in vetrina, `0-AAAA-MM-GG` per gli altri). Ordinando per `ordine` decrescente compaiono prima quelli in vetrina e poi gli altri, ognuno dal più recente. Non cambiano la traduzione e non ripubblicano il sito.
 
 ## La sveglia del bot
 

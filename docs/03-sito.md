@@ -11,17 +11,19 @@ La pagina è pensata **prima per il telefono**: niente scorrimento laterale (reg
 | Sezione | Cosa mostra | Da dove prende i dati |
 | --- | --- | --- |
 | **Banner promo** | Barra gialla in cima, **dentro l'intestazione fissa**: resta visibile anche scorrendo. Solo se la promo è attiva e nelle date giuste | `promo.md` |
-| **Apertura** | Logo, foto di apertura con il badge "Tutto incluso", titolo, pulsante *Calcola il prezzo* e "da €X al giorno" | `info.json` → `fotoApertura`; prezzo più basso da `prezzi.json` |
+| **Apertura** | Logo, foto di apertura (senza scritte sopra), titolo, pulsante *Calcola il prezzo*, "da €X al giorno" e il riquadro **"A bordo c'è già tutto"** con 4 icone (pieno, cucina per 4, kit sosta libera, assistenza 24/7) che porta al kit | `info.json` → `fotoApertura`; prezzo più basso da `prezzi.json` |
 | **Perché il Kentucky** | Tre righe con icona | testi in `src/i18n/` (`why_*`) |
 | **Diario di bordo** | Gli ultimi 3 articoli non scaduti; su telefono card basse con foto piccola e titolo. È in alto apposta, perché più in basso nessuno ci arrivava | `src/content/diario/` |
-| **Kit di partenza** | Elenco con icone (2–4 colonne su schermo grande) e il riquadro *Prima di ogni partenza* | `info.json` → `kit` (campo `icona` facoltativo: se manca, l'icona dipende dalla posizione del gruppo), `preparazione` |
+| **Kit di partenza** | Elenco con icone (2–4 colonne su schermo grande), la nota *"Lenzuola e asciugamani non sono inclusi: puoi aggiungerli tra gli extra"* e il riquadro *Prima di ogni partenza* | `info.json` → `kit` (campo `icona` facoltativo: se manca, l'icona dipende dalla posizione del gruppo), `preparazione` |
 | **Piani e prezzi** | 1 · stagioni (tre riquadri con prezzo e periodi) · 2 · coperture (tre colonne, senza tabelle larghe) · 3 · quota fissa: **è l'unico posto in cui compare la quota da €200** · extra in una riga | `prezzi.json` |
-| **Calcolatore** | Date affiancate anche su telefono, piano, persone, extra, note, totale e *Invia la richiesta su WhatsApp*. Sotto, il calendario delle date occupate (apribile) | `prezzi.json`, `promo.md`, `info.json` |
+| **Calcolatore** | Date affiancate anche su telefono, piano, persone (menu alto quanto gli altri campi, numero al centro), extra, note, totale e *Invia la richiesta su WhatsApp*. Sotto, il calendario delle date occupate (apribile) | `prezzi.json`, `promo.md`, `info.json` |
 | **Galleria** | 2 foto su telefono, 3 su schermo grande, e il pulsante *Tutte le foto (N)*: apre un visore a tutto schermo con frecce, tastiera, swipe e contatore | `info.json` → `galleria` |
 | **Ritiro e riconsegna** | Indirizzo con link a Maps, orari, come riconsegnarlo, regole | `info.json` → `ritiro`, `riconsegna`, `regole` |
 | **Domande frequenti** | Domande apribili; quelle con `DA_CONFERMARE` sono nascoste | `info.json` → `faq` |
 | **Contatti** | Telefoni ed email | `info.json` |
 | **WhatsApp** | **Un solo pulsante**, fisso in basso a destra e sempre visibile su ogni schermo. L'unico altro pulsante WhatsApp è quello del calcolatore, che manda la richiesta già compilata | `info.json` → `whatsapp` |
+
+**Messaggio "completo di tutto":** il sito e i post dicono che il camper è **completo di tutto per partire**, ma **non** usano formule come "tutto incluso" o "tutto incluso tranne le lenzuola": lenzuola e asciugamani sono extra a pagamento e sono indicati come tali nel kit, negli extra e nel calcolatore. Titolo per Google: *"Noleggio camper a Bari · pieno, kit e assistenza inclusi | Mistralia"* (`meta_title` in `src/i18n/`).
 
 **Calcolatore, date:** appena si sceglie il ritiro, la riconsegna non può essere prima del giorno dopo e, se è vuota, viene proposta con il **noleggio minimo** di quel periodo, così il calendario si apre già dalla data giusta e il prezzo compare subito.
 

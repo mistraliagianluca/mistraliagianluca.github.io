@@ -13,6 +13,16 @@
 
 ---
 
+## 2026-11-22 · "Completo di tutto per partire" al posto di "tutto incluso tranne le lenzuola"
+- Cosa:
+  - via il badge "Tutto incluso tranne le lenzuola" dalla foto di apertura; al suo posto, sotto il pulsante, il riquadro "A bordo c'è già tutto" con 4 icone che porta al kit;
+  - sottotitolo, primo punto di "Perché" ("Sali e parti"), titolo e descrizione per Google riscritti senza la formula;
+  - nel kit la nota che lenzuola e asciugamani non sono inclusi e si aggiungono tra gli extra;
+  - nel prompt dei post: passare sempre il concetto "completo di tutto per partire", mai dire che lenzuola e asciugamani sono inclusi, mai "tutto incluso";
+  - nel calcolatore il menu Persone è alto quanto gli altri campi, con il numero al centro (su computer era più basso).
+- Perché: richiesta di Gianluca; lenzuola e asciugamani sono extra a pagamento.
+- Da fare: niente. Il nuovo titolo per Google compare nei risultati dopo il prossimo passaggio del motore di ricerca.
+
 ## 2026-11-22 · Nuovo layout della home, prima per il telefono
 - Cosa: `src/components/Home.astro` riscritta con layout compatto:
   - niente più scorrimento laterale (`overflow-x: clip`; tabella dei piani sostituita da tre colonne);
