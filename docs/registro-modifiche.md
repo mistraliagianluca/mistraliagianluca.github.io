@@ -13,6 +13,11 @@
 
 ---
 
+## 2026-11-22 · Tolto l'articolo di esempio
+- Cosa: eliminati `src/content/diario/esempio-polignano.it.md` ed `.en.md`, l'articolo dimostrativo dell'MVP (non pubblicato, con una foto della galleria al posto dell'immagine generata). Il sito continua a ignorare eventuali articoli con `esempio: true`.
+- Perché: compariva nel pannello `/admin` come un articolo vero ma non era sul sito.
+- Da fare: niente.
+
 ## 2026-11-22 · Articoli solo in italiano, inglese automatico
 - Cosa: il pannello mostra solo la versione italiana degli articoli; nuovo `automazione/traduzioni.mjs`, chiamato dal bot a ogni giro, che ritraduce con Claude l'inglese quando cambiano titolo, anteprima o testo italiani, copia data, scadenza, nascosto e immagine, ed elimina l'inglese se l'italiano viene eliminato. Impronta del testo sorgente nel campo `origine` dei file inglesi. Il pannello non scrive più i campi facoltativi vuoti (`omit_empty_optional_fields`) e la scadenza vuota è accettata.
 - Perché: modificare una volta sola, nella lingua del team.
