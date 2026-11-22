@@ -42,7 +42,9 @@ flowchart LR
 
 **Uso:** *Dati del sito* → scegli **Prezzi, stagioni e condizioni**, **Promozione** oppure **Contatti, ritiro, kit, regole, FAQ e foto** → modifica → **Save**. Le foto si caricano dal campo *Galleria* (anche dal telefono), si trascinano per cambiare l'ordine e finiscono in `public/assets/gallery/`.
 
-**Cosa NON si cambia dal pannello:** i testi fissi del sito (`src/i18n/`), i nomi dei piani, gli articoli del Diario (li gestisce il bot) e le impostazioni dell'automazione. Per questi vedi la tabella qui sotto.
+**Diario di bordo (articoli):** sezione *Diario di bordo* del pannello. Ogni articolo compare due volte (`it` ed `en`): si può correggere testo, titolo e immagine, impostare la **Fine dell'evento**, **nascondere** l'articolo con un interruttore o **eliminarlo** (*Delete*). Fai la stessa cosa su tutti e due i file. Gli articoli nuovi li crea solo il bot.
+
+**Cosa NON si cambia dal pannello:** i testi fissi del sito (`src/i18n/`), i nomi dei piani e le impostazioni dell'automazione. Per questi vedi la tabella qui sotto.
 
 **Da sapere:**
 - Il pannello è solo per Gianluca: per entrare serve un token con accesso in scrittura al repository. Chi apre `/admin` senza token vede solo la schermata di accesso, e la pagina non compare su Google (`noindex`).
@@ -67,7 +69,7 @@ flowchart LR
 | **Domande frequenti** | `info.json` → `faq` | Una FAQ che contiene `DA_CONFERMARE` non viene mostrata |
 | **Foto della galleria** | pannello → Contatti… → *Galleria* · oppure `public/assets/gallery/` + `info.json` → `galleria` | vedi [Foto](#foto) |
 | **Testi fissi** (titoli, pulsanti, frasi) | `src/i18n/it.json` e `src/i18n/en.json` | Stesse chiavi in tutti e due i file |
-| **Articoli del Diario** | `src/content/diario/` | Li scrive il bot; vedi [Sviluppo](06-sviluppo.md#togliere-un-articolo) per toglierli |
+| **Articoli del Diario** | pannello → Diario di bordo · oppure `src/content/diario/` | Li scrive il bot; vedi [Articoli scaduti e nascosti](#articoli-scaduti-e-nascosti) |
 | Aspetto, colori, struttura | `src/components/`, `src/layouts/`, `src/styles/global.css` | Solo per chi sviluppa ([Sviluppo](06-sviluppo.md)) |
 
 ### In alternativa: modificare un file con l'editor web di GitHub
@@ -102,6 +104,23 @@ titolo_en: "Black Friday: 15% off spring rentals"
 - Per vedere subito il banner (per esempio per una prova), metti come *Banner visibile dal* la data di oggi.
 - Per una nuova promo cambia i valori e metti `attiva: true` (nel pannello: l'interruttore *Promo attiva*).
 - Salvando dal pannello i commenti `#` del file spariscono: le spiegazioni restano qui e nei suggerimenti dei campi.
+
+## Articoli scaduti e nascosti
+
+```mermaid
+flowchart LR
+    A["Articolo pubblicato<br>con 'Fine dell'evento'"] --> B{"Oggi è dopo<br>la fine?"}
+    B -->|No| C["In vetrina nella home<br>(i 3 più recenti)"]
+    B -->|Sì| D["Esce dalla home;<br>la pagina resta online<br>con l'avviso 'evento concluso'"]
+    E["Interruttore 'Nascondi'<br>nel pannello"] --> F["Sparisce dal sito<br>(pagina compresa),<br>si può riattivare"]
+```
+
+- **Fine dell'evento** (`scadenza`): la scrive il bot quando il post parla di un evento con date, ed è controllata dal verificatore. Per luoghi e itinerari è vuota e l'articolo non scade. Si può correggere dal pannello.
+- Dal giorno dopo la scadenza l'articolo **esce dalla home** e la sua pagina mostra *"Questo evento si è concluso il … · Scopri le prossime idee di viaggio"*. La pagina **resta online** apposta, così i link già condivisi sui social non portano a una pagina inesistente. Lo decide il browser del visitatore in base alla data: non serve ricostruire il sito.
+- La home mostra i **3 articoli più recenti non scaduti**. Se sono tutti scaduti, la sezione Diario sparisce.
+- **Nascondi** (`nascosto: true`): l'articolo sparisce del tutto dal sito ma il file resta, e si può riaccendere. Serve per un articolo sbagliato o non più adatto.
+- **Elimina** (*Delete* nel pannello): toglie per sempre il file dal repository (resta nella storia di git). L'immagine in `public/assets/diario/` resta e si può cancellare dalla libreria media del pannello.
+- I **post social** non vengono toccati: è normale che i post di eventi passati restino sul profilo.
 
 ## Foto
 

@@ -44,6 +44,7 @@ function scriviArticolo(b) {
       `immagine: ${yaml(img)}`,
       `estratto: ${yaml(c[`estratto_${l}`])}`,
       'immagineAI: true',
+      ...(/^\d{4}-\d{2}-\d{2}$/.test(String(c.scadenza ?? '')) ? [`scadenza: ${c.scadenza}`] : []),
       '---',
       '',
       c[`articolo_${l}`].trim(),

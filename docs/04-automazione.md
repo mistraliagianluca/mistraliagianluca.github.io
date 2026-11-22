@@ -51,6 +51,7 @@ flowchart TD
 - **Durata del viaggio:** entro 2 ore → weekend lungo; 3–4 ore → 4–7 giorni; traghetto ed estero → 7–10 giorni, d'estate due settimane. Da giugno a settembre privilegia viaggi lunghi in periodi poco affollati (giugno, inizio luglio, settembre); nel resto dell'anno weekend lunghi e ponti. Niente gite di un giorno.
 - **Fatti sul camper:** solo quelli scritti nel prompt. **Mai citare età o anno del camper**, mai prezzi diversi da "da €X al giorno", dove X è il prezzo più basso in `src/data/prezzi.json`: se cambi i prezzi dal pannello, i post si aggiornano da soli.
 - **Date di eventi:** solo se verificate in una fonte trovata al momento.
+- **Scadenza:** se il post parla di un evento con date, Claude scrive anche il campo `scadenza` (ultimo giorno dell'evento). Con Pubblica finisce nell'articolo: dal giorno dopo l'articolo esce dalla home e la pagina dice "evento concluso" ([Il sito → Articoli scaduti](03-sito.md#articoli-scaduti-e-nascosti)).
 - **Temi già usati:** riceve gli ultimi 12 temi, con il luogo, e non deve ripeterli.
 - **Immagine:** "reale" (il Kentucky nel luogo) oppure, una settimana su 4, "improbabile" (il Kentucky in un posto impossibile e simpatico).
 - **Tono:** fresco, frasi corte, massimo 3 emoji, niente finta urgenza e niente recensioni inventate.
@@ -59,7 +60,7 @@ Per cambiare tono o regole si modifica `prompt.md`: è testo normale. Se cambian
 
 ### La verifica dei fatti (`verifica.md`)
 
-Una **seconda chiamata a Claude**, separata dalla prima, rilegge la bozza e cerca da sola sul web ogni fatto su eventi e luoghi: nome, **edizione di quest'anno**, date, luogo, ingresso, traghetti (linea, periodo, imbarco camper), tempi di viaggio. Non si fida delle fonti della prima chiamata, e una pagina dell'anno precedente non vale come conferma.
+Una **seconda chiamata a Claude**, separata dalla prima, rilegge la bozza e cerca da sola sul web ogni fatto su eventi e luoghi: nome, **edizione di quest'anno**, date, luogo, ingresso, traghetti (linea, periodo, imbarco camper), tempi di viaggio e la **scadenza** dell'evento. Non si fida delle fonti della prima chiamata, e una pagina dell'anno precedente non vale come conferma.
 
 | Esito | Cosa succede |
 | --- | --- |

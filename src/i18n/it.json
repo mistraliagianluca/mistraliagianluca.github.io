@@ -113,5 +113,7 @@
   "step3_title": "3 · Quota fissa a noleggio",
   "per_rental_once": "una volta per noleggio, obbligatoria",
   "km_note_only": "Km extra: €{price} per km.",
-  "ai_image": "Immagine creata con l'intelligenza artificiale."
+  "ai_image": "Immagine creata con l'intelligenza artificiale.",
+  "post_expired": "Questo evento si è concluso il {d}.",
+  "post_expired_more": "Scopri le prossime idee di viaggio →"
 }

@@ -160,7 +160,15 @@ function genera() {
     '',
     '## Articoli pubblicati nel Diario',
     '',
-    ...(diario.length ? diario.map((f) => `- \`${f.replace('.it.md', '')}\``) : ['Nessuno.']),
+    ...(diario.length
+      ? ['| Articolo | Pubblicato | Fine evento | Stato |', '| --- | --- | --- | --- |', ...diario.map((f) => {
+          const t = fs.readFileSync(rel('src/content/diario', f), 'utf8');
+          const v = (k) => (t.match(new RegExp(`^${k}:\\s*"?([^"\\n]*)"?`, 'm')) || [, ''])[1].trim();
+          const oggi = new Date().toISOString().slice(0, 10);
+          const stato = v('nascosto') === 'true' ? 'nascosto' : v('scadenza') && v('scadenza') < oggi ? 'evento concluso' : 'in vetrina';
+          return `| \`${f.replace('.it.md', '')}\` | ${v('data') || '—'} | ${v('scadenza') || '—'} | ${stato} |`;
+        })]
+      : ['Nessuno.']),
     '',
     '## Struttura del repository',
     '',

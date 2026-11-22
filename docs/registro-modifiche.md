@@ -13,6 +13,11 @@
 
 ---
 
+## 2026-11-22 · Articoli con scadenza, nascosti e Diario nel pannello
+- Cosa: nuovo campo `scadenza` negli articoli (ultimo giorno dell'evento), scritto dal bot e controllato dal verificatore; dal giorno dopo l'articolo esce dalla home e la sua pagina mostra "evento concluso" (deciso dal browser, senza ricostruire il sito). Nuovo campo `nascosto` per togliere un articolo dal sito senza cancellarlo. La home prepara fino a 9 articoli e ne mostra i 3 più recenti non scaduti. Nuova sezione *Diario di bordo* nel pannello `/admin` per correggere, impostare la scadenza, nascondere o eliminare gli articoli. Il riferimento tecnico mostra lo stato di ogni articolo.
+- Perché: non lasciare in vetrina eventi passati, senza rompere i link già condivisi sui social.
+- Da fare: nel pannello impostare la **Fine dell'evento** dei due articoli già pubblicati (Matera, 'Ndocciata di Agnone), su tutti e due i file it ed en.
+
 ## 2026-11-22 · Date della promo salvate dal pannello
 - Cosa: `src/lib/site.ts` legge le date della promo sempre come AAAA-MM-GG. Il pannello le salva senza virgolette e il sito le riceveva come `2026-11-22T00:00:00.000Z`: il banner restava nascosto il primo giorno e la data "fino al" poteva risultare non valida.
 - Perché: la promo Black Friday attivata dal pannello con inizio 22/11 non compariva.

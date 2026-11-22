@@ -69,6 +69,9 @@ function stagioniDaPeriodi(periodi: { dal: string; al: string; stagione: string 
 
 const prezzi = { ...prezziFile, stagioni: stagioniDaPeriodi((prezziFile as any).periodi) };
 
+/** Data AAAA-MM-GG (o stringa vuota) per gli attributi letti dal browser. */
+export const isoData = (v: unknown) => (v ? iso(v) : '');
+
 /** Percorso di un'immagine della galleria: accetta il percorso (/assets/gallery/x.jpg) o il vecchio numero (7). */
 export const fotoGalleria = (v: string | number) => (typeof v === 'number' || /^\d+$/.test(String(v)) ? `/assets/gallery/${v}.jpg` : String(v));
 

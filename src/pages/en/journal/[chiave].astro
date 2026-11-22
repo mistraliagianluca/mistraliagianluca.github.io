@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Post from '../../../components/Post.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('diario', ({ data }) => data.lingua === 'en' && !data.esempio);
+  const posts = await getCollection('diario', ({ data }) => data.lingua === 'en' && !data.esempio && !data.nascosto);
   return posts.map((post) => ({ params: { chiave: post.data.chiave }, props: { post } }));
 }
 const { post } = Astro.props;

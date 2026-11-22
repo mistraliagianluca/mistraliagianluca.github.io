@@ -113,5 +113,7 @@
   "step3_title": "3 · Fixed fee per rental",
   "per_rental_once": "once per rental, mandatory",
   "km_note_only": "Extra kilometres: €{price} per km.",
-  "ai_image": "Image created with artificial intelligence."
+  "ai_image": "Image created with artificial intelligence.",
+  "post_expired": "This event ended on {d}.",
+  "post_expired_more": "See our latest trip ideas →"
 }

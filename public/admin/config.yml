@@ -209,3 +209,40 @@ collections:
             label: Codice GoatCounter (statistiche, facoltativo)
             widget: string
             required: false
+
+  # -------------------------------------------------------------------- DIARIO
+  # Ogni articolo ha due file: <chiave>.it.md e <chiave>.en.md. Li crea il bot con "Pubblica": qui si correggono,
+  # si nascondono o si eliminano (fare la stessa cosa su tutti e due i file).
+  - name: diario
+    label: Diario di bordo (articoli)
+    label_singular: articolo
+    folder: src/content/diario
+    extension: md
+    format: yaml-frontmatter
+    create: false
+    media_folder: /public/assets/diario
+    public_folder: /assets/diario
+    summary: "{{lingua}} · {{titolo}}"
+    sortable_fields: [data, titolo, scadenza]
+    fields:
+      - { name: titolo, label: Titolo, widget: string }
+      - { name: lingua, label: Lingua del file, widget: hidden }
+      - { name: chiave, label: Chiave, widget: hidden }
+      - { name: data, label: Data di pubblicazione, widget: datetime, type: date, picker_utc: true }
+      - name: scadenza
+        label: Fine dell'evento
+        hint: "Dal giorno dopo l'articolo esce dalla home e la sua pagina dice che l'evento è concluso. Vuoto = nessuna scadenza (luoghi, itinerari). Metti la stessa data nel file it e nel file en."
+        widget: datetime
+        type: date
+        picker_utc: true
+        required: false
+      - name: nascosto
+        label: Nascondi dal sito
+        hint: "Acceso = l'articolo sparisce dal sito (pagina compresa) ma resta qui e si può riattivare. Accendilo su tutti e due i file (it ed en)."
+        widget: boolean
+        required: false
+        default: false
+      - { name: estratto, label: Anteprima (1-2 frasi), widget: text }
+      - { name: immagine, label: Immagine, widget: image }
+      - { name: immagineAI, label: Immagine creata con AI (mostra la nota), widget: boolean, required: false, default: true }
+      - { name: body, label: Testo dell'articolo, widget: markdown }

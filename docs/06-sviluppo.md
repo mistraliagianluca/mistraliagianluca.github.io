@@ -145,6 +145,8 @@ Dal sito di GitHub, per un file solo: apri il file → **History** → scegli la
 <a id="togliere-un-articolo"></a>
 ## Togliere un articolo dal Diario
 
+**Il modo più semplice è il pannello:** www.mistralia.co/admin → *Diario di bordo* → apri l'articolo (file `it` ed `en`) → interruttore **Nascondi dal sito** oppure **Delete**. Vedi [Il sito → Articoli scaduti e nascosti](03-sito.md#articoli-scaduti-e-nascosti). Da riga di comando:
+
 ```bash
 git pull
 ls src/content/diario/           # trova la chiave, es. matera-natale-sassi-presepe-vivente-camper

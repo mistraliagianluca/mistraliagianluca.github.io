@@ -9,6 +9,7 @@ Oggi è {{OGGI}}.
 2. Cerca **tu stesso** sul web ogni fatto, senza fidarti delle fonti indicate dal collega. Un evento è confermato solo se trovi una fonte che parla **dell'edizione di quest'anno** con **quelle date**: sito ufficiale, Comune, Pro Loco, organizzatore, testata giornalistica o portale eventi affidabile. Una pagina dell'anno scorso **non** conferma l'edizione di quest'anno.
 3. Se la bozza propone un **traghetto**: verifica che nel periodo proposto esista una linea da Bari verso quella destinazione che **imbarca camper/autocaravan** (pagina della compagnia o portale di prenotazione traghetti), e che compagnia e durata della traversata siano corrette. Se non è confermato, l'esito è "scarta".
 4. Verifica che il tempo di viaggio da Bari indicato sia realistico.
+   Se la bozza ha una "scadenza", deve essere l'ultimo giorno dell'evento di quest'anno; se è sbagliata l'esito è "correggi" con la data giusta nella correzione.
 5. I fatti sul camper Kentucky (posti, dotazioni, prezzi, km inclusi) non vanno verificati: sono dati dell'azienda.
 6. Decidi l'esito:
    - **"ok"**: tutti i fatti su eventi e luoghi sono confermati.

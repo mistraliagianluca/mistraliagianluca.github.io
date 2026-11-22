@@ -1,7 +1,7 @@
 ---
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { t, paths, fmtDate, u, type Lang } from '../lib/site';
+import { t, paths, fmtDate, u, isoData, type Lang } from '../lib/site';
 
 interface Props { post: CollectionEntry<'diario'>; lang: Lang }
 const { post, lang } = Astro.props;
@@ -15,6 +15,12 @@ const other: Lang = lang === 'it' ? 'en' : 'it';
       <a href={paths.home(lang)}>← {t(lang, 'journal_back')}</a>
       <h1>{post.data.titolo}</h1>
       <p class="post-meta">{fmtDate(post.data.data, lang)}</p>
+      {post.data.scadenza && (
+        <p class="post-expired" hidden data-scadenza={isoData(post.data.scadenza)}>
+          {t(lang, 'post_expired', { d: fmtDate(post.data.scadenza, lang) })}
+          <a href={`${paths.home(lang)}#diario`}>{t(lang, 'post_expired_more')}</a>
+        </p>
+      )}
       <figure class="post-figure">
         <img class="post-hero" src={u(post.data.immagine)} alt="" />
         {post.data.immagineAI && <figcaption>{t(lang, 'ai_image')}</figcaption>}
@@ -26,3 +32,16 @@ const other: Lang = lang === 'it' ? 'en' : 'it';
     </div>
   </article>
 </Base>
+
+<script>
+  // Mostra l'avviso "evento concluso" dal giorno dopo la scadenza (decide il browser, senza ricostruire il sito)
+  const box = document.querySelector<HTMLElement>('.post-expired');
+  const today = new Date().toISOString().slice(0, 10);
+  if (box && box.dataset.scadenza && today > box.dataset.scadenza) box.hidden = false;
+</script>
+
+<style>
+  .post-expired { background: var(--yellow-soft); border-left: 6px solid var(--yellow); border-radius: 12px; padding: 12px 16px; font-weight: 600; margin: 12px 0 20px; }
+  .post-expired[hidden] { display: none; }
+  .post-expired a { display: block; margin-top: 4px; font-weight: 700; }
+</style>

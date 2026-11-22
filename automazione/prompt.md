@@ -41,6 +41,7 @@ Rispondi **solo** con un blocco ```json con questi campi:
   "tema": "breve descrizione del tema",
   "luogo": "luogo principale",
   "durata": "durata consigliata del viaggio, es. weekend lungo (3-4 giorni)",
+  "scadenza": "AAAA-MM-GG: ultimo giorno dell'evento citato (verificato). null se il post non parla di un evento con date (luogo, borgo, itinerario)",
   "chiave": "slug-ascii-minuscolo-con-trattini, max 60 caratteri, unico",
   "titolo_it": "titolo dell'articolo, max 70 caratteri",
   "titolo_en": "article title, max 70 characters",

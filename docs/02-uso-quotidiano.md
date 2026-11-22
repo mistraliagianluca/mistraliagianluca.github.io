@@ -111,6 +111,7 @@ Dal sito il cliente preme il pulsante WhatsApp e arriva un messaggio già compil
 | Il lunedì dopo le 9:15 non è arrivata la bozza | Se nel gruppo c'è un ⚠️, leggilo; poi scrivi `/nuovo`. Se dopo 10 minuti non è successo niente, avvisa Gianluca |
 | Arriva *"⚠️ Qualcosa non è andato: …"* | Copia il messaggio e mandalo a Gianluca. Non riprovare più volte di seguito |
 | Arriva *"⚠️ … budget del mese raggiunto"* | Il tetto di spesa mensile è stato superato: fino al mese dopo niente bozze nuove. Decide l'amministratore se alzarlo |
-| Ho pubblicato per sbaglio | Avvisa Gianluca: l'articolo si toglie dal sito in 2 minuti (vedi [Sviluppo](06-sviluppo.md#togliere-un-articolo)) |
+| Ho pubblicato per sbaglio | Avvisa Gianluca: dal pannello `/admin` → *Diario* lo nasconde in 2 minuti |
+| Un evento è passato | Non serve fare niente: dal giorno dopo la fine dell'evento l'articolo esce dalla home e la sua pagina dice "evento concluso". I post social restano (è normale) |
 | Il post contiene un errore già pubblicato | Come sopra; per i social, modifica o cancella il post dall'app |
 | Il bot non risponde da più di 10 minuti | Avvisa Gianluca: controllerà la cronologia di cron-job.org e Actions |
