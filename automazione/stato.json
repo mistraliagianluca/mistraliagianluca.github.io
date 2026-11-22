@@ -1,11 +1,11 @@
 {
-  "offset": 926428055,
+  "offset": 926428056,
   "bozza": {
     "id": "2026-11-22-lecce-black-friday-camper-primavera-pupi",
     "codice": "392ddf11ec",
-    "messageId": 52,
-    "testoId": 53,
-    "creata": "2026-11-22T15:48:20.325Z",
+    "messageId": 56,
+    "testoId": 57,
+    "creata": "2026-11-22T15:55:23.508Z",
     "promemoria": false
   },
   "storico": [
@@ -64,6 +64,12 @@
       "tema": "Black Friday Mistralia (−15% sui noleggi dal 1° marzo al 31 maggio 2027, prenotabili dal 24 novembre al 1° dicembre) con la Fiera dei Pupi di Lecce (5-27 dicembre 2026) come antipasto e Lecce e il Salento in primavera come idea di viaggio",
       "luogo": "Lecce (Puglia), a circa 2 ore (a seconda del traffico) di guida da Bari",
       "data": "2026-11-22"
+    },
+    {
+      "id": "2026-11-22-lecce-black-friday-camper-primavera-pupi",
+      "tema": "Black Friday Mistralia: −15% sui noleggi del Kentucky dal 1° marzo al 31 maggio 2027, prenotabili dal 24 novembre al 1° dicembre. Lecce è solo uno spunto di viaggio, tra tanti.",
+      "luogo": "Lecce (Puglia), a circa 2 ore (a seconda del traffico) di guida da Bari",
+      "data": "2026-11-22"
     }
   ],
   "pubblicati": [
@@ -82,7 +88,7 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 3.312702
+    "dollari": 3.5952719999999996
   },
   "settimanale": "2026-11-16"
 }
