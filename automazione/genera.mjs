@@ -143,6 +143,11 @@ async function preparaBozza({ nota, precedente, scartata } = {}) {
 }
 
 if (process.argv[1] === new URL(import.meta.url).pathname) {
+  const ultima = leggiStato().storico?.at(-1);
+  if (process.env.UNA_AL_GIORNO === '1' && ultima?.data === oggiISO()) {
+    console.log(`Oggi c'è già una bozza (${ultima.id}): non ne preparo un'altra.`);
+    process.exit(0);
+  }
   creaBozza().catch(async (e) => {
     console.error(e);
     await telegram('sendMessage', { chat_id: chatId(), text: `⚠️ Non sono riuscito a preparare il post: ${e.message.slice(0, 300)}` }).catch(() => {});

@@ -18,11 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main   # ultima versione, non quella di quando il giro è stato messo in coda (lo stato del bot cambia di continuo)
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - run: node automazione/genera.mjs
         env:
+          UNA_AL_GIORNO: '1'   # se due timer partono lo stesso giorno, la seconda bozza non viene fatta
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

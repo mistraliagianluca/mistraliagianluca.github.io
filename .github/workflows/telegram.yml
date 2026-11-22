@@ -4,7 +4,7 @@ name: Bot Telegram
 
 on:
   schedule:
-    - cron: '*/15 6-21 * * *'
+    - cron: '7,22,37,52 6-21 * * *'   # evitiamo i minuti :00 e :15, i più affollati su GitHub
   workflow_dispatch:
 
 permissions:
@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main   # ultima versione, non quella di quando il giro è stato messo in coda (lo stato del bot cambia di continuo)
       - uses: actions/setup-node@v4
         with:
           node-version: 22
