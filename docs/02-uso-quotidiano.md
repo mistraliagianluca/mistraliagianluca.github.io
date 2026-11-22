@@ -112,6 +112,7 @@ Dal sito il cliente preme il pulsante WhatsApp e arriva un messaggio già compil
 | Arriva *"⚠️ Qualcosa non è andato: …"* | Copia il messaggio e mandalo a Gianluca. Non riprovare più volte di seguito |
 | Arriva *"⚠️ … budget del mese raggiunto"* | Il tetto di spesa mensile è stato superato: fino al mese dopo niente bozze nuove. Decide l'amministratore se alzarlo |
 | Ho pubblicato per sbaglio | Avvisa Gianluca: dal pannello `/admin` → *Diario* lo nasconde in 2 minuti |
+| Nel gruppo arriva *"🌍 Versione inglese aggiornata"* | Normale: qualcuno ha modificato un articolo in italiano e il bot ha aggiornato la traduzione |
 | Un evento è passato | Non serve fare niente: dal giorno dopo la fine dell'evento l'articolo esce dalla home e la sua pagina dice "evento concluso". I post social restano (è normale) |
 | Il post contiene un errore già pubblicato | Come sopra; per i social, modifica o cancella il post dall'app |
 | Il bot non risponde da più di 10 minuti | Avvisa Gianluca: controllerà la cronologia di cron-job.org e Actions |

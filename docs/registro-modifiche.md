@@ -13,6 +13,11 @@
 
 ---
 
+## 2026-11-22 · Articoli solo in italiano, inglese automatico
+- Cosa: il pannello mostra solo la versione italiana degli articoli; nuovo `automazione/traduzioni.mjs`, chiamato dal bot a ogni giro, che ritraduce con Claude l'inglese quando cambiano titolo, anteprima o testo italiani, copia data, scadenza, nascosto e immagine, ed elimina l'inglese se l'italiano viene eliminato. Impronta del testo sorgente nel campo `origine` dei file inglesi. Il pannello non scrive più i campi facoltativi vuoti (`omit_empty_optional_fields`) e la scadenza vuota è accettata.
+- Perché: modificare una volta sola, nella lingua del team.
+- Da fare: niente. Costo stimato ~$0,02–0,05 per articolo modificato, nessun costo se non si modifica niente.
+
 ## 2026-11-22 · Articoli con scadenza, nascosti e Diario nel pannello
 - Cosa: nuovo campo `scadenza` negli articoli (ultimo giorno dell'evento), scritto dal bot e controllato dal verificatore; dal giorno dopo l'articolo esce dalla home e la sua pagina mostra "evento concluso" (deciso dal browser, senza ricostruire il sito). Nuovo campo `nascosto` per togliere un articolo dal sito senza cancellarlo. La home prepara fino a 9 articoli e ne mostra i 3 più recenti non scaduti. Nuova sezione *Diario di bordo* nel pannello `/admin` per correggere, impostare la scadenza, nascondere o eliminare gli articoli. Il riferimento tecnico mostra lo stato di ogni articolo.
 - Perché: non lasciare in vetrina eventi passati, senza rompere i link già condivisi sui social.

@@ -10,6 +10,7 @@ La documentazione completa è in [`docs/04-automazione.md`](../docs/04-automazio
 | `prompt.md` / `verifica.md` | istruzioni a Claude per scrivere e per verificare |
 | `config.json` | impostazioni: modelli, limiti, budget |
 | `stato.json` | memoria del bot: **non modificare a mano** |
+| `traduzioni.mjs` | versione inglese degli articoli allineata all'italiano |
 | `documentazione.mjs` | rigenera `docs/riferimento.md` e controlla il registro delle modifiche |
 
 Prova senza spendere: `PROVA=1 TELEGRAM_CHAT_ID=1 node automazione/genera.mjs`

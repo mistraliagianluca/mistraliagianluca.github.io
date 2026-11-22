@@ -14,6 +14,7 @@ Tutto il codice sta in `automazione/`, è scritto in JavaScript per Node 22 e **
 | `config.json` | Impostazioni: modelli, limiti, budget, foto di riferimento |
 | `stato.json` | Memoria del bot. **Non modificare a mano** |
 | `bozze/` | Una cartella per ogni bozza (`bozza.json` + `immagine.jpg`) |
+| `traduzioni.mjs` | Tiene la versione inglese di ogni articolo allineata a quella italiana (traduce, copia, elimina) |
 | `documentazione.mjs` | Rigenera `docs/riferimento.md` e controlla il registro delle modifiche |
 
 ## Come nasce una bozza
@@ -85,7 +86,8 @@ flowchart TD
     D -->|"risposta alla bozza"| H["Bozza corretta"]
     D -->|"/nuovo · /aiuto"| I["Bozza nuova · elenco comandi"]
     D -->|"altro testo"| X
-    F & G & H & I --> J["Promemoria se la bozza<br>aspetta da 48 ore"]
+    F & G & H & I --> T["Allinea le versioni inglesi<br>degli articoli (traduzioni.mjs)"]
+    T --> J["Promemoria se la bozza<br>aspetta da 48 ore"]
     J --> K["Commit di stato,<br>bozze e articoli"]
     K --> L{"C'è un articolo<br>da pubblicare?"}
     L -->|Sì| M["Avvia Pubblica sito"]
@@ -95,6 +97,23 @@ flowchart TD
 - La conferma del tap (*answerCallbackQuery*) Telegram la accetta solo per pochi secondi. Il bot passa più di rado, quindi la conferma di solito è scaduta: il bot la ignora e scrive invece un messaggio nel gruppo.
 - I pulsanti contengono un codice corto di 10 caratteri e non l'identificativo della bozza, perché Telegram accetta al massimo 64 byte.
 - Due giri non lavorano mai insieme: i workflow del bot e del post sono nello stesso gruppo di *concurrency* `automazione` e partono uno dopo l'altro, ognuno con l'ultima versione del repository.
+
+## Versione inglese degli articoli
+
+Gli articoli si modificano **solo in italiano**: dal pannello, dall'editor web o dal Mac. A ogni giro il bot confronta ogni `<chiave>.it.md` con il suo `<chiave>.en.md`:
+
+| Nell'italiano è cambiato… | Il bot… | Costo |
+| --- | --- | --- |
+| titolo, anteprima o testo | fa tradurre a Claude e riscrive l'inglese (senza ricerche web), poi scrive *"🌍 Versione inglese aggiornata"* nel gruppo | ~$0,02–0,05 |
+| data, fine dell'evento, nascosto, immagine | copia il valore nell'inglese | gratis |
+| file eliminato | elimina anche l'inglese | gratis |
+| niente | niente | gratis |
+
+- Il file inglese conserva in `origine` l'**impronta** del testo italiano da cui è stato tradotto. Finché l'italiano non cambia, nessuna chiamata a Claude.
+- Se la traduzione fallisce, il bot lo scrive nel gruppo e **non riprova ogni minuto**: riprova alla prossima modifica dell'italiano. Le fallite sono in `stato.json` → `traduzioniFallite`.
+- Gli articoli pubblicati con ✅ Pubblica nascono già allineati: l'inglese lo scrive Claude insieme all'italiano, con l'impronta.
+- Dopo un aggiornamento il bot ripubblica il sito. Per circa 2 minuti la pagina inglese può mostrare la versione precedente.
+- La spesa delle traduzioni entra nel totale del mese e nel tetto `budgetMensileDollari`.
 
 ## La sveglia del bot
 

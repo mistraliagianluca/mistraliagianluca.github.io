@@ -42,7 +42,7 @@ flowchart LR
 
 **Uso:** *Dati del sito* → scegli **Prezzi, stagioni e condizioni**, **Promozione** oppure **Contatti, ritiro, kit, regole, FAQ e foto** → modifica → **Save**. Le foto si caricano dal campo *Galleria* (anche dal telefono), si trascinano per cambiare l'ordine e finiscono in `public/assets/gallery/`.
 
-**Diario di bordo (articoli):** sezione *Diario di bordo* del pannello. Ogni articolo compare due volte (`it` ed `en`): si può correggere testo, titolo e immagine, impostare la **Fine dell'evento**, **nascondere** l'articolo con un interruttore o **eliminarlo** (*Delete*). Fai la stessa cosa su tutti e due i file. Gli articoli nuovi li crea solo il bot.
+**Diario di bordo (articoli):** sezione *Diario di bordo* del pannello. Si vede e si modifica **solo la versione italiana**: titolo, anteprima, testo, immagine, **Fine dell'evento**, interruttore **Nascondi** o **Delete**. La **versione inglese si aggiorna da sola** entro pochi minuti: il bot ritraduce i testi cambiati, copia date, immagine e interruttori, ed elimina l'inglese se elimini l'italiano. Nel gruppo Telegram arriva *"🌍 Versione inglese aggiornata"*. Gli articoli nuovi li crea solo il bot.
 
 **Cosa NON si cambia dal pannello:** i testi fissi del sito (`src/i18n/`), i nomi dei piani e le impostazioni dell'automazione. Per questi vedi la tabella qui sotto.
 
@@ -119,7 +119,8 @@ flowchart LR
 - Dal giorno dopo la scadenza l'articolo **esce dalla home** e la sua pagina mostra *"Questo evento si è concluso il … · Scopri le prossime idee di viaggio"*. La pagina **resta online** apposta, così i link già condivisi sui social non portano a una pagina inesistente. Lo decide il browser del visitatore in base alla data: non serve ricostruire il sito.
 - La home mostra i **3 articoli più recenti non scaduti**. Se sono tutti scaduti, la sezione Diario sparisce.
 - **Nascondi** (`nascosto: true`): l'articolo sparisce del tutto dal sito ma il file resta, e si può riaccendere. Serve per un articolo sbagliato o non più adatto.
-- **Elimina** (*Delete* nel pannello): toglie per sempre il file dal repository (resta nella storia di git). L'immagine in `public/assets/diario/` resta e si può cancellare dalla libreria media del pannello.
+- **Elimina** (*Delete* nel pannello): toglie per sempre l'articolo dal repository (resta nella storia di git); il bot elimina anche la versione inglese. L'immagine in `public/assets/diario/` resta e si può cancellare dalla libreria media del pannello.
+- **Versione inglese:** non va mai modificata a mano, perché viene riscritta a ogni modifica dell'italiano. Si corregge l'italiano e la traduzione segue. Dettagli in [Automazione → Traduzioni](04-automazione.md#versione-inglese-degli-articoli).
 - I **post social** non vengono toccati: è normale che i post di eventi passati restino sul profilo.
 
 ## Foto

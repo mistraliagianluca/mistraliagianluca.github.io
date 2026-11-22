@@ -7,8 +7,9 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROOT, AUTO, PROVA, config, leggiStato, salvaStato, oggiISO, slug, telegram, chatId, scrivi } from './lib.mjs';
+import { ROOT, AUTO, PROVA, config, leggiStato, salvaStato, oggiISO, slug, telegram, chatId, scrivi, spesaDelGiro, spesaDelMese, meseCorrente } from './lib.mjs';
 import { creaBozza } from './genera.mjs';
+import { allineaTraduzioni, impronta, leggiArticolo } from './traduzioni.mjs';
 
 const AIUTO = [
   'Comandi del bot Mistralia:',
@@ -52,6 +53,10 @@ function scriviArticolo(b) {
     ].join('\n');
     fs.writeFileSync(path.join(dir, `${chiave}.${l}.md`), fm);
   }
+  // La versione inglese ricorda da quale testo italiano viene: così il bot non la ritraduce (vedi traduzioni.mjs)
+  const it = leggiArticolo(path.join(dir, `${chiave}.it.md`));
+  const fileEn = path.join(dir, `${chiave}.en.md`);
+  fs.writeFileSync(fileEn, fs.readFileSync(fileEn, 'utf8').replace(/\n---\n/, `\norigine: "${impronta(it.fm, it.corpo)}"\n---\n`));
   fs.writeFileSync(path.join(AUTO, '.da-pubblicare'), chiave);
   return chiave;
 }
@@ -155,6 +160,14 @@ async function main() {
         await scrivi(`⚠️ Non sono riuscito a preparare il post della settimana: ${e.message.slice(0, 300)}\nPer riprovare scrivi /nuovo.`).catch(() => {});
       }
     }
+  }
+
+  // Versioni inglesi degli articoli allineate a quelle italiane (modificate dal pannello o a mano)
+  if (nostra) {
+    const prima = spesaDelGiro();
+    try { await allineaTraduzioni(stato); } catch (e) { console.error(e); }
+    const costo = spesaDelGiro() - prima;
+    if (costo > 0) stato.spesa = { mese: meseCorrente(), dollari: spesaDelMese(stato) + costo };
   }
 
   // Promemoria se la bozza aspetta da troppo

@@ -75,7 +75,7 @@ export async function chiediClaude(prompt, { ricerche = 3, finta = finto } = {})
     body: JSON.stringify({
       model: modello,
       max_tokens: 8000,
-      tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: ricerche }],
+      ...(ricerche > 0 ? { tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: ricerche }] } : {}),
       messages: [{ role: 'user', content: prompt }],
     }),
   });

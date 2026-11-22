@@ -42,6 +42,8 @@ flowchart TD
 | `git push` rifiutato (*rejected… fetch first*) | Il bot ha fatto commit nel frattempo | `git pull`, poi `git push` |
 | `git status` mostra `node_modules/` o `dist/` | Manca o è incompleto `.gitignore` (il Finder non copia i file nascosti) | Ripristina `.gitignore` (vedi `docs/riferimento.md` → struttura) e `git rm -r --cached node_modules dist .astro` |
 | Il sito ha perso il dominio | Cancellato `public/CNAME` o cambiato in Settings → Pages | Ripristina `public/CNAME` con `www.mistralia.co` e controlla Settings → Pages |
+| *"⚠️ Non sono riuscito ad aggiornare la versione inglese di …"* | Errore di Claude (credito, modello, rete) durante la traduzione | Il bot non riprova da solo: sistema la causa e rimodifica l'articolo italiano (basta una virgola) per far ripartire la traduzione |
+| La versione inglese di un articolo ha perso una mia correzione | È stata modificata a mano: l'inglese viene riscritto a ogni modifica dell'italiano | Correggi l'italiano; se serve una frase precisa in inglese, chiedi di aggiungerla al prompt di traduzione in `traduzioni.mjs` |
 | Il banner della promo non compare | `attiva: false`, data di oggi fuori da *Banner visibile dal/fino al*, oppure *Pubblica sito* non è ancora finito dopo il Save | Controlla la promo nel pannello e il giro di *Pubblica sito* in Actions; ricarica la pagina con Cmd+Shift+R. Prima del 22/11/2026 c'era anche un bug con le date salvate dal pannello, ora corretto |
 
 ## Prima di chiedere aiuto, raccogli:

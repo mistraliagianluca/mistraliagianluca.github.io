@@ -16,7 +16,7 @@ const diario = defineCollection({
     esempio: z.boolean().optional(),
     immagineAI: z.boolean().optional(),
     // Ultimo giorno dell'evento: dopo questa data l'articolo esce dalla home e la pagina mostra "evento concluso"
-    scadenza: z.coerce.date().optional().nullable(),
+    scadenza: z.preprocess((v) => (v === '' || v === null ? undefined : v), z.coerce.date().optional()),
     // true = articolo tolto dal sito (nessuna pagina, non in elenco), ma il file resta e si può ripristinare
     nascosto: z.boolean().optional(),
   }),

@@ -15,4 +15,5 @@ Progetto: sito www.mistralia.co (Astro su GitHub Pages) + post settimanale autom
 7. **Non modificare il sito** (struttura, testi, dati) se non è richiesto esplicitamente.
 8. Tono dei contenuti: niente età del camper, niente prezzi diversi da "da €X al giorno", eventi solo se verificati. Regole complete in `automazione/prompt.md`.
 9. I dati in `src/data/` li modifica Gianluca dal pannello `/admin` (Sveltia CMS, `public/admin/config.yml`): se cambi la struttura di un file in `src/data/`, aggiorna anche `config.yml` e verifica che il pannello lo carichi senza avvisi.
-10. Nei documenti condivisi del team si nominano solo Gianluca e Andrea; gli altri membri sono "Persona A/B".
+10. Gli articoli del Diario si modificano solo in italiano: i file `*.en.md` li genera `automazione/traduzioni.mjs`. Non scriverli a mano.
+11. Nei documenti condivisi del team si nominano solo Gianluca e Andrea; gli altri membri sono "Persona A/B".

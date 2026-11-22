@@ -169,6 +169,7 @@ Usa **Run workflow**, non **Re-run** su un giro vecchio: il re-run riusa la vers
 | --- | --- |
 | Modificare a mano `automazione/stato.json` | Il bot rileggerebbe vecchi messaggi o perderebbe la bozza attiva |
 | Scrivere a mano `docs/riferimento.md` | Viene riscritto a ogni push |
+| Modificare a mano i file `*.en.md` del Diario | Il bot li riscrive dall'italiano a ogni modifica |
 | Mettere chiavi in un file del repository | È pubblico. Vedi [Sicurezza](05-sicurezza.md) |
 | Committare `node_modules/`, `dist/`, `.astro/` | Sono generati; `.gitignore` li esclude, non toglierlo |
 | Cancellare `public/CNAME` | Il sito perde il dominio www.mistralia.co |
