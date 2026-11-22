@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
 import it from '../i18n/it.json';
 import en from '../i18n/en.json';
 import prezziFile from '../data/prezzi.json';
@@ -71,6 +74,22 @@ const prezzi = { ...prezziFile, stagioni: stagioniDaPeriodi((prezziFile as any).
 
 /** Data AAAA-MM-GG (o stringa vuota) per gli attributi letti dal browser. */
 export const isoData = (v: unknown) => (v ? iso(v) : '');
+
+/**
+ * Aggiunge all'indirizzo di un'immagine una "versione" calcolata dal contenuto del file (es. 7.jpg?v=3fa2c1d0).
+ * Se la foto viene sostituita con lo stesso nome, la versione cambia e browser e GitHub Pages scaricano quella nuova
+ * invece di mostrare la copia vecchia che hanno in memoria.
+ */
+export function versionata(src: string) {
+  if (!src.startsWith('/')) return src;
+  const file = path.join(process.cwd(), 'public', decodeURIComponent(src.split('?')[0]));
+  try {
+    const v = createHash('sha1').update(fs.readFileSync(file)).digest('hex').slice(0, 8);
+    return `${src}?v=${v}`;
+  } catch {
+    return src;
+  }
+}
 
 /** Percorso di un'immagine della galleria: accetta il percorso (/assets/gallery/x.jpg) o il vecchio numero (7). */
 export const fotoGalleria = (v: string | number) => (typeof v === 'number' || /^\d+$/.test(String(v)) ? `/assets/gallery/${v}.jpg` : String(v));

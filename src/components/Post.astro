@@ -1,7 +1,7 @@
 ---
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { t, paths, fmtDate, u, isoData, type Lang } from '../lib/site';
+import { t, paths, fmtDate, u, isoData, versionata, type Lang } from '../lib/site';
 
 interface Props { post: CollectionEntry<'diario'>; lang: Lang }
 const { post, lang } = Astro.props;
@@ -9,20 +9,26 @@ const { Content } = await render(post);
 const other: Lang = lang === 'it' ? 'en' : 'it';
 ---
 <Base lang={lang} title={`${post.data.titolo} · Mistralia`} description={post.data.estratto}
-      altPath={paths.post(other, post.data.chiave)} image={post.data.immagine}>
+      altPath={paths.post(other, post.data.chiave)} image={post.data.immagine} noindex={post.data.nascosto === true}>
   <article class="post">
     <div class="wrap">
       <a href={paths.home(lang)}>← {t(lang, 'journal_back')}</a>
       <h1>{post.data.titolo}</h1>
       <p class="post-meta">{fmtDate(post.data.data, lang)}</p>
-      {post.data.scadenza && (
+      {post.data.nascosto && (
+        <p class="post-expired">
+          {t(lang, 'post_hidden')}
+          <a href={`${paths.home(lang)}#diario`}>{t(lang, 'post_expired_more')}</a>
+        </p>
+      )}
+      {!post.data.nascosto && post.data.scadenza && (
         <p class="post-expired" hidden data-scadenza={isoData(post.data.scadenza)}>
           {t(lang, 'post_expired', { d: fmtDate(post.data.scadenza, lang) })}
           <a href={`${paths.home(lang)}#diario`}>{t(lang, 'post_expired_more')}</a>
         </p>
       )}
       <figure class="post-figure">
-        <img class="post-hero" src={u(post.data.immagine)} alt="" />
+        <img class="post-hero" src={u(versionata(post.data.immagine))} alt="" />
         {post.data.immagineAI && <figcaption>{t(lang, 'ai_image')}</figcaption>}
       </figure>
       <Content />

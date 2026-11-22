@@ -13,6 +13,19 @@
 
 ---
 
+## 2026-11-23 · Extra a persona, a letto e a tratta; FAQ complete
+- Cosa:
+  - gli extra hanno l'unità di prezzo (`unita` in `prezzi.json`, campo *Il prezzo è…* nel pannello): il calcolatore moltiplica gli asciugamani per le persone e fa scegliere quanti letti per le lenzuola e se il transfer è solo andata o andata e ritorno; nei prezzi compare "a persona", "a letto", "a tratta";
+  - script una tantum `aggiorna-dati-una-volta.mjs`, non nel repository, che sui dati veri ha impostato le unità, ripulito i nomi degli extra, messo "Pastiglie per il WC" e completato le FAQ (patente con 21 anni, cauzione con importi e pre-autorizzazione Stripe, 100 km al giorno, cancellazione fino a 30 giorni prima) e ne ha aggiunte due (pagamento con Stripe, consegna solo in aeroporto);
+  - nel pannello la voce della preparazione si chiama "Prima di ogni partenza".
+- Perché: risposte di Gianluca del 23/11 e dati del pannello.
+- Da fare: decidere supplementi e franchigie dei piani (vedi log del progetto).
+
+## 2026-11-22 · Immagini sempre aggiornate dopo una sostituzione
+- Cosa: nuova funzione `versionata` in `src/lib/site.ts` che aggiunge agli indirizzi di galleria, foto di apertura e immagini degli articoli una versione calcolata dal contenuto (`?v=…`). Usata in `Home.astro` e `Post.astro`.
+- Perché: dopo aver rifatto le foto della galleria con lo stesso nome, browser e GitHub Pages mostravano ancora alcune versioni vecchie.
+- Da fare: niente.
+
 ## 2026-11-22 · Pulsante Foto nell'intestazione
 - Cosa: pulsante verde "📷 Foto" nell'intestazione fissa, visibile anche su telefono; sulla home apre il visore della galleria, dagli articoli porta a `/#galleria`. Testi `nav_photos` in `src/i18n/`.
 - Perché: le foto sono la cosa che si guarda di più e su telefono il menu era nascosto.

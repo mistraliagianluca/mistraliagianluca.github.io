@@ -1,7 +1,7 @@
 ---
 import fs from 'node:fs';
 import { getCollection } from 'astro:content';
-import { t, paths, prezzi, info, getPromo, prezzoMinimo, fmtDate, u, fotoGalleria, isoData, type Lang } from '../lib/site';
+import { t, paths, prezzi, info, getPromo, prezzoMinimo, fmtDate, u, fotoGalleria, isoData, versionata, type Lang } from '../lib/site';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -59,12 +59,12 @@ const calcData = {
   stagioni: prezzi.stagioni,
   piani: prezzi.piani.map((p) => ({ ...p, nome: t(lang, planKey(p.id)) })),
   servizio: { importo: prezzi.servizio.importo, nome: prezzi.servizio[lang] },
-  extra: prezzi.extra.map((e) => ({ id: e.id, importo: e.importo, nome: e[lang] })),
+  extra: prezzi.extra.map((e: any) => ({ id: e.id, importo: e.importo, nome: e[lang], unita: e.unita ?? 'noleggio' })),
   promo,
   txt: Object.fromEntries(
     ['season_B', 'season_M', 'season_A', 'calc_days', 'calc_season_line', 'calc_plan_line', 'calc_promo_line',
      'calc_err_dates', 'calc_err_order', 'calc_err_min', 'wa_hello', 'wa_dates', 'wa_plan', 'wa_people',
-     'wa_total', 'wa_promo', 'wa_name', 'wa_notes', 'calc_service_line', 'wa_extras'].map((k) => [k, t(lang, k)]),
+     'wa_total', 'wa_promo', 'wa_name', 'wa_notes', 'calc_service_line', 'wa_extras', 'qty_persona', 'qty_letto', 'qty_tratta', 'qty_persona_one', 'qty_letto_one', 'qty_tratta_one'].map((k) => [k, t(lang, k)]),
   ),
 };
 
@@ -78,8 +78,9 @@ const jsonLd = {
   address: { '@type': 'PostalAddress', streetAddress: 'Strada Statale 96, km 115,500', postalCode: '70026', addressLocality: 'Modugno', addressRegion: 'BA', addressCountry: 'IT' },
   priceRange: `€${prezzoMinimo}–€${Math.max(...Object.values(prezzi.prezzoGiorno))} / giorno`,
 };
+const unita = (e: any) => (e.unita && e.unita !== 'noleggio' ? ` ${t(lang, 'unit_' + e.unita)}` : '');
 const extraFm = (n: number) => n.toLocaleString(lang === 'it' ? 'it-IT' : 'en-GB');
-const galleria = info.galleria.map((v) => u(fotoGalleria(v)));
+const galleria = info.galleria.map((v) => u(versionata(fotoGalleria(v))));
 
 // Icone (tratto semplice, 24×24) per "Perché" e per i gruppi del kit. Ogni gruppo del kit può scegliere la sua
 // icona nel pannello (campo "icona"); se manca si usa quella nella stessa posizione di questo elenco.
@@ -106,7 +107,7 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
   <div class="wrap hero-grid">
     <img class="hero-logo" src={u('/assets/brand/logo.png')} alt="Mistralia" width="900" height="677" />
     <div class="hero-photo">
-      <img src={u(heroSrc)} alt="Kentucky" width="1264" height="848" fetchpriority="high" />
+      <img src={u(versionata(heroSrc))} alt="Kentucky" width="1264" height="848" fetchpriority="high" />
     </div>
     <div class="hero-text">
       <p class="eyebrow">{t(lang, 'kicker')}</p>
@@ -155,7 +156,7 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
       <div class="posts">
         {posts.map((p) => (
           <a class="post-card" href={paths.post(lang, p.data.chiave)} data-scadenza={isoData(p.data.scadenza)} hidden>
-            <img src={u(p.data.immagine)} alt="" loading="lazy" width="400" height="225" />
+            <img src={u(versionata(p.data.immagine))} alt="" loading="lazy" width="400" height="225" />
             <div>
               <small>{fmtDate(p.data.data, lang)}</small>
               <h3>{p.data.titolo}</h3>
@@ -227,7 +228,7 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
       <div><strong>{prezzi.servizio[lang]}</strong><small>{t(lang, 'per_rental_once')}</small></div>
       <b>€{prezzi.servizio.importo}</b>
     </div>
-    <p class="extras"><span>{t(lang, 'options_title')}:</span> {prezzi.extra.map((e, i) => <>{i > 0 && ' · '}{e[lang]} <strong>€{e.importo}</strong></>)}</p>
+    <p class="extras"><span>{t(lang, 'options_title')}:</span> {prezzi.extra.map((e: any, i: number) => <>{i > 0 && ' · '}{e[lang]} <strong>€{e.importo}</strong>{unita(e)}</>)}</p>
   </div>
 </section>
 
@@ -256,8 +257,19 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
         <label>{t(lang, 'calc_name')}<input type="text" name="nome" autocomplete="name" /></label>
         <fieldset class="extras-pick">
           <legend>{t(lang, 'calc_extras')}</legend>
-          {prezzi.extra.map((e) => (
-            <label class="check"><input type="checkbox" name="extra" value={e.id} /> {e[lang]} <small>€{e.importo}</small></label>
+          {prezzi.extra.map((e: any) => (
+            <div class="extra-row">
+              <label class="check"><input type="checkbox" name="extra" value={e.id} /> {e[lang]} <small>€{e.importo}{unita(e)}</small></label>
+              {e.unita === 'letto' && (
+                <select class="qty" name={`q-${e.id}`} aria-label={t(lang, 'qty_beds_label')}>{[1, 2, 3].map((n) => <option value={n} selected={n === 1}>{t(lang, n === 1 ? 'qty_letto_one' : 'qty_letto', { n })}</option>)}</select>
+              )}
+              {e.unita === 'tratta' && (
+                <select class="qty" name={`q-${e.id}`} aria-label={t(lang, 'qty_trip_label')}>
+                  <option value="1">{t(lang, 'trip_one')}</option>
+                  <option value="2">{t(lang, 'trip_both')}</option>
+                </select>
+              )}
+            </div>
           ))}
         </fieldset>
         <label class="wide">{t(lang, 'calc_notes')}<textarea name="note" rows="2" placeholder={t(lang, 'calc_notes_ph')}></textarea></label>
@@ -466,8 +478,14 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
     // Quota fissa di servizio e extra scelti (non scontati)
     total += D.servizio.importo;
     lines.push([fill(D.txt.calc_service_line, { name: D.servizio.nome }), D.servizio.importo]);
-    const chosen = D.extra.filter((e: any) => f.getAll('extra').includes(e.id));
-    for (const e of chosen) { total += e.importo; lines.push([e.nome, e.importo]); }
+    // Extra: il prezzo può essere a noleggio, a persona, a letto o a tratta
+    const persone = Number(f.get('persone') || 1);
+    const chosen = D.extra.filter((e: any) => f.getAll('extra').includes(e.id)).map((e: any) => {
+      const q = e.unita === 'persona' ? persone : e.unita === 'letto' || e.unita === 'tratta' ? Number(f.get('q-' + e.id) || 1) : 1;
+      const det = e.unita !== 'noleggio' && e.unita ? ` (${fill(D.txt['qty_' + e.unita + (q === 1 ? '_one' : '')], { n: q })})` : '';
+      return { ...e, q, label: e.nome + det, tot: e.importo * q };
+    });
+    for (const e of chosen) { total += e.tot; lines.push([e.label, e.tot]); }
 
     out.lines.innerHTML = '';
     for (const [label, v] of lines) {
@@ -486,7 +504,7 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
       fill(D.txt.wa_people, { n: String(f.get('persone')) }),
       fill(D.txt.wa_total, { t: Math.round(total) }),
       promoOk ? fill(D.txt.wa_promo, { name: D.promo.nome }) : '',
-      chosen.length ? fill(D.txt.wa_extras, { list: chosen.map((e: any) => e.nome).join(', ') }) : '',
+      chosen.length ? fill(D.txt.wa_extras, { list: chosen.map((e: any) => e.label).join(', ') }) : '',
       f.get('nome') ? fill(D.txt.wa_name, { n: String(f.get('nome')) }) : '',
       f.get('note') ? fill(D.txt.wa_notes, { n: String(f.get('note')) }) : '',
     ].filter(Boolean).join('\n');
@@ -678,7 +696,12 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
   .pill:has(input:checked) { border-color: var(--green); background: var(--mint-soft); }
   .extras-pick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; }
   .check { flex-direction: row !important; align-items: center; gap: 8px !important; font-weight: 400 !important; }
-  .check small { color: var(--muted); margin-left: auto; }
+  .check small { color: var(--muted); margin-left: auto; white-space: nowrap; }
+  .extra-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .extra-row .check { flex: 1; min-width: 0; }
+  .extras-pick { grid-template-columns: minmax(0, 1fr) !important; }
+  @media (min-width: 821px) { .extras-pick { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
+  .calc .qty { width: auto; height: 36px; padding: 0 30px 0 10px; font-size: 0.85rem; flex: none; text-align: left; text-align-last: left; background-position: right 8px center; }
   @media (max-width: 420px) { .extras-pick { grid-template-columns: 1fr; } }
   .calc-result { background: var(--white); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); align-self: start; }
   .calc-lines :global(div), .calc-total, .calc-deposit { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; }

@@ -115,8 +115,18 @@ collections:
                 widget: string
                 pattern: ['^[a-z0-9-]+$', "Solo lettere minuscole, numeri e trattini"]
               - { name: importo, label: Prezzo (€), widget: number, value_type: int, min: 0 }
-              - { name: it, label: Nome in italiano, widget: string }
-              - { name: en, label: Nome in inglese, widget: string }
+              - name: unita
+                label: Il prezzo è…
+                hint: "Nel calcolatore: a persona moltiplica per le persone, a letto e a tratta fanno scegliere la quantità."
+                widget: select
+                default: noleggio
+                options:
+                  - { label: "a noleggio", value: noleggio }
+                  - { label: "a persona", value: persona }
+                  - { label: "a letto", value: letto }
+                  - { label: "a tratta (andata o ritorno)", value: tratta }
+              - { name: it, label: "Nome in italiano (senza l'unità: la aggiunge il sito)", widget: string }
+              - { name: en, label: "Nome in inglese (senza l'unità)", widget: string }
 
       # ------------------------------------------------------------------ PROMO
       - name: promo
@@ -189,7 +199,7 @@ collections:
                   - { label: "Comfort / clima", value: comfort }
                   - { label: "Spunta generica", value: incluso }
           - name: preparazione
-            label: Come prepariamo il camper
+            label: "Prima di ogni partenza (preparazione: pulizia, gas, pastiglie WC…)"
             widget: object
             fields:
               - { name: it, label: Italiano, widget: list, field: { name: voce, label: Voce, widget: string } }

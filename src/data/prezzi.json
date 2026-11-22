@@ -102,33 +102,37 @@
     {
       "id": "lenzuola-per-letto",
       "importo": 40,
-      "it": "Lenzuola (Per Letto)",
-      "en": "Bed linen (Per Bed)"
+      "it": "Lenzuola",
+      "en": "Bed linen",
+      "unita": "letto"
     },
     {
       "id": "asciugamani-per-persona",
       "importo": 15,
-      "it": "Asciugamani (Per Persona)",
-      "en": "Bath towels (Per Person)"
+      "it": "Asciugamani",
+      "en": "Bath towels",
+      "unita": "persona"
     },
     {
       "id": "barbecue",
       "importo": 25,
       "it": "Barbecue",
-      "en": "Barbecue"
+      "en": "Barbecue",
+      "unita": "noleggio"
     },
     {
       "id": "transfer",
       "importo": 100,
-      "it": "Transfer aeroporto (andata o ritorno)",
-      "en": "Airport transfer (pick-up or drop-off)"
+      "it": "Transfer aeroporto",
+      "en": "Airport transfer",
+      "unita": "tratta"
     }
   ],
-  "_extra": "Extra facoltativi, prezzo per noleggio",
+  "_extra": "Extra facoltativi: \"unita\" dice se il prezzo è a noleggio, a persona, a letto o a tratta.",
   "_km": "Prezzo km extra €0,35 come su Yescapa. kmInclusiGiorno: metti il numero di km inclusi al giorno (es. 250); con null il sito mostra solo il prezzo del km extra",
   "_leggimi": "Prezzi, stagioni e condizioni. Si modificano dal pannello www.mistralia.co/admin (o a mano): al salvataggio il sito si aggiorna da solo in circa 2 minuti. Le voci con DA_CONFERMARE sono provvisorie.",
   "_minimoGiorni": "Noleggio minimo in giorni secondo la stagione del giorno di ritiro; le eccezioni qui sotto valgono per i ritiri nel periodo indicato",
   "_periodi": "Stagione di ogni periodo: B bassa, M media, A alta. I giorni non coperti da nessun periodo valgono come media; un anno senza periodi usa quelli dell'ultimo anno presente.",
-  "_piani": "Cauzione Basic €2.000 come su Yescapa. DA_CONFERMARE: supplemento al giorno di ogni piano e cauzione di Plus e Premium",
-  "_servizio": "Obbligatorio, una volta per noleggio. Su Yescapa è 'Cleaning Fees' €200; nel testo dell'annuncio compare €150: DA_CONFERMARE quale vale per le prenotazioni dirette"
+  "_piani": "Supplemento al giorno, cauzione e franchigia di ogni piano: si modificano dal pannello.",
+  "_servizio": "Quota obbligatoria, una volta per noleggio (confermata €200)."
 }

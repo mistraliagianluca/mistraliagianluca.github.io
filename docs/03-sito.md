@@ -70,7 +70,7 @@ flowchart LR
 | **Noleggio minimo** | `prezzi.json` → `minimoGiorni`, `minimoEccezioni` | Le eccezioni valgono per i ritiri tra `dal` e `al` |
 | **Piani** (supplemento, cauzione, franchigia) | `prezzi.json` → `piani` | `supplementoGiorno` in euro al giorno |
 | **Quota obbligatoria** (pulizia, preparazione, check-in) | `prezzi.json` → `servizio` | Si paga una volta per noleggio |
-| **Extra** (lenzuola, asciugamani, barbecue, transfer) | `prezzi.json` → `extra` | Prezzo per noleggio |
+| **Extra** (lenzuola, asciugamani, barbecue, transfer) | pannello → Prezzi → Extra · oppure `prezzi.json` → `extra` | Ogni extra ha un'**unità** (`unita`): *a noleggio*, *a persona* (il calcolatore moltiplica per le persone), *a letto* o *a tratta* (il calcolatore fa scegliere quanti letti o se andata e ritorno). Il nome va scritto senza l'unità: "a persona", "a letto" eccetera li aggiunge il sito |
 | **Promo** (es. Black Friday) | pannello → Promozione · oppure `src/data/promo.md` | vedi [Promo](#promo) |
 | **Numero WhatsApp**, telefoni, email | `src/data/info.json` | `whatsapp` senza `+` e senza spazi (es. `393756473839`) |
 | **Indirizzo e orari di ritiro** | `info.json` → `ritiro` | È l'indirizzo che vedono i clienti, non la sede legale |
@@ -139,6 +139,7 @@ flowchart LR
 
 - **Dal pannello:** campo *Galleria* → **carica** le foto o scegli tra quelle già caricate → trascina per l'ordine → Salva. Le foto finiscono in `public/assets/gallery/`. Usa foto orizzontali in JPG, meglio sotto i 500 KB.
 - **Foto di apertura** (quella grande in alto): campo *Foto grande in cima* (`info.json` → `fotoApertura`, oggi `/assets/gallery/SER.jpg`). Se il file non c'è, il sito usa la *Foto di riserva* (`fotoAperturaRiserva`). Maiuscole e minuscole nel nome del file non contano.
+- **Foto sostituite con lo stesso nome:** il sito aggiunge a ogni immagine una versione calcolata dal contenuto del file (`7.jpg?v=3fa2c1d0`, funzione `versionata` in `src/lib/site.ts`). Quando una foto cambia, cambia l'indirizzo, e browser e GitHub Pages scaricano subito quella nuova invece di mostrare la copia in memoria. Vale per galleria, foto di apertura e immagini degli articoli.
 - In `info.json` la galleria è un elenco di percorsi (`"/assets/gallery/7.jpg"`). Per compatibilità il sito accetta anche il vecchio formato a numeri (`7`).
 - **Riferimento del camper per i post:** Gemini usa le foto **vere** salvate in `automazione/riferimento/` (`kentucky-1.jpg`, `kentucky-2.jpg`), indicate in `automazione/config.json` → `fotoRiferimento`. Se mancano, usa `1.jpg` e `2.jpg` della galleria. Non cancellarle.
 - Sotto la galleria c'è la nota *"Ambientazioni ricreate con l'intelligenza artificiale: il camper è quello vero."* (`gallery_ai_note` in `src/i18n/`).

@@ -137,5 +137,18 @@
   "onboard_more": "See what's on board",
   "kit_not_included": "Bed linen and towels are not included: you can add them as extras when you check the price.",
   "gallery_ai_note": "Settings recreated with artificial intelligence: the campervan is the real one.",
-  "nav_photos": "Photos"
+  "nav_photos": "Photos",
+  "unit_persona": "per person",
+  "unit_letto": "per bed",
+  "unit_tratta": "per trip",
+  "qty_persona": "{n} people",
+  "qty_letto": "{n} beds",
+  "qty_tratta": "{n} trips",
+  "qty_beds_label": "How many beds",
+  "qty_trip_label": "Which trips",
+  "trip_one": "1 trip",
+  "trip_both": "Both ways",
+  "qty_persona_one": "{n} person",
+  "qty_letto_one": "{n} bed",
+  "qty_tratta_one": "{n} trip"
 }

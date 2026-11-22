@@ -137,5 +137,18 @@
   "onboard_more": "Guarda cosa c'è a bordo",
   "kit_not_included": "Lenzuola e asciugamani non sono inclusi: puoi aggiungerli tra gli extra quando calcoli il prezzo.",
   "gallery_ai_note": "Ambientazioni ricreate con l'intelligenza artificiale: il camper è quello vero.",
-  "nav_photos": "Foto"
+  "nav_photos": "Foto",
+  "unit_persona": "a persona",
+  "unit_letto": "a letto",
+  "unit_tratta": "a tratta",
+  "qty_persona": "{n} persone",
+  "qty_letto": "{n} letti",
+  "qty_tratta": "{n} tratte",
+  "qty_beds_label": "Quanti letti",
+  "qty_trip_label": "Quali tratte",
+  "trip_one": "1 tratta",
+  "trip_both": "Andata e ritorno",
+  "qty_persona_one": "{n} persona",
+  "qty_letto_one": "{n} letto",
+  "qty_tratta_one": "{n} tratta"
 }

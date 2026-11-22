@@ -122,7 +122,7 @@
       "Pulizia professionale",
       "Igienizzazione",
       "Bombole del gas piene",
-      "Prodotti chimici per il WC",
+      "Pastiglie per il WC",
       "Serbatoio dell'acqua pieno",
       "Batterie cariche"
     ],
@@ -130,7 +130,7 @@
       "Professional cleaning",
       "Sanitisation",
       "Full gas bottles",
-      "Toilet chemicals",
+      "Toilet tablets",
       "Full fresh-water tank",
       "Fully charged batteries"
     ]
@@ -171,21 +171,21 @@
     {
       "it": [
         "Che patente serve?",
-        "Basta la patente B. 21: età minima e anni di patente."
+        "Serve la patente B e almeno 21 anni di età."
       ],
       "en": [
         "Which licence do I need?",
-        "A standard car licence (category B). 21: minimum age and years of licence."
+        "A standard car licence (category B) and a minimum age of 21."
       ]
     },
     {
       "it": [
         "Quanto è la cauzione?",
-        "€2.000 con il piano Basic, più bassa con Plus e Premium. Viene restituita alla riconsegna se il camper torna senza danni."
+        "€2.000 con il piano Basic, €1.500 con Plus e €1.000 con Premium. Viene pre-autorizzata sulla carta tramite Stripe, cioè bloccata e non addebitata, e sbloccata alla riconsegna se il camper torna senza danni."
       ],
       "en": [
         "How much is the deposit?",
-        "€2,000 with the Basic plan, lower with Plus and Premium. It is returned at drop-off if the camper comes back undamaged."
+        "€2,000 with the Basic plan, €1,500 with Plus and €1,000 with Premium. It is pre-authorised on your card via Stripe (blocked, not charged) and released at drop-off if the camper comes back undamaged."
       ]
     },
     {
@@ -241,21 +241,41 @@
     {
       "it": [
         "Ci sono km inclusi?",
-        "DA_CONFERMARE: km inclusi al giorno. Oltre, ogni km costa €0,35."
+        "Sì, 100 km al giorno inclusi. Oltre, ogni km costa €0,35."
       ],
       "en": [
         "Are kilometres included?",
-        "TO_CONFIRM: km included per day. Beyond that, each km costs €0.35."
+        "Yes, 100 km per day are included. Beyond that, each km costs €0.35."
       ]
     },
     {
       "it": [
         "Posso cancellare?",
-        "DA_CONFERMARE: condizioni di cancellazione per le prenotazioni dirette."
+        "Sì, puoi cancellare la prenotazione fino a 30 giorni prima della partenza."
       ],
       "en": [
         "Can I cancel?",
-        "TO_CONFIRM: cancellation terms for direct bookings."
+        "Yes, you can cancel your booking up to 30 days before departure."
+      ]
+    },
+    {
+      "it": [
+        "Come si paga?",
+        "Tutto online con carta, tramite Stripe: noleggio, extra e cauzione."
+      ],
+      "en": [
+        "How do I pay?",
+        "Everything online by card, via Stripe: rental, extras and deposit."
+      ]
+    },
+    {
+      "it": [
+        "Potete consegnare il camper altrove?",
+        "Solo in aeroporto, con il servizio transfer tra gli extra. Per altre esigenze scrivici su WhatsApp."
+      ],
+      "en": [
+        "Can you deliver the camper elsewhere?",
+        "Only at the airport, with the transfer service among the extras. For anything else, message us on WhatsApp."
       ]
     }
   ],
