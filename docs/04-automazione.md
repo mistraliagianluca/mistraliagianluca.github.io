@@ -55,6 +55,7 @@ flowchart TD
 - **Date di eventi:** solo se verificate in una fonte trovata al momento.
 - **Scadenza:** se il post parla di un evento con date, Claude scrive anche il campo `scadenza` (ultimo giorno dell'evento). Con Pubblica finisce nell'articolo: dal giorno dopo l'articolo esce dalla home e la pagina dice "evento concluso" ([Il sito → Articoli scaduti](03-sito.md#articoli-scaduti-archiviati-ed-eliminati)).
 - **Temi già usati:** riceve gli ultimi 12 temi, con il luogo, e non deve ripeterli.
+- **Nota sull'immagine:** il camper è sempre quello vero e solo l'ambientazione è creata con l'AI. La nota la aggiunge il bot ai testi per i social (*"📸 Ambientazione creata con l'AI, il camper è quello vero."*), e il sito la mostra sotto l'immagine dell'articolo (`ai_image` in `src/i18n/`).
 - **Immagine:** "reale" (il Kentucky nel luogo) oppure, una settimana su 4, "improbabile" (il Kentucky in un posto impossibile e simpatico).
 - **Tono:** fresco, frasi corte, massimo 3 emoji, niente finta urgenza e niente recensioni inventate.
 

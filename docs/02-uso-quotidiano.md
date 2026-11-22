@@ -85,6 +85,8 @@ Dopo ✅ Pubblica il bot manda due messaggi da copiare:
 - **📋 Testo per Instagram e Facebook**: italiano, poi inglese, poi hashtag
 - **📋 Testo per TikTok**: corto, con hashtag
 
+Entrambi finiscono con la nota *"📸 Ambientazione creata con l'AI, il camper è quello vero."* (nel testo per Instagram e Facebook anche in inglese): lasciala, perché è corretto dirlo e protegge da contestazioni. Sul sito la stessa nota compare sotto l'immagine dell'articolo.
+
 **Instagram e Facebook:**
 1. Sulla bozza, tieni premuta l'immagine → **Salva** nella galleria del telefono.
 2. Tieni premuto il messaggio *"📋 Testo per Instagram e Facebook"* → **Copia**.
@@ -111,7 +113,7 @@ Dal sito il cliente preme il pulsante WhatsApp e arriva un messaggio già compil
 | Il lunedì dopo le 9:15 non è arrivata la bozza | Se nel gruppo c'è un ⚠️, leggilo; poi scrivi `/nuovo`. Se dopo 10 minuti non è successo niente, avvisa Gianluca |
 | Arriva *"⚠️ Qualcosa non è andato: …"* | Copia il messaggio e mandalo a Gianluca. Non riprovare più volte di seguito |
 | Arriva *"⚠️ … budget del mese raggiunto"* | Il tetto di spesa mensile è stato superato: fino al mese dopo niente bozze nuove. Decide l'amministratore se alzarlo |
-| Ho pubblicato per sbaglio | Avvisa Gianluca: dal pannello `/admin` → *Diario* lo nasconde in 2 minuti |
+| Ho pubblicato per sbaglio | Avvisa Gianluca: dal pannello `/admin` → *Diario* lo elimina (articolo sbagliato) o lo archivia (non più adatto), online in 2 minuti |
 | Nel gruppo arriva *"🌍 Versione inglese aggiornata"* | Normale: qualcuno ha modificato un articolo in italiano e il bot ha aggiornato la traduzione |
 | Un evento è passato | Non serve fare niente: dal giorno dopo la fine dell'evento l'articolo esce dalla home e la sua pagina dice "evento concluso". I post social restano (è normale) |
 | Il post contiene un errore già pubblicato | Come sopra; per i social, modifica o cancella il post dall'app |

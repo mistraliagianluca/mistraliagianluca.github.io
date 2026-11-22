@@ -112,7 +112,7 @@
   "step3_title": "3 · Quota fissa a noleggio",
   "per_rental_once": "una volta per noleggio, obbligatoria",
   "km_note_only": "Km extra: €{price} per km.",
-  "ai_image": "Immagine creata con l'intelligenza artificiale.",
+  "ai_image": "Ambientazione creata con l'intelligenza artificiale: il camper è quello vero.",
   "post_expired": "Questo evento si è concluso il {d}.",
   "post_expired_more": "Scopri le prossime idee di viaggio →",
   "post_hidden": "Questo articolo è in archivio e non è più in evidenza.",
@@ -135,5 +135,6 @@
   "onboard_offgrid": "Kit sosta libera",
   "onboard_assist": "Assistenza 24/7",
   "onboard_more": "Guarda cosa c'è a bordo",
-  "kit_not_included": "Lenzuola e asciugamani non sono inclusi: puoi aggiungerli tra gli extra quando calcoli il prezzo."
+  "kit_not_included": "Lenzuola e asciugamani non sono inclusi: puoi aggiungerli tra gli extra quando calcoli il prezzo.",
+  "gallery_ai_note": "Ambientazioni ricreate con l'intelligenza artificiale: il camper è quello vero."
 }

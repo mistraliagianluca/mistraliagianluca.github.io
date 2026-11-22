@@ -72,8 +72,11 @@ async function pubblica(stato, id, chi) {
     reply_markup: { inline_keyboard: [] },
   }).catch(() => {});
   const tag = c.hashtag.map((h) => '#' + h).join(' ');
-  await scrivi(`📋 Testo per Instagram e Facebook (copia e incolla):\n\n${c.post_it}\n\n🇬🇧 ${c.post_en}\n\n${tag}`);
-  await scrivi(`📋 Testo per TikTok:\n\n${c.tiktok}\n\n${tag}\n\nL'immagine è quella della bozza qui sopra: tienila premuta per salvarla.`);
+  // Nota fissa sull'immagine: solo l'ambientazione è creata con l'AI, il camper è quello vero
+  const notaAI = "📸 Ambientazione creata con l'AI, il camper è quello vero.";
+  const notaAIen = '📸 AI-generated setting, real campervan.';
+  await scrivi(`📋 Testo per Instagram e Facebook (copia e incolla):\n\n${c.post_it}\n\n🇬🇧 ${c.post_en}\n\n${notaAI}\n${notaAIen}\n\n${tag}`);
+  await scrivi(`📋 Testo per TikTok:\n\n${c.tiktok}\n${notaAI}\n\n${tag}\n\nL'immagine è quella della bozza qui sopra: tienila premuta per salvarla.`);
   stato.pubblicati = [...(stato.pubblicati || []), { id, chiave, data: oggiISO(), da: chi }];
   stato.bozza = null;
 }

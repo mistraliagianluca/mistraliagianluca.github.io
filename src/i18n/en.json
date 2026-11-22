@@ -112,7 +112,7 @@
   "step3_title": "3 · Fixed fee per rental",
   "per_rental_once": "once per rental, mandatory",
   "km_note_only": "Extra kilometres: €{price} per km.",
-  "ai_image": "Image created with artificial intelligence.",
+  "ai_image": "Setting created with artificial intelligence: the campervan is the real one.",
   "post_expired": "This event ended on {d}.",
   "post_expired_more": "See our latest trip ideas →",
   "post_hidden": "This article is archived and no longer featured.",
@@ -135,5 +135,6 @@
   "onboard_offgrid": "Off-grid kit",
   "onboard_assist": "24/7 assistance",
   "onboard_more": "See what's on board",
-  "kit_not_included": "Bed linen and towels are not included: you can add them as extras when you check the price."
+  "kit_not_included": "Bed linen and towels are not included: you can add them as extras when you check the price.",
+  "gallery_ai_note": "Settings recreated with artificial intelligence: the campervan is the real one."
 }

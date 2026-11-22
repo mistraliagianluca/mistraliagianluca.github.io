@@ -140,7 +140,29 @@ flowchart LR
 - **Dal pannello:** campo *Galleria* → **carica** le foto o scegli tra quelle già caricate → trascina per l'ordine → Salva. Le foto finiscono in `public/assets/gallery/`. Usa foto orizzontali in JPG, meglio sotto i 500 KB.
 - **Foto di apertura** (quella grande in alto): campo *Foto grande in cima* (`info.json` → `fotoApertura`, oggi `/assets/gallery/SER.jpg`). Se il file non c'è, il sito usa la *Foto di riserva* (`fotoAperturaRiserva`). Maiuscole e minuscole nel nome del file non contano.
 - In `info.json` la galleria è un elenco di percorsi (`"/assets/gallery/7.jpg"`). Per compatibilità il sito accetta anche il vecchio formato a numeri (`7`).
-- Le foto `1.jpg` e `2.jpg` servono anche a Gemini come **riferimento del camper** per le immagini dei post (`automazione/config.json` → `fotoRiferimento`). **Non cancellarle**; se le sostituisci, scegli foto in cui il Kentucky si veda bene e intero.
+- **Riferimento del camper per i post:** Gemini usa le foto **vere** salvate in `automazione/riferimento/` (`kentucky-1.jpg`, `kentucky-2.jpg`), indicate in `automazione/config.json` → `fotoRiferimento`. Se mancano, usa `1.jpg` e `2.jpg` della galleria. Non cancellarle.
+- Sotto la galleria c'è la nota *"Ambientazioni ricreate con l'intelligenza artificiale: il camper è quello vero."* (`gallery_ai_note` in `src/i18n/`).
+
+### Rifare le foto della galleria con Gemini (una volta, dal Mac)
+
+Il programma `automazione/foto-galleria.mjs` manda a Gemini ogni foto della galleria. Gli **esterni** vengono ambientati in Puglia (uliveto, costa di Polignano, trulli, masseria, Salento, Ostuni, Gargano, a rotazione) lasciando il camper identico; negli **interni** migliorano solo luce e colori. Le foto vengono **sovrascritte** con lo stesso nome e ridotte per il web con `sips` del Mac (lato lungo 1600 px, JPG qualità 80). La prima volta salva una copia di `1.jpg` e `2.jpg` in `automazione/riferimento/`.
+
+```bash
+cd ~/Documents/GitHub/mistraliagianluca.github.io
+git pull --rebase
+read -s GEMINI_API_KEY && export GEMINI_API_KEY   # incolla la chiave Gemini e premi invio: non si vede e non resta salvata
+node automazione/foto-galleria.mjs                # tutte (circa 5 minuti, ~$1,50)
+node automazione/foto-galleria.mjs 3 7            # solo alcune, per rifare quelle venute male
+```
+
+Prima del commit guarda le foto in `public/assets/gallery/`. Se una non va, **prima rimetti l'originale** con git (finché non hai fatto il commit), poi rifalla, così Gemini parte dalla foto vera e non dalla versione venuta male:
+
+```bash
+git checkout -- public/assets/gallery/6.jpg public/assets/gallery/7.jpg
+node automazione/foto-galleria.mjs 6 7
+```
+
+Le istruzioni a Gemini chiedono anche che quello che si vede dai finestrini e dalle porte aperte sia coerente con il nuovo sfondo (negli interni niente paesaggio, che viene finto: fuori dai vetri solo luce del giorno chiara, come nelle foto professionali di interni). Poi `git add -A`, `git commit` e `git push`. Il comando costa circa $0,07 a foto, addebitati sulla fatturazione Google, e non entra nel tetto mensile del bot.
 
 ## Calendario
 

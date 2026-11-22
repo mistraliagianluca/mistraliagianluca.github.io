@@ -3,6 +3,8 @@
   "modelloTesti": "claude-sonnet-5-5",
   "modelloImmagini": "gemini-3.1-flash-image",
   "fotoRiferimento": [
+    "automazione/riferimento/kentucky-2.jpg",
+    "automazione/riferimento/kentucky-1.jpg",
     "public/assets/gallery/2.jpg",
     "public/assets/gallery/1.jpg"
   ],

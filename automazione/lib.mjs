@@ -96,7 +96,8 @@ export async function chiediClaude(prompt, { ricerche = 3, finta = finto } = {})
 
 // ---------- Gemini ----------
 export async function creaImmagine(istruzione, destinazione) {
-  const riferimenti = config.fotoRiferimento.map((p) => path.join(ROOT, p)).filter((p) => fs.existsSync(p));
+  // Le prime due foto di riferimento che esistono: le copie delle foto vere (automazione/riferimento/), altrimenti la galleria
+  const riferimenti = config.fotoRiferimento.map((p) => path.join(ROOT, p)).filter((p) => fs.existsSync(p)).slice(0, 2);
   if (PROVA) {
     fs.copyFileSync(riferimenti[0], destinazione);
     return destinazione;

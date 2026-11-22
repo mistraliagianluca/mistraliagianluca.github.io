@@ -13,6 +13,26 @@
 
 ---
 
+## 2026-11-22 · Foto galleria: interni con luce del giorno dai vetri
+- Cosa: negli interni Gemini toglie quello che si vede da finestrini, parabrezza e oblò (auto, parcheggi) e lo sostituisce con luce del giorno chiara, senza paesaggi.
+- Perché: il paesaggio visto dall'interno (foto 13) risultava finto, e nella 16 restava il parcheggio.
+- Da fare: niente.
+
+## 2026-11-22 · Foto galleria: finestrini coerenti con lo sfondo
+- Cosa: in `automazione/foto-galleria.mjs` istruzioni più precise a Gemini su quello che si vede dai finestrini, dal parabrezza e dalle porte aperte (esterni: stesso nuovo sfondo; interni: campagna sfocata o luce del giorno) e sui riflessi; nella documentazione come rimettere l'originale con git prima di rifare una foto.
+- Perché: in alcune foto (6, 7, 13, 19) dai finestrini si vedeva uno sfondo innaturale.
+- Da fare: niente.
+
+## 2026-11-22 · Nota "ambientazione AI, camper vero" nei post
+- Cosa: i testi per Instagram, Facebook e TikTok mandati dal bot dopo Pubblica finiscono con *"📸 Ambientazione creata con l'AI, il camper è quello vero."* (più la versione inglese per Instagram e Facebook); la didascalia sotto l'immagine degli articoli dice lo stesso (prima: "Immagine creata con l'intelligenza artificiale"); il prompt dice a Claude che la nota la aggiunge il bot.
+- Perché: dichiarare che solo lo sfondo è generato, non il camper.
+- Da fare: niente.
+
+## 2026-11-22 · Foto della galleria ambientate in Puglia
+- Cosa: nuovo `automazione/foto-galleria.mjs`, da lanciare una volta dal Mac, che rifà con Gemini le foto della galleria (esterni in ambientazioni pugliesi, interni solo luce e colori) e le ottimizza per il web; copia delle foto vere di riferimento del camper in `automazione/riferimento/`, ora prime in `fotoRiferimento`; `lib.mjs` usa al massimo 2 foto di riferimento; nota sotto la galleria sugli sfondi ricreati con l'AI.
+- Perché: foto più accattivanti e coerenti con il territorio, senza alterare il camper.
+- Da fare: lanciare il comando (vedi [Il sito → Foto](03-sito.md#rifare-le-foto-della-galleria-con-gemini-una-volta-dal-mac)), controllare le foto, commit e push. Costo una tantum ~$1,50.
+
 ## 2026-11-22 · "Completo di tutto per partire" al posto di "tutto incluso tranne le lenzuola"
 - Cosa:
   - via il badge "Tutto incluso tranne le lenzuola" dalla foto di apertura; al suo posto, sotto il pulsante, il riquadro "A bordo c'è già tutto" con 4 icone che porta al kit;
