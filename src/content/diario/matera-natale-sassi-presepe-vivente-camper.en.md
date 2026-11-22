@@ -6,7 +6,8 @@ chiave: "matera-natale-sassi-presepe-vivente-camper"
 immagine: "/assets/diario/matera-natale-sassi-presepe-vivente-camper.jpg"
 estratto: "A living nativity, Christmas markets and a stop in Gravina: December in Matera makes a perfect long weekend by motorhome, just over an hour from Bari."
 immagineAI: true
-nascosto: true
+scadenza: 2026-11-21
+nascosto: false
 origine: "da78a42fd808"
 ---
 
