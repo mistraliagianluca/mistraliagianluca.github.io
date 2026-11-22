@@ -13,6 +13,11 @@
 
 ---
 
+## 2026-11-22 · Ordine degli articoli nel pannello
+- Cosa: nel pannello *Diario di bordo* prima gli articoli in vetrina, poi quelli conclusi o nascosti, ognuno dal più recente. Il bot (`traduzioni.mjs`) tiene aggiornati `stato` e `ordine` nei file italiani; il pannello ordina per `ordine` decrescente e mostra lo stato nell'elenco. Provato il pannello in modalità cartella locale: elenco, ordine e salvataggio dei prezzi funzionano.
+- Perché: vedere subito cosa è online.
+- Da fare: niente. Se l'elenco appare in un altro ordine, *Sort* → *Ordine* decrescente.
+
 ## 2026-11-22 · Tolto l'articolo di esempio
 - Cosa: eliminati `src/content/diario/esempio-polignano.it.md` ed `.en.md`, l'articolo dimostrativo dell'MVP (non pubblicato, con una foto della galleria al posto dell'immagine generata). Il sito continua a ignorare eventuali articoli con `esempio: true`.
 - Perché: compariva nel pannello `/admin` come un articolo vero ma non era sul sito.

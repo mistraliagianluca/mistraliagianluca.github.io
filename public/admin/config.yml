@@ -223,13 +223,21 @@ collections:
     create: false
     media_folder: /public/assets/diario
     public_folder: /assets/diario
-    summary: "{{titolo}}"
+    # In cima gli articoli in vetrina, sotto quelli conclusi o nascosti, ognuno dal più recente.
+    # "stato" e "ordine" li aggiorna il bot a ogni giro (automazione/traduzioni.mjs).
+    summary: "{{stato}} · {{titolo}} · {{data}}"
     filter: { field: lingua, value: it }
-    sortable_fields: [data, titolo, scadenza]
+    sortable_fields:
+      fields: [ordine, data, titolo, scadenza]
+      default:
+        field: ordine
+        direction: descending
     fields:
       - { name: titolo, label: Titolo, widget: string }
       - { name: lingua, label: Lingua del file, widget: hidden }
       - { name: chiave, label: Chiave, widget: hidden }
+      - { name: stato, label: Stato, widget: hidden }
+      - { name: ordine, label: Ordine, widget: hidden }
       - { name: data, label: Data di pubblicazione, widget: datetime, type: date, picker_utc: true }
       - name: scadenza
         label: Fine dell'evento

@@ -114,6 +114,7 @@ Gli articoli si modificano **solo in italiano**: dal pannello, dall'editor web o
 - Gli articoli pubblicati con ✅ Pubblica nascono già allineati: l'inglese lo scrive Claude insieme all'italiano, con l'impronta.
 - Dopo un aggiornamento il bot ripubblica il sito. Per circa 2 minuti la pagina inglese può mostrare la versione precedente.
 - La spesa delle traduzioni entra nel totale del mese e nel tetto `budgetMensileDollari`.
+- Nello stesso passaggio il bot aggiorna nel file **italiano** due campi per il pannello: `stato` (🟢 in vetrina, ⚪ evento concluso, ⚫ nascosto) e `ordine` (`1-AAAA-MM-GG` per quelli in vetrina, `0-AAAA-MM-GG` per gli altri). Ordinando per `ordine` decrescente compaiono prima quelli in vetrina e poi gli altri, ognuno dal più recente. Non cambiano la traduzione e non ripubblicano il sito.
 
 ## La sveglia del bot
 
