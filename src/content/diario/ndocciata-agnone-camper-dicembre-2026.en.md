@@ -6,6 +6,7 @@ chiave: "ndocciata-agnone-camper-dicembre-2026"
 immagine: "/assets/diario/ndocciata-agnone-camper-dicembre-2026.jpg"
 estratto: "On Saturday 12 December, Agnone lights up for the Grand 'Ndocciata. It's about 3.5-4 hours from Bari. Here's how to do it in 4-5 days with the Kentucky, with free camper stops and mountain villages."
 immagineAI: true
+scadenza: 2026-12-12
 nascosto: false
 origine: "c5aed79b46db"
 ---
