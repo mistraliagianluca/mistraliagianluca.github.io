@@ -1,11 +1,11 @@
 {
-  "offset": 926428058,
+  "offset": 926428059,
   "bozza": {
     "id": "2026-11-23-napoli-san-gregorio-armeno-presepi-camper",
     "codice": "ca84fb876e",
-    "messageId": 63,
-    "testoId": 64,
-    "creata": "2026-11-23T09:10:33.801Z",
+    "messageId": 67,
+    "testoId": 68,
+    "creata": "2026-11-23T09:15:08.144Z",
     "promemoria": false
   },
   "storico": [
@@ -76,6 +76,12 @@
       "tema": "Presepi di San Gregorio Armeno a Napoli in camper: la via dei maestri presepiai e la fiera natalizia, con sosta a Pozzuoli",
       "luogo": "Napoli (Campania), con base a Pozzuoli",
       "data": "2026-11-23"
+    },
+    {
+      "id": "2026-11-23-napoli-san-gregorio-armeno-presepi-camper",
+      "tema": "Presepi di San Gregorio Armeno a Napoli in camper: la via dei maestri presepiai e la fiera natalizia",
+      "luogo": "Napoli (Campania)",
+      "data": "2026-11-23"
     }
   ],
   "pubblicati": [
@@ -100,7 +106,7 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 4.926208
+    "dollari": 5.229616
   },
   "settimanale": "2026-11-23",
   "traduzioniFallite": {}
