@@ -1,13 +1,6 @@
 {
-  "offset": 926428059,
-  "bozza": {
-    "id": "2026-11-23-napoli-san-gregorio-armeno-presepi-camper",
-    "codice": "ca84fb876e",
-    "messageId": 67,
-    "testoId": 68,
-    "creata": "2026-11-23T09:15:08.144Z",
-    "promemoria": false
-  },
+  "offset": 926428061,
+  "bozza": null,
   "storico": [
     {
       "id": "2026-11-21-selva-di-fasano-camper-apulia-for-christmas-2026",
@@ -101,6 +94,12 @@
       "id": "2026-11-22-lecce-black-friday-camper-primavera-pupi",
       "chiave": "lecce-black-friday-camper-primavera-pupi",
       "data": "2026-11-22",
+      "da": "Gianluca"
+    },
+    {
+      "id": "2026-11-23-napoli-san-gregorio-armeno-presepi-camper",
+      "chiave": "napoli-san-gregorio-armeno-presepi-camper",
+      "data": "2026-11-23",
       "da": "Gianluca"
     }
   ],
