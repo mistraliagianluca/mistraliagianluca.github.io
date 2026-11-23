@@ -3,7 +3,7 @@
 > ⚙️ **Non modificare questo file a mano.** Lo rigenera il workflow *Documentazione* a ogni push, leggendo i file veri del progetto.
 > Se qualcosa qui è sbagliato, è sbagliato il file da cui viene: correggi quello.
 
-Ultimo aggiornamento: 2026-11-23 13:40 UTC
+Ultimo aggiornamento: 2026-11-23 22:22 UTC
 
 ## Workflow di GitHub Actions
 
@@ -40,16 +40,18 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 | `temiDaEvitareUltimi` | `12` |
 | `oreProMemoria` | `48` |
 | `postSettimanale` | `{"giorno":1,"ora":9}` |
+| `sondaggio` | `{"attivo":true,"ore":4,"ricerche":3}` |
+| `radar` | `{"attivo":true,"giorni":[2,5],"ora":11,"spunti":3,"ricerche":5,"settimaneDa":2,"settimaneA":8}` |
 | `tentativiVerifica` | `2` |
 | `ricercheScrittura` | `3` |
 | `ricercheVerifica` | `4` |
-| `budgetMensileDollari` | `8` |
+| `budgetMensileDollari` | `15` |
 | `oreMaxDaBari` | `4` |
 | `sito` | `"https://www.mistralia.co"` |
 | `prezzoDa` | `77` |
 | `prezzi` | `{"claude-sonnet-5-5":[2,10],"claude-opus-5-5":[4,20],"claude-fable-5-2":[8,40],"ricercaWeb":0.01,"immagine":0.07}` |
 
-## Prezzi in vigore (`src/data/prezzi.json`)
+## Prezzi in vigore (`src/data/prezzi.json` e `coperture.json`)
 
 - Prezzo al giorno: bassa €78 · media €105 · alta €150
 - Noleggio minimo: bassa 2 giorni · media 3 · alta 3 · eccezioni: 2026-11-01→2026-12-31: 3 giorni; 2027-09-12→2027-10-01: 2 giorni
@@ -75,12 +77,12 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 
 ## Articoli pubblicati nel Diario
 
-| Articolo | Pubblicato | Fine evento | Stato |
-| --- | --- | --- | --- |
-| `lecce-black-friday-camper-primavera-pupi` | 2026-11-22 | — | in vetrina |
-| `matera-natale-sassi-presepe-vivente-camper` | 2026-11-21 | 2026-12-21 | in vetrina |
-| `napoli-san-gregorio-armeno-presepi-camper` | 2026-11-23 | 2027-01-10 | in vetrina |
-| `ndocciata-agnone-camper-dicembre-2026` | 2026-11-21 | — | in vetrina |
+| Articolo | Tipo | Pubblicato | Fine evento/offerta | Stato |
+| --- | --- | --- | --- | --- |
+| `lecce-black-friday-camper-primavera-pupi` | idea | 2026-11-22 | — | in vetrina |
+| `matera-natale-sassi-presepe-vivente-camper` | evento | 2026-11-21 | 2026-12-21 | in vetrina |
+| `napoli-san-gregorio-armeno-presepi-camper` | evento | 2026-11-23 | 2027-01-10 | in vetrina |
+| `ndocciata-agnone-camper-dicembre-2026` | idea | 2026-11-21 | — | in vetrina |
 
 ## Struttura del repository
 
@@ -102,7 +104,11 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 │   ├── genera.mjs
 │   ├── lib.mjs
 │   ├── prompt.md
+│   ├── radar.md
+│   ├── radar.mjs
 │   ├── README.md
+│   ├── sondaggio.md
+│   ├── sondaggio.mjs
 │   ├── stato.json
 │   ├── telegram.mjs
 │   ├── traduzioni.mjs
@@ -133,11 +139,17 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 │   └── CNAME
 ├── src/
 │   ├── components/
+│   │   ├── DiarioIndice.astro
 │   │   ├── Home.astro
-│   │   └── Post.astro
+│   │   ├── Post.astro
+│   │   └── PostCard.astro
 │   ├── content/
 │   │   └── diario/ …
 │   ├── data/
+│   │   ├── bordo.json
+│   │   ├── coperture.json
+│   │   ├── faq.json
+│   │   ├── foto.json
 │   │   ├── info.json
 │   │   ├── prezzi.json
 │   │   └── promo.md
@@ -150,10 +162,12 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 │   │   └── site.ts
 │   ├── pages/
 │   │   ├── diario/
-│   │   │   └── [chiave].astro
+│   │   │   ├── [chiave].astro
+│   │   │   └── index.astro
 │   │   ├── en/
 │   │   │   ├── journal/
-│   │   │   │   └── [chiave].astro
+│   │   │   │   ├── [chiave].astro
+│   │   │   │   └── index.astro
 │   │   │   └── index.astro
 │   │   ├── 404.astro
 │   │   └── index.astro
