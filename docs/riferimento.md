@@ -3,7 +3,7 @@
 > ⚙️ **Non modificare questo file a mano.** Lo rigenera il workflow *Documentazione* a ogni push, leggendo i file veri del progetto.
 > Se qualcosa qui è sbagliato, è sbagliato il file da cui viene: correggi quello.
 
-Ultimo aggiornamento: 2026-11-23 22:22 UTC
+Ultimo aggiornamento: 2026-11-23 22:27 UTC
 
 ## Workflow di GitHub Actions
 
@@ -82,7 +82,7 @@ Si impostano in GitHub → Settings → Secrets and variables → Actions. Detta
 | `lecce-black-friday-camper-primavera-pupi` | idea | 2026-11-22 | — | in vetrina |
 | `matera-natale-sassi-presepe-vivente-camper` | evento | 2026-11-21 | 2026-12-21 | in vetrina |
 | `napoli-san-gregorio-armeno-presepi-camper` | evento | 2026-11-23 | 2027-01-10 | in vetrina |
-| `ndocciata-agnone-camper-dicembre-2026` | idea | 2026-11-21 | — | in vetrina |
+| `ndocciata-agnone-camper-dicembre-2026` | evento | 2026-11-21 | 2026-12-12 | in vetrina |
 
 ## Struttura del repository
 
