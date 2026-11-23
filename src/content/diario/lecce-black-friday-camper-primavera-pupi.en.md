@@ -6,6 +6,8 @@ chiave: "lecce-black-friday-camper-primavera-pupi"
 immagine: "/assets/diario/lecce-black-friday-camper-primavera-pupi.jpg"
 estratto: "15% off Kentucky rentals starting between 1 March and 31 May 2027. Book on our website from 24 November to 1 December. You choose the destination."
 immagineAI: true
+scadenza: 2026-11-29
+nascosto: false
 origine: "a8bc1824f71b"
 ---
 
