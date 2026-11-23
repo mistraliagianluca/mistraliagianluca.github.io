@@ -1,6 +1,13 @@
 {
-  "offset": 926428057,
-  "bozza": null,
+  "offset": 926428058,
+  "bozza": {
+    "id": "2026-11-23-napoli-san-gregorio-armeno-presepi-camper",
+    "codice": "ca84fb876e",
+    "messageId": 63,
+    "testoId": 64,
+    "creata": "2026-11-23T09:10:33.801Z",
+    "promemoria": false
+  },
   "storico": [
     {
       "id": "2026-11-21-selva-di-fasano-camper-apulia-for-christmas-2026",
@@ -63,6 +70,12 @@
       "tema": "Black Friday Mistralia: −15% sui noleggi del Kentucky dal 1° marzo al 31 maggio 2027, prenotabili dal 24 novembre al 1° dicembre. Lecce è solo uno spunto di viaggio, tra tanti.",
       "luogo": "Lecce (Puglia), a circa 2 ore (a seconda del traffico) di guida da Bari",
       "data": "2026-11-22"
+    },
+    {
+      "id": "2026-11-23-napoli-san-gregorio-armeno-presepi-camper",
+      "tema": "Presepi di San Gregorio Armeno a Napoli in camper: la via dei maestri presepiai e la fiera natalizia, con sosta a Pozzuoli",
+      "luogo": "Napoli (Campania), con base a Pozzuoli",
+      "data": "2026-11-23"
     }
   ],
   "pubblicati": [
@@ -87,7 +100,7 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 4.255132
+    "dollari": 4.926208
   },
   "settimanale": "2026-11-23",
   "traduzioniFallite": {}
