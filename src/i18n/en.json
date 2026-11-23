@@ -150,5 +150,19 @@
   "trip_both": "Both ways",
   "qty_persona_one": "{n} person",
   "qty_letto_one": "{n} bed",
-  "qty_tratta_one": "{n} trip"
+  "qty_tratta_one": "{n} trip",
+  "journal_all_btn": "All articles",
+  "journal_archive": "Archive",
+  "journal_archive_sub": "Past events and offers: they stay here as ideas for the coming years.",
+  "cat_offerta": "Offer",
+  "cat_evento": "Event",
+  "cat_idea": "Trip idea",
+  "filter_all": "All",
+  "filter_offerta": "Offers",
+  "filter_evento": "Events",
+  "filter_idea": "Ideas",
+  "promo_read": "Read the trip idea →",
+  "post_expired_offer": "This offer ended on {d}.",
+  "journal_filter_label": "Show",
+  "journal_empty": "None right now."
 }

@@ -16,10 +16,29 @@
     "giorno": 1,
     "ora": 9
   },
+  "_sondaggio": "Il lunedì, invece della bozza diretta, il bot manda un sondaggio con 3 proposte; dopo 'ore' ore (o quando hanno votato tutti) prepara la bozza sul tema vincente. attivo: false = bozza diretta come prima.",
+  "sondaggio": {
+    "attivo": true,
+    "ore": 4,
+    "ricerche": 3
+  },
+  "_radar": "Radar eventi: nei giorni indicati (1 = lunedì … 7 = domenica), dall'ora italiana indicata, il bot cerca 'spunti' eventi tra 'settimaneDa' e 'settimaneA' settimane e li propone nel gruppo. Costa circa $0,30-0,50 a giro.",
+  "radar": {
+    "attivo": true,
+    "giorni": [
+      2,
+      5
+    ],
+    "ora": 11,
+    "spunti": 3,
+    "ricerche": 5,
+    "settimaneDa": 2,
+    "settimaneA": 8
+  },
   "tentativiVerifica": 2,
   "ricercheScrittura": 3,
   "ricercheVerifica": 4,
-  "budgetMensileDollari": 8,
+  "budgetMensileDollari": 15,
   "oreMaxDaBari": 4,
   "sito": "https://www.mistralia.co",
   "_prezzoDa": "Usato solo se non si riesce a leggere src/data/prezzi.json: normalmente il prezzo \"da\" è il più basso di prezzoGiorno",

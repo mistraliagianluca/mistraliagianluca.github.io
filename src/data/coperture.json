@@ -1,0 +1,64 @@
+{
+  "_leggimi": "Piani di copertura, quota obbligatoria ed extra facoltativi. Si modifica dal pannello www.mistralia.co/admin → Piani ed extra.",
+  "piani": [
+    {
+      "id": "basic",
+      "supplementoGiorno": 0,
+      "cauzione": 2000,
+      "franchigia": "standard",
+      "secondoGuidatore": false
+    },
+    {
+      "id": "plus",
+      "supplementoGiorno": 15,
+      "cauzione": 1500,
+      "franchigia": "standard",
+      "secondoGuidatore": false
+    },
+    {
+      "id": "premium",
+      "supplementoGiorno": 25,
+      "cauzione": 1000,
+      "franchigia": "azzerata",
+      "secondoGuidatore": true
+    }
+  ],
+  "_piani": "Supplemento al giorno, cauzione e franchigia di ogni piano: si modificano dal pannello.",
+  "servizio": {
+    "importo": 200,
+    "it": "Pulizia finale, preparazione e check-in",
+    "en": "Final cleaning, preparation and check-in"
+  },
+  "_servizio": "Quota obbligatoria, una volta per noleggio (confermata €200).",
+  "extra": [
+    {
+      "id": "lenzuola-per-letto",
+      "importo": 40,
+      "it": "Lenzuola",
+      "en": "Bed linen",
+      "unita": "letto"
+    },
+    {
+      "id": "asciugamani-per-persona",
+      "importo": 15,
+      "it": "Asciugamani",
+      "en": "Bath towels",
+      "unita": "persona"
+    },
+    {
+      "id": "barbecue",
+      "importo": 25,
+      "it": "Barbecue",
+      "en": "Barbecue",
+      "unita": "noleggio"
+    },
+    {
+      "id": "transfer",
+      "importo": 100,
+      "it": "Transfer aeroporto",
+      "en": "Airport transfer",
+      "unita": "tratta"
+    }
+  ],
+  "_extra": "Extra facoltativi: \"unita\" dice se il prezzo è a noleggio, a persona, a letto o a tratta."
+}

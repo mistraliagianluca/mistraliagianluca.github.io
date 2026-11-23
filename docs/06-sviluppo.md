@@ -89,10 +89,32 @@ echo "[{\"update_id\":2,\"message\":{\"message_id\":9,\"chat\":{\"id\":1},\"text
 PROVA=1 TELEGRAM_CHAT_ID=1 node automazione/telegram.mjs
 ```
 
-⚠️ I test **modificano davvero** `automazione/stato.json`, `automazione/bozze/` e, con Pubblica, `src/content/diario/`. Alla fine rimetti tutto com'era **prima** di fare commit:
+```bash
+# Radar eventi: spunti finti nel log, poi tap su "Post + offerta" del primo e conferma dell'offerta
+echo '[{"update_id":3,"message":{"message_id":10,"chat":{"id":1},"text":"/radar"}}]' > automazione/prova-updates.json
+PROVA=1 TELEGRAM_CHAT_ID=1 node automazione/telegram.mjs
+S=$(node -p 'require("./automazione/stato.json").spunti.at(-2).codice')
+echo "[{\"update_id\":4,\"callback_query\":{\"id\":\"q\",\"from\":{\"first_name\":\"Test\"},\"data\":\"spo:$S\",\"message\":{\"chat\":{\"id\":1}}}}]" > automazione/prova-updates.json
+PROVA=1 TELEGRAM_CHAT_ID=1 node automazione/telegram.mjs
+echo "[{\"update_id\":5,\"callback_query\":{\"id\":\"q\",\"from\":{\"first_name\":\"Test\"},\"data\":\"ofs:$S\",\"message\":{\"chat\":{\"id\":1}}}}]" > automazione/prova-updates.json
+PROVA=1 TELEGRAM_CHAT_ID=1 node automazione/telegram.mjs   # scrive src/data/promo.md!
+
+# Sondaggio: /sondaggio, poi un voto finto (il sondaggio si chiude da solo dopo config.sondaggio.ore)
+echo '[{"update_id":6,"message":{"message_id":11,"chat":{"id":1},"text":"/sondaggio"}}]' > automazione/prova-updates.json
+PROVA=1 TELEGRAM_CHAT_ID=1 node automazione/telegram.mjs
+P=$(node -p 'require("./automazione/stato.json").sondaggio.pollId')
+echo "[{\"update_id\":7,\"poll\":{\"id\":\"$P\",\"total_voter_count\":1,\"options\":[{\"voter_count\":0},{\"voter_count\":1},{\"voter_count\":0}]}}]" > automazione/prova-updates.json
+PROVA=1 TELEGRAM_CHAT_ID=1 node automazione/telegram.mjs
+```
+
+Con `PROVA=1`, se è giorno e ora del sondaggio o del radar, il bot li avvia anche da solo al primo giro: è normale.
+
+Per leggere i prompt che arriverebbero a Claude aggiungi `PROVA_PROMPT=/tmp/prompt.txt` al comando: ogni prompt viene accodato a quel file.
+
+⚠️ I test **modificano davvero** `automazione/stato.json`, `automazione/bozze/`, con Pubblica `src/content/diario/` e con la conferma dell'offerta `src/data/promo.md`. Alla fine rimetti tutto com'era **prima** di fare commit:
 
 ```bash
-git restore automazione/stato.json src/content/diario public/assets/diario
+git restore automazione/stato.json src/content/diario public/assets/diario src/data/promo.md
 git clean -fd automazione/bozze src/content/diario public/assets/diario
 ```
 
@@ -145,7 +167,7 @@ Dal sito di GitHub, per un file solo: apri il file → **History** → scegli la
 <a id="togliere-un-articolo"></a>
 ## Togliere un articolo dal Diario
 
-**Il modo più semplice è il pannello:** www.mistralia.co/admin → *Diario di bordo* → apri l'articolo (file `it` ed `en`) → interruttore **Nascondi dal sito** oppure **Delete**. Vedi [Il sito → Articoli scaduti e nascosti](03-sito.md#articoli-scaduti-e-nascosti). Da riga di comando:
+**Il modo più semplice è il pannello:** www.mistralia.co/admin → *Diario di bordo* → apri l'articolo (file `it` ed `en`) → interruttore **Archivia** (la pagina resta raggiungibile dal link) oppure **Delete** (la pagina sparisce e il link porta alla 404 di Mistralia). Vedi [Il sito → Articoli scaduti, archiviati ed eliminati](03-sito.md#articoli-scaduti-archiviati-ed-eliminati). Da riga di comando:
 
 ```bash
 git pull

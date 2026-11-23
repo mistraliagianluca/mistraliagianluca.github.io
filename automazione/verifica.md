@@ -10,8 +10,9 @@ Oggi è {{OGGI}}.
 3. Se la bozza propone un **traghetto**: verifica che nel periodo proposto esista una linea da Bari verso quella destinazione che **imbarca camper/autocaravan** (pagina della compagnia o portale di prenotazione traghetti), e che compagnia e durata della traversata siano corrette. Se non è confermato, l'esito è "scarta".
 4. Verifica che il tempo di viaggio da Bari indicato sia realistico.
    Se la bozza ha una "scadenza", deve essere l'ultimo giorno dell'evento di quest'anno; se è sbagliata l'esito è "correggi" con la data giusta nella correzione.
-5. I fatti sul camper Kentucky (posti, dotazioni, prezzi, km inclusi) non vanno verificati: sono dati dell'azienda.
-6. Decidi l'esito:
+5. Se la bozza suggerisce **dove fermarsi a dormire o a sostare** (aree sosta, campeggi, parcheggi, agriturismi, spiagge o piazzali per la notte), l'esito è almeno "correggi" con la correzione "togli ogni indicazione su dove sostare o dormire": è una regola dell'azienda.
+6. I fatti sul camper Kentucky (posti, dotazioni, prezzi, km inclusi) non vanno verificati: sono dati dell'azienda.
+7. Decidi l'esito:
    - **"ok"**: tutti i fatti su eventi e luoghi sono confermati.
    - **"correggi"**: l'evento esiste ed è confermato per quest'anno, ma qualche dettaglio è sbagliato o non verificabile (per esempio l'ingresso gratuito, un orario, il numero di artigiani). In "correzione" scrivi esattamente cosa cambiare o togliere.
    - **"scarta"**: non trovi conferma che l'evento si tenga quest'anno con quelle date, oppure il luogo è descritto in modo sostanzialmente sbagliato.
@@ -29,6 +30,7 @@ Rispondi **solo** con un blocco ```json:
   "esito": "ok | correggi | scarta",
   "problemi": ["ogni fatto non confermato o sbagliato, in una riga"],
   "correzione": "istruzione precisa per il collega (vuota se esito ok)",
+  "da_controllare": ["1-3 cose che una persona del team deve guardare a colpo d'occhio prima di pubblicare, ognuna con dove controllarla (es. 'le date 12-13 dicembre → comune.agnone.is.it'). Brevi, max 100 caratteri ciascuna"],
   "fonti": ["URL che confermano i fatti, la più autorevole per prima"]
 }
 ```

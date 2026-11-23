@@ -19,6 +19,9 @@ const diario = defineCollection({
     scadenza: z.preprocess((v) => (v === '' || v === null ? undefined : v), z.coerce.date().optional()),
     // true = articolo tolto dal sito (nessuna pagina, non in elenco), ma il file resta e si può ripristinare
     nascosto: z.boolean().optional(),
+    // Tipo di articolo: offerta (legato a una promo, scade con la promo), evento (con date), idea di viaggio.
+    // Se manca: evento se c'è una scadenza, altrimenti idea (vedi categoriaDi in src/lib/site.ts)
+    categoria: z.enum(['offerta', 'evento', 'idea']).optional(),
   }),
 });
 

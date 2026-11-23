@@ -6,12 +6,14 @@ Tutto il codice sta in `automazione/`, è scritto in JavaScript per Node 22 e **
 
 | File | Ruolo |
 | --- | --- |
-| `genera.mjs` | Prepara una bozza: scrittura, verifica dei fatti, immagine, invio su Telegram |
-| `telegram.mjs` | Il bot: legge il gruppo ed esegue Pubblica, Rigenera, correzioni e comandi |
+| `genera.mjs` | Prepara una bozza: scrittura, verifica dei fatti, immagine, invio su Telegram con il messaggio 💬 *Che ne pensate?* |
+| `telegram.mjs` | Il bot: legge il gruppo ed esegue Pubblica, Rigenera, correzioni, voti e comandi; poi i lavori a orario |
+| `sondaggio.mjs` + `sondaggio.md` | **Sondaggio del lunedì**: 3 proposte di tema, voto nel gruppo, bozza sul tema vincente |
+| `radar.mjs` + `radar.md` | **Radar eventi**: cerca eventi tra 2 e 8 settimane, li propone con i pulsanti, attiva l'offerta sul sito dopo la conferma |
 | `lib.mjs` | Funzioni comuni: chiamate a Claude, Gemini e Telegram, stato, spesa, modalità di prova |
 | `prompt.md` | **Istruzioni a Claude per scrivere** il post: fatti sul camper, mete, durata, tono, formato |
 | `verifica.md` | **Istruzioni al verificatore** dei fatti |
-| `config.json` | Impostazioni: modelli, limiti, budget, foto di riferimento |
+| `config.json` | Impostazioni: modelli, limiti, budget, foto di riferimento, orari di sondaggio e radar |
 | `stato.json` | Memoria del bot. **Non modificare a mano** |
 | `bozze/` | Una cartella per ogni bozza (`bozza.json` + `immagine.jpg`) |
 | `traduzioni.mjs` | Tiene la versione inglese di ogni articolo allineata a quella italiana (traduce, copia, elimina) |
@@ -21,7 +23,7 @@ Tutto il codice sta in `automazione/`, è scritto in JavaScript per Node 22 e **
 
 ```mermaid
 flowchart TD
-    S(["Avvio: lunedì dalle 9, /nuovo,<br>🔄 Rigenera o una correzione"]) --> B{"Spesa del mese<br>oltre il budget?"}
+    S(["Avvio: tema vincente del sondaggio,<br>spunto del radar, /nuovo,<br>🔄 Rigenera o una correzione"]) --> B{"Spesa del mese<br>oltre il budget?"}
     B -->|Sì| STOP["⚠️ messaggio nel gruppo<br>nessuna chiamata"]
     B -->|No| W["Claude SCRIVE<br>(fino a 3 ricerche web)"]
     W --> V["Claude VERIFICA<br>chiamata indipendente<br>(fino a 4 ricerche web)"]
@@ -31,7 +33,7 @@ flowchart TD
     T -->|"Sì: la bozza resta<br>non verificata"| IMG
     T -->|"No, era «correggi»"| W2["Claude riscrive<br>applicando la correzione"] --> V
     T -->|"No, era «scarta»"| W3["Claude cambia tema<br>(all'ultimo tentativo:<br>niente eventi né date)"] --> V
-    IMG["Gemini crea l'immagine<br>dalle foto del Kentucky"] --> TG["Bozza su Telegram<br>📝 se verificata, ⚠️ se no"]
+    IMG["Gemini crea l'immagine<br>dalle foto del Kentucky"] --> TG["Bozza su Telegram<br>📝 se verificata, ⚠️ se no<br>+ messaggio 💬 Che ne pensate?"]
     TG --> ST["Salva bozza, stato e spesa<br>nel repository"]
 ```
 
@@ -39,11 +41,16 @@ flowchart TD
 
 | Avvio | Da dove | Cosa cambia |
 | --- | --- | --- |
-| Lunedì dalle 9 (ora italiana) | il **Bot Telegram** stesso, al primo giro dopo l'ora indicata in `config.json` → `postSettimanale` | Una sola volta a settimana. Se questa settimana c'è già una bozza (anche da `/nuovo`) non ne fa un'altra. Se fallisce **non riprova da solo** (per non spendere): scrive l'errore nel gruppo e si usa `/nuovo` |
+| Sondaggio del lunedì | il **Bot Telegram**, quando il sondaggio si chiude (vedi [Il sondaggio del lunedì](#il-sondaggio-del-lunedì)) | Bozza sul tema che ha vinto. Con `sondaggio.attivo: false` in `config.json` il lunedì arriva direttamente la bozza, come prima |
+| Spunto del radar | ✍️ *Prepara la bozza*, 🏷 *Post + offerta* o una risposta allo spunto | Bozza su quell'evento; con l'offerta attivata, il post la cita e l'articolo è di tipo *Offerta* (vedi [Il radar eventi](#il-radar-eventi)) |
 | Avvio a mano | workflow *Post settimanale* → Run workflow | Solo per emergenze; con la sveglia ogni minuto può essere cancellato da un giro del bot (vedi sotto). Meglio `/nuovo` |
-| `/nuovo` | Bot Telegram | Bozza nuova subito |
+| `/nuovo` | Bot Telegram | Bozza nuova subito. `/nuovo` seguito da un testo (es. `/nuovo un weekend a Matera per l'Immacolata`) passa a Claude le indicazioni |
 | 🔄 Rigenera | Bot Telegram | Claude riceve la bozza scartata e deve cambiare **evento e luogo** |
-| Risposta alla bozza | Bot Telegram | Stesso tema e luogo, applica la correzione; l'immagine si rifà solo se la correzione la riguarda |
+| Risposta al messaggio 💬 (o alla bozza) | Bot Telegram | Stesso tema, luogo e offerta, applica la correzione; l'immagine si rifà solo se la correzione la riguarda |
+
+**Il messaggio 💬 *Che ne pensate?*** arriva subito sotto ogni bozza: è il messaggio a cui rispondere per le correzioni (funziona anche rispondere alla foto o al testo, come prima). Contiene **cosa controllare prima di pubblicare**: 1–3 punti scritti dal verificatore (campo `da_controllare` di `verifica.md`, es. *"le date 12–13 dicembre → comune.agnone.is.it"*) più, sempre, il controllo dell'immagine.
+
+**Tipo di articolo (`categoria`):** Claude scrive `evento` se il post parla di un evento con date e `idea` per luoghi e itinerari; il bot mette `offerta` quando la bozza nasce da un'offerta attivata, e in quel caso la `scadenza` è l'ultimo giorno del banner della promo. Con Pubblica finisce nell'articolo (anche in quello inglese).
 
 ### Le regole che Claude segue (`prompt.md`)
 
@@ -51,10 +58,11 @@ flowchart TD
 - **Traghetti:** solo se ha verificato che nel periodo c'è una linea da Bari che **imbarca camper**. Cita la compagnia e la durata della traversata, senza prezzi.
 - **Durata del viaggio:** entro 2 ore → weekend lungo; 3–4 ore → 4–7 giorni; traghetto ed estero → 7–10 giorni, d'estate due settimane. Da giugno a settembre privilegia viaggi lunghi in periodi poco affollati (giugno, inizio luglio, settembre); nel resto dell'anno weekend lunghi e ponti. Niente gite di un giorno.
 - **Messaggio:** il camper è **completo di tutto per partire** (pieno, cucina, sosta libera, assistenza 24/7). Lenzuola e asciugamani **non sono inclusi**: mai dire che lo sono, e mai formule come "tutto incluso tranne le lenzuola".
-- **Fatti sul camper:** solo quelli scritti nel prompt. **Mai citare età o anno del camper**, mai prezzi diversi da "da €X al giorno", dove X è il prezzo più basso in `src/data/prezzi.json`: se cambi i prezzi dal pannello, i post si aggiornano da soli.
+- **Fatti sul camper:** solo quelli scritti nel prompt. I km inclusi al giorno li prende da `src/data/prezzi.json` (`kmInclusiGiorno`), come il prezzo. **Mai citare età o anno del camper**, mai prezzi diversi da "da €X al giorno", dove X è il prezzo più basso in `src/data/prezzi.json`: se cambi i prezzi dal pannello, i post si aggiornano da soli.
 - **Date di eventi:** solo se verificate in una fonte trovata al momento.
+- **Mai suggerire dove dormire o sostare** (aree sosta, campeggi, parcheggi, agriturismi, spiagge o piazzali per la notte): dove fermarsi lo scelgono i clienti. Si può dire che il Kentucky è attrezzato per la sosta libera, senza indicare luoghi. Il verificatore controlla anche questo e, se trova un suggerimento, fa correggere la bozza.
 - **Scadenza:** se il post parla di un evento con date, Claude scrive anche il campo `scadenza` (ultimo giorno dell'evento). Con Pubblica finisce nell'articolo: dal giorno dopo l'articolo esce dalla home e la pagina dice "evento concluso" ([Il sito → Articoli scaduti](03-sito.md#articoli-scaduti-archiviati-ed-eliminati)).
-- **Temi già usati:** riceve gli ultimi 12 temi, con il luogo, e non deve ripeterli.
+- **Temi già usati:** riceve gli ultimi 12 temi, con il luogo, e non deve ripeterli. Fa eccezione il **tema scelto dal team** (sondaggio, radar): lì il tema è imposto e Claude non lo cambia; se l'evento non si conferma, parla del luogo senza date.
 - **Nota sull'immagine:** il camper è sempre quello vero e solo l'ambientazione è creata con l'AI. La nota la aggiunge il bot ai testi per i social (*"📸 Ambientazione creata con l'AI, il camper è quello vero."*), e il sito la mostra sotto l'immagine dell'articolo (`ai_image` in `src/i18n/`).
 - **Immagine:** "reale" (il Kentucky nel luogo) oppure, una settimana su 4, "improbabile" (il Kentucky in un posto impossibile e simpatico).
 - **Tono:** fresco, frasi corte, massimo 3 emoji, niente finta urgenza e niente recensioni inventate.
@@ -74,31 +82,91 @@ Una **seconda chiamata a Claude**, separata dalla prima, rilegge la bozza e cerc
 
 Il numero di tentativi è `tentativiVerifica` in `config.json`, oggi 2. Il rischio di un errore non è zero, ma per proporre un evento falso dovrebbero sbagliare due chiamate indipendenti con ricerche separate.
 
+## Il sondaggio del lunedì
+
+```mermaid
+flowchart LR
+    A["Lunedì dalle 9<br>(postSettimanale)"] --> B["Claude: 3 proposte<br>diverse (sondaggio.md,<br>fino a 3 ricerche)"]
+    B --> C["🗳 Sondaggio nel gruppo<br>+ dettagli e fonti"]
+    C --> D{"Passate 4 ore<br>o hanno votato tutti?"}
+    D -->|No| D
+    D -->|Sì| E["Chiude il sondaggio:<br>vince la più votata<br>(pari: la prima; nessun voto: la prima)"]
+    E --> F["Bozza sul tema vincente"]
+```
+
+- Le 3 proposte sono diverse tra loro (per esempio un evento, un borgo di stagione, un itinerario). La prima è quella che Claude consiglia: vince se nessuno vota o in caso di pareggio.
+- Il sondaggio non è anonimo: si vede chi ha votato cosa.
+- "Hanno votato tutti" = votanti uguali ai membri del gruppo meno il bot (`getChatMemberCount`).
+- Si può avviare anche a mano con `/sondaggio`. Mentre un sondaggio è aperto non se ne apre un altro.
+- Impostazioni in `config.json` → `sondaggio`: `attivo` (false = bozza diretta il lunedì), `ore` (durata del voto, oggi 4), `ricerche` (oggi 3).
+- Come il post del lunedì, se la preparazione fallisce il bot **non riprova da solo**: scrive l'errore e si usa `/nuovo` o `/sondaggio`.
+
+## Il radar eventi
+
+```mermaid
+flowchart TD
+    A["Martedì e venerdì dalle 11<br>(config.radar) o /radar"] --> B["Claude cerca 2–3 eventi<br>tra 2 e 8 settimane<br>(radar.md, fino a 5 ricerche)"]
+    B --> C["Un messaggio per spunto<br>con fonte e, se ha senso,<br>un'idea di offerta"]
+    C --> D{"Il team sceglie"}
+    D -->|"⏭ No"| N["Spunto chiuso:<br>non viene riproposto"]
+    D -->|"✍️ Prepara la bozza<br>o risposta con indicazioni"| BZ["Bozza su quell'evento"]
+    D -->|"🏷 Post + offerta"| O["Proposta di offerta:<br>sconto, date, banner<br>❓ il camper è libero?"]
+    O -->|"risposta: '15% e dal 6 al 10'"| O2["Claude aggiorna la proposta<br>(nessuna ricerca)"] --> O
+    O -->|"✅ È libero: attiva"| P["Scrive src/data/promo.md<br>→ Pubblica sito"] --> BZ2["Bozza che cita l'offerta<br>(articolo tipo Offerta)"]
+    O -->|"📝 Solo il post"| BZ
+    O -->|"❌ Annulla"| N
+```
+
+- **Cosa cerca:** concerti, mostre ed eventi d'arte, festival, teatro, sagre, grandi eventi sportivi, fiere, mercatini, rievocazioni, nelle mete raggiungibili da Bari (stesse regole del post). Ogni evento deve avere una fonte che conferma **l'edizione di quest'anno**; gli eventi già proposti o pubblicati non tornano.
+- **L'idea di offerta:** Claude la propone solo se ha senso, cioè in bassa o media stagione o per un grande evento; mai in alta stagione. Riceve il calendario delle stagioni da `src/data/prezzi.json`. Sconto tra 5 e 15%, sui noleggi che iniziano poco prima dell'evento; banner da oggi fino al giorno prima. Il bot scarta le proposte con date non valide.
+- **Prima di attivare** il bot chiede se il camper è libero (il calendario va guardato da una persona) e avvisa se c'è già una promo attiva che verrebbe sostituita. Con ✅ il bot scrive la promo in `src/data/promo.md` mantenendo commenti e campi che non conosce, il workflow la salva su GitHub e avvia *Pubblica sito*: banner, sconto nel calcolatore e, dopo la pubblicazione dell'articolo, l'articolo in evidenza.
+- La promo attivata dal bot si modifica o si spegne come sempre dal pannello → *Promozione*.
+- Gli spunti restano nello stato (`spunti`, ultimi 30). Un pulsante premuto due volte o su uno spunto già gestito risponde *"Questo spunto è già stato gestito"*.
+- Impostazioni in `config.json` → `radar`: `attivo`, `giorni` (1 = lunedì … 7 = domenica, oggi `[2, 5]`), `ora` (oggi 11), `spunti` (3), `ricerche` (5), `settimaneDa`/`settimaneA` (2 e 8).
+- **Non suggerisce mai dove dormire o sostare**, come i post.
+
 ## Cosa fa il bot a ogni giro
 
 ```mermaid
 flowchart TD
     A["Avvio del workflow<br>Bot Telegram"] --> B["Scarica l'ultima versione<br>del repository (ref: main)"]
-    B --> C["getUpdates: messaggi e tap<br>arrivati dall'ultimo giro"]
-    C --> D{"Per ogni messaggio"}
+    B --> C
+    C["getUpdates: messaggi, tap<br>e voti arrivati dall'ultimo giro"] --> D{"Per ogni messaggio"}
     D -->|"/id"| E["Risponde con l'id della chat<br>(in qualsiasi chat)"]
     D -->|"da un'altra chat"| X["Ignora"]
     D -->|"✅ Pubblica"| F["Scrive l'articolo IT+EN<br>e l'immagine nel sito,<br>manda i testi social"]
     D -->|"🔄 Rigenera"| G["Nuova bozza:<br>altro tema e luogo"]
-    D -->|"risposta alla bozza"| H["Bozza corretta"]
-    D -->|"/nuovo · /aiuto"| I["Bozza nuova · elenco comandi"]
+    D -->|"risposta a 💬 o alla bozza"| H["Bozza corretta"]
+    D -->|"/nuovo · /sondaggio · /radar · /aiuto"| I["Bozza · sondaggio · radar · comandi"]
+    D -->|"pulsanti e risposte<br>del radar"| R["Bozza, offerta<br>o spunto saltato"]
+    D -->|"voto nel sondaggio"| SV["Aggiorna i conteggi"]
     D -->|"altro testo"| X
-    F & G & H & I --> T["Allinea le versioni inglesi<br>degli articoli (traduzioni.mjs)"]
+    F & G & H & I & R & SV --> OR["Lavori a orario:<br>chiude il sondaggio se è ora,<br>sondaggio del lunedì,<br>radar eventi"]
+    OR --> T["Allinea le versioni inglesi<br>degli articoli (traduzioni.mjs)"]
     T --> J["Promemoria se la bozza<br>aspetta da 48 ore"]
     J --> K["Commit di stato,<br>bozze e articoli"]
-    K --> L{"C'è un articolo<br>da pubblicare?"}
+    K --> L{"Articolo, traduzione<br>o offerta da pubblicare?"}
     L -->|Sì| M["Avvia Pubblica sito"]
 ```
 
 - Dopo ogni messaggio il bot salva subito il punto in cui è arrivato (`offset`): se un passaggio fallisce, lo stesso messaggio **non** viene rieseguito all'infinito.
 - La conferma del tap (*answerCallbackQuery*) Telegram la accetta solo per pochi secondi. Il bot passa più di rado, quindi la conferma di solito è scaduta: il bot la ignora e scrive invece un messaggio nel gruppo.
 - I pulsanti contengono un codice corto di 10 caratteri e non l'identificativo della bozza, perché Telegram accetta al massimo 64 byte.
+- I **lavori a orario** (sondaggio, radar) si segnano nello stato *prima* di partire: se falliscono non vengono ritentati a ogni giro, così un errore non costa più volte.
 - Due giri non lavorano mai insieme: i workflow del bot e del post sono nello stesso gruppo di *concurrency* `automazione` e partono uno dopo l'altro, ognuno con l'ultima versione del repository.
+
+## Chiamate a Claude: errori e nuovi tentativi
+
+`chiediClaude` in `lib.mjs` gestisce da sola gli intoppi più comuni dell'API, senza fallire subito:
+
+| Intoppo | Cosa fa |
+| --- | --- |
+| API sovraccarica o in errore (429, 500, 502, 503, 529) o risposta vuota | riprova fino a 2 volte, dopo 20 e 40 secondi |
+| Risposta interrotta durante le ricerche web (`pause_turn`) | rimanda la conversazione per farla finire |
+| Risposta senza un JSON valido (troncata o solo testo) | chiede a Claude di ripetere solo il blocco JSON, senza nuove ricerche |
+| Ancora niente dopo 4 giri | errore *"Claude non ha restituito un JSON valido"* nel gruppo; si riprova con `/nuovo` |
+
+Il limite di lunghezza della risposta è 16.000 token. Ogni giro in più costa come una chiamata breve, cioè pochi centesimi, e la spesa resta contata nel totale del mese.
 
 ## Versione inglese degli articoli
 
@@ -107,7 +175,7 @@ Gli articoli si modificano **solo in italiano**: dal pannello, dall'editor web o
 | Nell'italiano è cambiato… | Il bot… | Costo |
 | --- | --- | --- |
 | titolo, anteprima o testo | fa tradurre a Claude e riscrive l'inglese (senza ricerche web), poi scrive *"🌍 Versione inglese aggiornata"* nel gruppo | ~$0,02–0,05 |
-| data, fine dell'evento, nascosto, immagine | copia il valore nell'inglese | gratis |
+| data, fine dell'evento, tipo di articolo, nascosto, immagine | copia il valore nell'inglese | gratis |
 | file eliminato | elimina anche l'inglese | gratis |
 | niente | niente | gratis |
 
@@ -162,13 +230,22 @@ Il timer di GitHub resta attivo come riserva: se partono entrambi, il gruppo di 
     "codice": "3f02d70d8b",       // codice corto dei pulsanti
     "messageId": 42,              // messaggio della foto su Telegram
     "testoId": 43,                // messaggio con il testo completo (se separato)
+    "domandaId": 44,              // messaggio 💬 "Che ne pensate?" (le risposte qui sono correzioni)
     "creata": "2026-11-23T08:07:00Z",
     "promemoria": false
   },
   "storico": [ { "id": "…", "tema": "…", "luogo": "…", "data": "2026-11-23" } ],
   "pubblicati": [ { "id": "…", "chiave": "…", "data": "…", "da": "Gianluca" } ],
   "spesa": { "mese": "2026-11", "dollari": 3.42 },
-  "settimanale": "2026-11-23"     // lunedì della settimana in cui il bot ha già provato il post automatico
+  "settimanale": "2026-11-23",    // lunedì della settimana in cui il bot ha già provato il post automatico
+  "sondaggio": {                  // sondaggio aperto (null se non ce n'è)
+    "pollId": "…", "messageId": 50, "creato": "…",
+    "opzioni": [ { "etichetta": "…", "titolo": "…", "luogo": "…", "date": "…", "dettagli": "…", "fonte": "…" } ],
+    "votanti": 2, "conteggi": [1, 1, 0], "membri": 4
+  },
+  "radar": { "ultimo": "2026-11-24" },   // ultimo giorno in cui il radar è partito
+  "spunti": [ { "codice": "…", "evento": "…", "luogo": "…", "inizio": "…", "offerta": { … }, "messageId": 60, "esito": "bozza | offerta | no | null" } ],
+  "offerta": { "codice": "…", "messageId": 61, "proposta": { … } }   // proposta di offerta in attesa di conferma
 }
 ```
 
@@ -184,7 +261,8 @@ Lo scrivono solo i programmi. Se lo modifichi a mano, il bot può rileggere vecc
 | GitHub, Telegram, sito | gratis |
 
 - Ogni bozza mostra su Telegram *💰 Costo di questa bozza* e la spesa del mese. È una stima fatta dai token restituiti dalle API: il dato esatto è su **console.anthropic.com → Usage** e su Google Cloud → Billing.
-- **Tetto interno:** `budgetMensileDollari` in `config.json`, oggi $8. Superato il tetto, il bot non prepara più bozze fino al mese dopo e lo scrive nel gruppo. Conta anche i tentativi falliti.
+- **Tetto interno:** `budgetMensileDollari` in `config.json`, oggi **$15** (era $8 fino al 23/11/2026, alzato per radar e sondaggio). Superato il tetto, il bot non prepara più bozze, sondaggi né radar fino al mese dopo e lo scrive nel gruppo. Conta anche i tentativi falliti.
+- **Spesa tipica al mese** (stima): bozze ~$0,30–0,50 l'una × 5–8 = $2–4; radar ~$0,30–0,50 a giro × 8–9 = $3–4; sondaggio ~$0,15–0,25 × 4 = ~$1; ritocchi dell'offerta ~$0,01; traduzioni pochi centesimi. Totale **circa $6–10**.
 - **Tetti esterni, da impostare comunque:** limite mensile su console.anthropic.com → *Settings → Limits*; budget con avviso su Google Cloud → *Billing → Budgets & alerts*.
 - Per spendere meno si possono ridurre `ricercheScrittura`, `ricercheVerifica` e `tentativiVerifica`. **Lezione appresa:** con Opus e fino a 6 + 8 ricerche, tre giorni di prove sono costati circa $20.
 
@@ -201,4 +279,4 @@ PROVA=1 TELEGRAM_CHAT_ID=1 node automazione/genera.mjs
 cat automazione/prova-telegram.log
 ```
 
-Con `PROVA=1` nessuna chiamata esce davvero. Claude e la verifica restituiscono contenuti finti, l'immagine è una foto della galleria, e i messaggi che il bot manderebbe finiscono in `automazione/prova-telegram.log`. Per simulare tap e risposte si crea `automazione/prova-updates.json` con gli aggiornamenti finti e si lancia `telegram.mjs`. Esempi in [Sviluppo](06-sviluppo.md#test-in-modalità-prova). Il log e il file dei finti aggiornamenti sono esclusi da git.
+Con `PROVA=1` nessuna chiamata esce davvero. Radar e sondaggio hanno contenuti finti propri (spunti *"Prova: Festival jazz"*, proposte *"Prova: mercatini a Matera"*). Claude e la verifica restituiscono contenuti finti, l'immagine è una foto della galleria, e i messaggi che il bot manderebbe finiscono in `automazione/prova-telegram.log`. Per simulare tap e risposte si crea `automazione/prova-updates.json` con gli aggiornamenti finti e si lancia `telegram.mjs`. Esempi in [Sviluppo](06-sviluppo.md#test-in-modalità-prova). Il log e il file dei finti aggiornamenti sono esclusi da git.

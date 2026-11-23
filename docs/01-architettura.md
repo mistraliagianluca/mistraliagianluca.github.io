@@ -11,7 +11,7 @@ flowchart TB
     CJ["⏰ cron-job.org<br>ogni minuto"]
     subgraph Actions["⚙️ GitHub Actions"]
         direction LR
-        W3["Bot Telegram<br>telegram.yml<br>(anche la bozza del lunedì)"]
+        W3["Bot Telegram<br>telegram.yml<br>(sondaggio del lunedì, radar eventi)"]
         W2["Post settimanale<br>solo a mano"]
         W1["Pubblica sito<br>deploy.yml"]
         W4["Documentazione<br>documentazione.yml"]
@@ -24,7 +24,7 @@ flowchart TB
     end
     subgraph Repo["📁 Repository GitHub"]
         direction LR
-        DATI["src/ + src/data/<br>sito, prezzi, info, promo"]
+        DATI["src/ + src/data/<br>sito, prezzi, coperture, bordo,<br>faq, foto, info, promo"]
         DIARIO["src/content/diario/<br>articoli"]
         AUTO["automazione/<br>codice, bozze, stato.json"]
         DOCS["docs/"]
@@ -36,6 +36,7 @@ flowchart TB
     W3 --> Claude & Gemini
     W2 -.-> Claude
     W3 -- "salva articoli<br>e stato" --> DIARIO & AUTO
+    W3 -- "offerta confermata<br>(promo.md)" --> DATI
     W3 -- "avvia" --> W1
     DATI & DIARIO --> W1 --> Pages
     W4 -- "rigenera" --> DOCS
@@ -47,7 +48,7 @@ flowchart TB
 | **GitHub Pages** | Pubblica il sito sul dominio `www.mistralia.co` | impostazioni del repository → Pages | gratis |
 | **Pubblica sito** | Ricostruisce il sito e lo mette online | `.github/workflows/deploy.yml` | gratis |
 | **Post settimanale** | Prepara subito una bozza, **solo se avviato a mano** (la bozza del lunedì la prepara il bot) | `.github/workflows/post-settimanale.yml` → `automazione/genera.mjs` | Claude + Gemini a consumo |
-| **Bot Telegram** | Legge tap e risposte nel gruppo ed esegue: pubblica, rigenera, corregge. **Il lunedì dalle 9 prepara la bozza della settimana** | `.github/workflows/telegram.yml` → `automazione/telegram.mjs` → `genera.mjs` | gratis (costa solo quando prepara una bozza) |
+| **Bot Telegram** | Legge tap, risposte e voti nel gruppo ed esegue: pubblica, rigenera, corregge. **Il lunedì dalle 9 manda il sondaggio sul tema della settimana** e dopo il voto prepara la bozza. **Martedì e venerdì dalle 11 il radar eventi** propone 2–3 eventi, anche con un'offerta da attivare sul sito | `.github/workflows/telegram.yml` → `automazione/telegram.mjs` → `genera.mjs`, `sondaggio.mjs`, `radar.mjs` | gratis (costano solo le chiamate a Claude e Gemini) |
 | **Sveglia (cron-job.org)** | Ogni minuto chiede a GitHub di avviare il Bot Telegram | cron-job.org, account di Gianluca | gratis |
 | **Documentazione** | Rigenera il [riferimento tecnico](riferimento.md) e controlla che il [registro](registro-modifiche.md) sia aggiornato | `.github/workflows/documentazione.yml` → `automazione/documentazione.mjs` | gratis |
 | **Claude** | Scrive testi e articoli, cerca sul web, **verifica i fatti** in una seconda chiamata indipendente | API Anthropic, modello in `automazione/config.json` | ~$2 / milione di token + $0,01 a ricerca |
@@ -74,7 +75,10 @@ sequenceDiagram
     participant P as Pubblica sito
 
     S->>PS: avvia il bot (lunedì: primo giro dopo le 9)
-    PS->>C: scrivi un post (cerca sul web)
+    PS->>C: 3 proposte di tema (sondaggio.md)
+    PS->>T: 🗳 sondaggio con le 3 proposte
+    T-->>PS: voti (per 4 ore, o finché hanno votato tutti)
+    PS->>C: scrivi un post sul tema vincente (cerca sul web)
     C-->>PS: testi IT/EN, articolo, hashtag, fonti
     PS->>V: verifica ogni fatto (ricerca indipendente)
     alt fatti confermati
@@ -85,7 +89,7 @@ sequenceDiagram
         PS->>V: verifica di nuovo
     end
     PS->>G: immagine dalle foto del Kentucky
-    PS->>T: bozza con ✅ Pubblica / 🔄 Rigenera
+    PS->>T: bozza con ✅ Pubblica / 🔄 Rigenera + 💬 "Che ne pensate?"
     PS->>R: salva bozza e stato
     T->>B: un membro preme ✅ Pubblica
     Note over B: legge al giro successivo
@@ -95,7 +99,7 @@ sequenceDiagram
     P-->>T: articolo online in 2–4 minuti
 ```
 
-Il dettaglio di ogni passo è in [Automazione](04-automazione.md).
+La stessa bozza può partire anche da uno **spunto del radar eventi** (✍️ Prepara la bozza, o 🏷 Post + offerta dopo aver attivato l'offerta sul sito) o dal comando `/nuovo`. Il dettaglio di ogni passo è in [Automazione](04-automazione.md).
 
 ## Flusso 2: un cliente prenota
 
@@ -127,11 +131,15 @@ Le modifiche alla sola cartella `automazione/`, a `docs/` e ai file README non a
 
 | Dato | File | Chi lo cambia |
 | --- | --- | --- |
-| Prezzi, stagioni (periodi), minimi, piani, extra | `src/data/prezzi.json` | Gianluca, dal pannello `/admin` |
-| Contatti, ritiro, kit, regole, FAQ, foto | `src/data/info.json` | Gianluca, dal pannello `/admin` |
-| Promo del momento | `src/data/promo.md` | Gianluca, dal pannello `/admin` |
+| Prezzi, stagioni, minimi, km | `src/data/prezzi.json` | Gianluca, dal pannello `/admin` |
+| Piani, quota, extra | `src/data/coperture.json` | Gianluca, dal pannello |
+| Kit, preparazione, riconsegna, regole | `src/data/bordo.json` | Gianluca, dal pannello |
+| Domande frequenti | `src/data/faq.json` | Gianluca, dal pannello |
+| Foto di apertura e galleria | `src/data/foto.json` | Gianluca, dal pannello |
+| Contatti, ritiro, calendario, azienda | `src/data/info.json` | Gianluca, dal pannello |
+| Promo del momento | `src/data/promo.md` | Gianluca, dal pannello `/admin`; oppure il bot, dopo la conferma nel gruppo (radar → Post + offerta) |
 | Testi fissi del sito | `src/i18n/it.json`, `src/i18n/en.json` | il team (a mano) |
-| Articoli del Diario | `src/content/diario/*.it.md` / `*.en.md` | il bot, con ✅ Pubblica |
+| Articoli del Diario (con il tipo: offerta, evento, idea) | `src/content/diario/*.it.md` / `*.en.md` | il bot, con ✅ Pubblica; correzioni dal pannello |
 | Immagini degli articoli | `public/assets/diario/` | il bot |
 | Foto della galleria | `public/assets/gallery/` | Gianluca, dal pannello `/admin` |
 | Bozze (anche quelle scartate) | `automazione/bozze/<data-tema>/` | il bot |

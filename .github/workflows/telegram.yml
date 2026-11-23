@@ -1,5 +1,6 @@
-# Ogni 15 minuti (dalle 7 alle 22) legge i pulsanti e le risposte nel gruppo Telegram.
-# Se qualcuno ha premuto "Pubblica", salva l'articolo e ripubblica il sito.
+# Legge i pulsanti, le risposte e i voti nel gruppo Telegram e fa i lavori a orario (sondaggio del lunedì, radar eventi).
+# Lo sveglia cron-job.org ogni minuto; il cron qui sotto è solo una riserva.
+# Se è cambiato qualcosa del sito (articolo pubblicato, traduzione, offerta attivata dal radar) ripubblica il sito.
 name: Bot Telegram
 
 on:
@@ -38,9 +39,9 @@ jobs:
         run: |
           git config user.name "Mistralia bot"
           git config user.email "bot@mistralia.co"
-          git add automazione src/content/diario public/assets/diario
+          git add automazione src/content/diario public/assets/diario src/data/promo.md
           git diff --cached --quiet || git commit -m "Bot Telegram: aggiornamento" && git pull --rebase --autostash && git push
-      - name: Ripubblica il sito se c'è un nuovo articolo
+      - name: Ripubblica il sito se è cambiato qualcosa (articolo, traduzione, offerta)
         run: if [ -f automazione/.da-pubblicare ]; then gh workflow run deploy.yml --ref main; fi
         env:
           GH_TOKEN: ${{ github.token }}

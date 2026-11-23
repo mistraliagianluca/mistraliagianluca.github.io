@@ -1,5 +1,6 @@
 # Pannello www.mistralia.co/admin (Sveltia CMS).
-# Ogni "Salva" fa un commit su main: "Pubblica sito" mette online la modifica in circa 2 minuti.
+# Ogni "Save" fa un commit su main: "Pubblica sito" mette online la modifica in circa 2 minuti.
+# Una sezione del pannello = un file in src/data (o la cartella del Diario). Il sito li unisce in src/lib/site.ts.
 # Documentazione: docs/03-sito.md → "Il pannello /admin". Se cambi questo file aggiorna docs/ e il registro.
 
 backend:
@@ -14,240 +15,31 @@ backend:
 media_folder: public/assets/gallery
 public_folder: /assets/gallery
 
+# Niente anteprima affiancata: il modulo occupa tutta la larghezza ed è più leggibile
+editor:
+  preview: false
+
 output:
   omit_empty_optional_fields: true   # campi facoltativi vuoti non scritti (es. nessuna scadenza)
   json:
     indent_style: space
     indent_size: 2
 
+# ============================================================== DIARIO (articoli)
+# Ogni articolo ha due file: <chiave>.it.md e <chiave>.en.md. Il pannello mostra SOLO l'italiano:
+# la versione inglese la riallinea il bot (automazione/traduzioni.mjs) entro pochi minuti, anche se l'articolo viene eliminato.
 collections:
-  - name: dati
-    label: Dati del sito
-    files:
-      # ------------------------------------------------------------------ PREZZI
-      - name: prezzi
-        label: Prezzi, stagioni e condizioni
-        file: src/data/prezzi.json
-        format: json
-        fields:
-          - name: prezzoGiorno
-            label: Prezzo al giorno (€)
-            widget: object
-            fields:
-              - { name: B, label: Bassa stagione, widget: number, value_type: int, min: 0 }
-              - { name: M, label: Media stagione, widget: number, value_type: int, min: 0 }
-              - { name: A, label: Alta stagione, widget: number, value_type: int, min: 0 }
-          - name: periodi
-            label: Stagioni (periodi)
-            label_singular: periodo
-            hint: "Ogni giorno deve stare in un periodo. I giorni non coperti valgono come media stagione. Metti i periodi in ordine di data."
-            widget: list
-            summary: "{{fields.dal}} → {{fields.al}} · {{fields.stagione}}"
-            fields:
-              - { name: dal, label: Dal, widget: datetime, type: date, picker_utc: true }
-              - { name: al, label: Al (compreso), widget: datetime, type: date, picker_utc: true }
-              - name: stagione
-                label: Stagione
-                widget: select
-                options:
-                  - { label: Bassa, value: B }
-                  - { label: Media, value: M }
-                  - { label: Alta, value: A }
-          - name: minimoGiorni
-            label: Noleggio minimo (giorni), secondo la stagione del giorno di ritiro
-            widget: object
-            fields:
-              - { name: B, label: Bassa, widget: number, value_type: int, min: 1 }
-              - { name: M, label: Media, widget: number, value_type: int, min: 1 }
-              - { name: A, label: Alta, widget: number, value_type: int, min: 1 }
-          - name: minimoEccezioni
-            label: Eccezioni al noleggio minimo
-            label_singular: eccezione
-            hint: "Valgono per i ritiri tra le due date e prevalgono sul minimo della stagione."
-            widget: list
-            required: false
-            summary: "{{fields.dal}} → {{fields.al}}: {{fields.giorni}} giorni"
-            fields:
-              - { name: dal, label: Ritiri dal, widget: datetime, type: date, picker_utc: true }
-              - { name: al, label: Ritiri al, widget: datetime, type: date, picker_utc: true }
-              - { name: giorni, label: Giorni minimi, widget: number, value_type: int, min: 1 }
-          - name: kmInclusiGiorno
-            label: Km inclusi al giorno
-            hint: "Vuoto = il sito mostra solo il prezzo del km extra."
-            widget: number
-            value_type: int
-            required: false
-          - { name: prezzoKmExtra, label: Prezzo km extra (€), widget: number, value_type: float, step: 0.01, min: 0 }
-          - name: piani
-            label: Piani (coperture)
-            hint: "I nomi dei piani sono nei testi del sito (plan_basic, plan_plus, plan_premium): qui si cambiano solo i valori."
-            widget: list
-            allow_add: false
-            allow_remove: false
-            allow_reorder: false
-            summary: "{{fields.id}}: +€{{fields.supplementoGiorno}}/giorno, cauzione €{{fields.cauzione}}"
-            fields:
-              - { name: id, label: Codice (non modificare), widget: hidden }
-              - { name: supplementoGiorno, label: Supplemento al giorno (€), widget: number, value_type: int, min: 0 }
-              - { name: cauzione, label: Cauzione (€), widget: number, value_type: int, min: 0 }
-              - name: franchigia
-                label: Franchigia
-                widget: select
-                options:
-                  - { label: Standard, value: standard }
-                  - { label: Azzerata, value: azzerata }
-              - { name: secondoGuidatore, label: Secondo guidatore incluso, widget: boolean, required: false, default: false }
-          - name: servizio
-            label: Quota obbligatoria (una volta per noleggio)
-            widget: object
-            fields:
-              - { name: importo, label: Importo (€), widget: number, value_type: int, min: 0 }
-              - { name: it, label: Descrizione in italiano, widget: string }
-              - { name: en, label: Descrizione in inglese, widget: string }
-          - name: extra
-            label: Extra facoltativi (prezzo per noleggio)
-            label_singular: extra
-            widget: list
-            summary: "{{fields.it}}: €{{fields.importo}}"
-            fields:
-              - name: id
-                label: Codice breve (minuscole, senza spazi)
-                widget: string
-                pattern: ['^[a-z0-9-]+$', "Solo lettere minuscole, numeri e trattini"]
-              - { name: importo, label: Prezzo (€), widget: number, value_type: int, min: 0 }
-              - name: unita
-                label: Il prezzo è…
-                hint: "Nel calcolatore: a persona moltiplica per le persone, a letto e a tratta fanno scegliere la quantità."
-                widget: select
-                default: noleggio
-                options:
-                  - { label: "a noleggio", value: noleggio }
-                  - { label: "a persona", value: persona }
-                  - { label: "a letto", value: letto }
-                  - { label: "a tratta (andata o ritorno)", value: tratta }
-              - { name: it, label: "Nome in italiano (senza l'unità: la aggiunge il sito)", widget: string }
-              - { name: en, label: "Nome in inglese (senza l'unità)", widget: string }
-
-      # ------------------------------------------------------------------ PROMO
-      - name: promo
-        label: Promozione
-        file: src/data/promo.md
-        format: yaml-frontmatter
-        fields:
-          - { name: attiva, label: Promo attiva, widget: boolean, hint: "Spenta = sparisce subito banner e sconto." }
-          - { name: nome, label: Nome interno, widget: string }
-          - { name: sconto, label: Sconto (%), widget: number, value_type: int, min: 0, max: 90 }
-          - { name: mostra_dal, label: Banner visibile dal, widget: datetime, type: date, picker_utc: true }
-          - { name: mostra_al, label: Banner visibile fino al, widget: datetime, type: date, picker_utc: true, hint: "Dopo questa data il banner sparisce da solo (il sito si ricostruisce ogni notte)." }
-          - { name: noleggi_dal, label: Sconto sui noleggi che iniziano dal, widget: datetime, type: date, picker_utc: true }
-          - { name: noleggi_al, label: …fino al, widget: datetime, type: date, picker_utc: true }
-          - { name: titolo_it, label: Testo del banner in italiano, widget: string }
-          - { name: titolo_en, label: Testo del banner in inglese, widget: string }
-
-      # ------------------------------------------------------------------ INFO
-      - name: info
-        label: Contatti, ritiro, kit, regole, FAQ e foto
-        file: src/data/info.json
-        format: json
-        fields:
-          - name: whatsapp
-            label: Numero WhatsApp
-            hint: "Con prefisso, senza + e senza spazi (es. 393756473839)."
-            widget: string
-            pattern: ['^[0-9]{8,15}$', "Solo cifre, con il prefisso internazionale"]
-          - { name: telefoni, label: Telefoni mostrati sul sito, widget: list, field: { name: numero, label: Numero, widget: string } }
-          - { name: email, label: Email, widget: string }
-          - name: ritiro
-            label: Ritiro e riconsegna
-            widget: object
-            fields:
-              - { name: indirizzo, label: "Indirizzo (quello per i clienti, non la sede legale)", widget: string }
-              - { name: mappaUrl, label: Link Google Maps, widget: string }
-              - { name: orari, label: Orari, widget: string }
-          - name: galleria
-            label: Galleria foto (in ordine)
-            hint: "Trascina per riordinare. Foto orizzontali, JPG, meglio sotto i 500 KB."
-            widget: image
-            multiple: true
-          - { name: fotoApertura, label: Foto grande in cima, widget: image }
-          - { name: fotoAperturaRiserva, label: Foto di riserva (se manca quella in cima), widget: image }
-          - name: calendarioEmbedUrl
-            label: Link "incorpora" del Google Calendar delle date occupate
-            hint: "Vuoto = il sito invita a chiedere la disponibilità su WhatsApp."
-            widget: string
-            required: false
-          - name: kit
-            label: Cosa è incluso (kit)
-            label_singular: gruppo
-            widget: list
-            summary: "{{fields.titolo.it}}"
-            fields:
-              - { name: titolo, label: Titolo, widget: object, fields: [ { name: it, label: Italiano, widget: string }, { name: en, label: Inglese, widget: string } ] }
-              - { name: voci, label: Cosa comprende, widget: object, fields: [ { name: it, label: Italiano, widget: text }, { name: en, label: Inglese, widget: text } ] }
-              - name: icona
-                label: Icona
-                widget: select
-                required: false
-                options:
-                  - { label: "Carburante / viaggio", value: carburante }
-                  - { label: "Benvenuto / caffè", value: benvenuto }
-                  - { label: "Sicurezza", value: sicurezza }
-                  - { label: "Energia", value: energia }
-                  - { label: "Cucina", value: cucina }
-                  - { label: "Esterno e relax", value: relax }
-                  - { label: "Igiene", value: igiene }
-                  - { label: "Comfort / clima", value: comfort }
-                  - { label: "Spunta generica", value: incluso }
-          - name: preparazione
-            label: "Prima di ogni partenza (preparazione: pulizia, gas, pastiglie WC…)"
-            widget: object
-            fields:
-              - { name: it, label: Italiano, widget: list, field: { name: voce, label: Voce, widget: string } }
-              - { name: en, label: Inglese, widget: list, field: { name: voce, label: Voce, widget: string } }
-          - name: riconsegna
-            label: Come va riconsegnato
-            widget: object
-            fields:
-              - { name: it, label: Italiano, widget: list, field: { name: voce, label: Voce, widget: string } }
-              - { name: en, label: Inglese, widget: list, field: { name: voce, label: Voce, widget: string } }
-          - name: regole
-            label: Regole
-            label_singular: regola
-            widget: list
-            summary: "{{fields.it}}"
-            fields:
-              - { name: it, label: Italiano, widget: string }
-              - { name: en, label: Inglese, widget: string }
-          - name: faq
-            label: Domande frequenti
-            label_singular: domanda
-            hint: "Ogni lingua: prima la domanda, poi la risposta. Una FAQ con DA_CONFERMARE non viene mostrata."
-            widget: list
-            fields:
-              - { name: it, label: "Italiano: domanda e risposta", widget: list, min: 2, max: 2, field: { name: testo, label: Testo, widget: text } }
-              - { name: en, label: "Inglese: domanda e risposta", widget: list, min: 2, max: 2, field: { name: testo, label: Testo, widget: text } }
-          - { name: ragioneSociale, label: Ragione sociale, widget: string }
-          - { name: sedeLegale, label: Sede legale (solo piè di pagina), widget: string }
-          - { name: piva, label: Partita IVA, widget: string }
-          - { name: rea, label: REA, widget: string }
-          - name: goatcounter
-            label: Codice GoatCounter (statistiche, facoltativo)
-            widget: string
-            required: false
-
-  # -------------------------------------------------------------------- DIARIO
-  # Ogni articolo ha due file: <chiave>.it.md e <chiave>.en.md. Il pannello mostra SOLO l'italiano:
-  # la versione inglese la riallinea il bot (automazione/traduzioni.mjs) entro pochi minuti, anche se l'articolo viene eliminato.
   - name: diario
-    label: Diario di bordo (articoli)
+    label: Diario
     label_singular: articolo
+    icon: menu_book
+    description: "Gli articoli li scrive e pubblica il bot Telegram. Qui li correggi, li archivi o li elimini. In cima quelli in vetrina 🟢, sotto i conclusi ⚪ e gli archiviati ⚫."
     folder: src/content/diario
     extension: md
     format: yaml-frontmatter
     create: false
     media_folder: /public/assets/diario
     public_folder: /assets/diario
-    # In cima gli articoli in vetrina, sotto quelli conclusi o archiviati, ognuno dal più recente.
     # "stato" e "ordine" li aggiorna il bot a ogni giro (automazione/traduzioni.mjs).
     summary: "{{stato}} · {{titolo}} · {{data}}"
     filter: { field: lingua, value: it }
@@ -262,17 +54,26 @@ collections:
       - { name: chiave, label: Chiave, widget: hidden }
       - { name: stato, label: Stato, widget: hidden }
       - { name: ordine, label: Ordine, widget: hidden }
+      - name: categoria
+        label: Tipo di articolo
+        hint: "Decide l'etichetta e il filtro nella pagina Diario. Offerta = legato alla promo: va in evidenza in home finché la promo è visibile."
+        widget: select
+        required: false
+        options:
+          - { label: "🧭 Idea di viaggio", value: idea }
+          - { label: "📅 Evento", value: evento }
+          - { label: "🏷 Offerta", value: offerta }
       - { name: data, label: Data di pubblicazione, widget: datetime, type: date, picker_utc: true }
       - name: scadenza
-        label: Fine dell'evento
-        hint: "Dal giorno dopo l'articolo esce dalla home e la sua pagina dice che l'evento è concluso. Vuoto = nessuna scadenza (luoghi, itinerari)."
+        label: Fine dell'evento o dell'offerta
+        hint: "Dal giorno dopo l'articolo esce dalla home e va nell'archivio. Vuoto = nessuna scadenza (luoghi, itinerari)."
         widget: datetime
         type: date
         picker_utc: true
         required: false
       - name: nascosto
         label: Archivia (togli dalla home)
-        hint: "Acceso = l'articolo esce dalla home ma la pagina resta raggiungibile da chi ha il link, con l'avviso 'in archivio'. Per togliere un articolo sbagliato usa Delete."
+        hint: "Acceso = l'articolo esce dalla home e dal Diario ma la pagina resta raggiungibile da chi ha il link, con l'avviso 'in archivio'. Per togliere un articolo sbagliato usa Delete."
         widget: boolean
         required: false
         default: false
@@ -280,3 +81,271 @@ collections:
       - { name: immagine, label: Immagine, widget: image }
       - { name: immagineAI, label: Immagine creata con AI (mostra la nota), widget: boolean, required: false, default: true }
       - { name: body, label: Testo dell'articolo, widget: markdown, hint: "Scrivi solo in italiano: la versione inglese viene tradotta e aggiornata in automatico entro pochi minuti." }
+
+# ============================================================== SEZIONI (un file ciascuna)
+singletons:
+  # -------------------------------------------------------------- PREZZI
+  - name: prezzi
+    label: Prezzi e stagioni
+    icon: euro
+    file: src/data/prezzi.json
+    format: json
+    fields:
+      - name: prezzoGiorno
+        label: Prezzo al giorno (€)
+        widget: object
+        fields:
+          - { name: B, label: Bassa stagione, widget: number, value_type: int, min: 0 }
+          - { name: M, label: Media stagione, widget: number, value_type: int, min: 0 }
+          - { name: A, label: Alta stagione, widget: number, value_type: int, min: 0 }
+      - name: periodi
+        label: Calendario delle stagioni
+        label_singular: periodo
+        hint: "Un periodo per riga, in ordine di data. I giorni non coperti valgono come media stagione. Tocca una riga per aprirla."
+        widget: list
+        collapsed: true
+        summary: "{{fields.dal}} → {{fields.al}} · {{fields.stagione}}"
+        fields:
+          - { name: dal, label: Dal, widget: datetime, type: date, picker_utc: true }
+          - { name: al, label: Al (compreso), widget: datetime, type: date, picker_utc: true }
+          - name: stagione
+            label: Stagione
+            widget: select
+            options:
+              - { label: Bassa, value: B }
+              - { label: Media, value: M }
+              - { label: Alta, value: A }
+      - name: minimoGiorni
+        label: Noleggio minimo (giorni)
+        hint: "Secondo la stagione del giorno di ritiro."
+        widget: object
+        fields:
+          - { name: B, label: Bassa, widget: number, value_type: int, min: 1 }
+          - { name: M, label: Media, widget: number, value_type: int, min: 1 }
+          - { name: A, label: Alta, widget: number, value_type: int, min: 1 }
+      - name: minimoEccezioni
+        label: Eccezioni al noleggio minimo
+        label_singular: eccezione
+        hint: "Per i ritiri tra le due date valgono questi giorni minimi, al posto di quelli della stagione (es. ponti e Natale)."
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.dal}} → {{fields.al}}: {{fields.giorni}} giorni"
+        fields:
+          - { name: dal, label: Ritiri dal, widget: datetime, type: date, picker_utc: true }
+          - { name: al, label: Ritiri al, widget: datetime, type: date, picker_utc: true }
+          - { name: giorni, label: Giorni minimi, widget: number, value_type: int, min: 1 }
+      - name: kmInclusiGiorno
+        label: Km inclusi al giorno
+        hint: "Vuoto = il sito mostra solo il prezzo del km extra."
+        widget: number
+        value_type: int
+        required: false
+      - { name: prezzoKmExtra, label: Prezzo di ogni km in più (€), widget: number, value_type: float, step: 0.01, min: 0 }
+
+  # -------------------------------------------------------------- PIANI, QUOTA, EXTRA
+  - name: coperture
+    label: Piani ed extra
+    icon: shield
+    file: src/data/coperture.json
+    format: json
+    fields:
+      - name: piani
+        label: Piani di copertura
+        hint: "I nomi dei piani (Basic, Plus, Premium) sono nei testi del sito: qui si cambiano solo i valori."
+        widget: list
+        allow_add: false
+        allow_remove: false
+        allow_reorder: false
+        collapsed: true
+        summary: "{{fields.id}}: +€{{fields.supplementoGiorno}} al giorno · cauzione €{{fields.cauzione}}"
+        fields:
+          - { name: id, label: Codice (non modificare), widget: hidden }
+          - { name: supplementoGiorno, label: Supplemento al giorno (€), widget: number, value_type: int, min: 0 }
+          - { name: cauzione, label: Cauzione (€), widget: number, value_type: int, min: 0 }
+          - name: franchigia
+            label: Franchigia
+            widget: select
+            options:
+              - { label: Standard, value: standard }
+              - { label: Azzerata, value: azzerata }
+          - { name: secondoGuidatore, label: Secondo guidatore incluso, widget: boolean, required: false, default: false }
+      - name: servizio
+        label: Quota obbligatoria (una volta per noleggio)
+        widget: object
+        fields:
+          - { name: importo, label: Importo (€), widget: number, value_type: int, min: 0 }
+          - { name: it, label: Descrizione in italiano, widget: string }
+          - { name: en, label: Descrizione in inglese, widget: string }
+      - name: extra
+        label: Extra facoltativi
+        label_singular: extra
+        hint: "Tocca un extra per modificarlo. Il prezzo può essere a noleggio, a persona, a letto o a tratta."
+        widget: list
+        collapsed: true
+        summary: "{{fields.it}}: €{{fields.importo}} ({{fields.unita}})"
+        fields:
+          - { name: it, label: "Nome in italiano (senza l'unità: la aggiunge il sito)", widget: string }
+          - { name: en, label: "Nome in inglese (senza l'unità)", widget: string }
+          - { name: importo, label: Prezzo (€), widget: number, value_type: int, min: 0 }
+          - name: unita
+            label: Il prezzo è…
+            hint: "Nel calcolatore: a persona moltiplica per le persone, a letto e a tratta fanno scegliere la quantità."
+            widget: select
+            default: noleggio
+            options:
+              - { label: "a noleggio", value: noleggio }
+              - { label: "a persona", value: persona }
+              - { label: "a letto", value: letto }
+              - { label: "a tratta (andata o ritorno)", value: tratta }
+          - name: id
+            label: Codice breve (minuscole, senza spazi)
+            hint: "Solo per i nuovi extra. Non cambiarlo per quelli esistenti."
+            widget: string
+            pattern: ['^[a-z0-9-]+$', "Solo lettere minuscole, numeri e trattini"]
+
+  # -------------------------------------------------------------- PROMO
+  - name: promo
+    label: Promozione
+    icon: sell
+    file: src/data/promo.md
+    format: yaml-frontmatter
+    fields:
+      - { name: attiva, label: Promo attiva, widget: boolean, hint: "Spenta = spariscono subito banner, sconto e articolo in evidenza. La può attivare anche il bot (radar eventi → Post + offerta)." }
+      - { name: titolo_it, label: Testo del banner in italiano, widget: string }
+      - { name: titolo_en, label: Testo del banner in inglese, widget: string }
+      - { name: sconto, label: Sconto (%), widget: number, value_type: int, min: 0, max: 90 }
+      - { name: noleggi_dal, label: Sconto sui noleggi che iniziano dal, widget: datetime, type: date, picker_utc: true }
+      - { name: noleggi_al, label: …fino al, widget: datetime, type: date, picker_utc: true }
+      - { name: mostra_dal, label: Banner visibile dal, widget: datetime, type: date, picker_utc: true }
+      - { name: mostra_al, label: Banner visibile fino al, widget: datetime, type: date, picker_utc: true, hint: "Dopo questa data il banner sparisce da solo (il sito si ricostruisce ogni notte)." }
+      - { name: nome, label: Nome interno, widget: string, hint: "Compare nel calcolatore e nel messaggio WhatsApp (es. Black Friday)." }
+
+  - divider: true
+
+  # -------------------------------------------------------------- A BORDO
+  - name: bordo
+    label: A bordo
+    icon: checklist
+    file: src/data/bordo.json
+    format: json
+    fields:
+      - name: kit
+        label: Cosa c'è a bordo
+        label_singular: gruppo
+        hint: "Un gruppo per riquadro del sito. Tocca un gruppo per modificarlo."
+        widget: list
+        collapsed: true
+        summary: "{{fields.titolo.it}}"
+        fields:
+          - { name: titolo, label: Titolo, widget: object, fields: [ { name: it, label: Italiano, widget: string }, { name: en, label: Inglese, widget: string } ] }
+          - { name: voci, label: Cosa comprende, widget: object, fields: [ { name: it, label: Italiano, widget: text }, { name: en, label: Inglese, widget: text } ] }
+          - name: icona
+            label: Icona
+            widget: select
+            required: false
+            options:
+              - { label: "Carburante / viaggio", value: carburante }
+              - { label: "Benvenuto / caffè", value: benvenuto }
+              - { label: "Sicurezza", value: sicurezza }
+              - { label: "Energia", value: energia }
+              - { label: "Cucina", value: cucina }
+              - { label: "Esterno e relax", value: relax }
+              - { label: "Igiene", value: igiene }
+              - { label: "Comfort / clima", value: comfort }
+              - { label: "Spunta generica", value: incluso }
+      - name: preparazione
+        label: "Prima di ogni partenza (pulizia, gas, pastiglie WC…)"
+        widget: object
+        collapsed: true
+        fields:
+          - { name: it, label: Italiano, widget: list, field: { name: voce, label: Voce, widget: string } }
+          - { name: en, label: Inglese, widget: list, field: { name: voce, label: Voce, widget: string } }
+      - name: riconsegna
+        label: Come va riconsegnato
+        widget: object
+        collapsed: true
+        fields:
+          - { name: it, label: Italiano, widget: list, field: { name: voce, label: Voce, widget: string } }
+          - { name: en, label: Inglese, widget: list, field: { name: voce, label: Voce, widget: string } }
+      - name: regole
+        label: Regole
+        label_singular: regola
+        widget: list
+        collapsed: true
+        summary: "{{fields.it}}"
+        fields:
+          - { name: it, label: Italiano, widget: string }
+          - { name: en, label: Inglese, widget: string }
+
+  # -------------------------------------------------------------- FAQ
+  - name: faq
+    label: FAQ
+    icon: quiz
+    file: src/data/faq.json
+    format: json
+    fields:
+      - name: faq
+        label: Domande frequenti
+        label_singular: domanda
+        hint: "Tocca una domanda per modificarla; trascina per cambiare l'ordine. Una risposta che contiene DA_CONFERMARE non viene mostrata sul sito."
+        widget: list
+        collapsed: true
+        summary: "{{fields.domanda}}"
+        fields:
+          - { name: domanda, label: Domanda, widget: string }
+          - { name: risposta, label: Risposta, widget: text }
+          - { name: question, label: Domanda in inglese, widget: string }
+          - { name: answer, label: Risposta in inglese, widget: text }
+
+  # -------------------------------------------------------------- FOTO
+  - name: foto
+    label: Foto
+    icon: photo_library
+    file: src/data/foto.json
+    format: json
+    fields:
+      - { name: fotoApertura, label: Foto grande in cima, widget: image }
+      - { name: fotoAperturaRiserva, label: Foto di riserva (se manca quella in cima), widget: image }
+      - name: galleria
+        label: Galleria (in ordine)
+        hint: "Trascina per riordinare. Foto orizzontali, JPG, meglio sotto i 500 KB."
+        widget: image
+        multiple: true
+
+  - divider: true
+
+  # -------------------------------------------------------------- CONTATTI
+  - name: info
+    label: Contatti
+    icon: contact_phone
+    file: src/data/info.json
+    format: json
+    fields:
+      - name: whatsapp
+        label: Numero WhatsApp
+        hint: "Con prefisso, senza + e senza spazi (es. 393756473839)."
+        widget: string
+        pattern: ['^[0-9]{8,15}$', "Solo cifre, con il prefisso internazionale"]
+      - { name: telefoni, label: Telefoni mostrati sul sito, widget: list, field: { name: numero, label: Numero, widget: string } }
+      - { name: email, label: Email, widget: string }
+      - name: ritiro
+        label: Ritiro e riconsegna
+        widget: object
+        fields:
+          - { name: indirizzo, label: "Indirizzo (quello per i clienti, non la sede legale)", widget: string }
+          - { name: mappaUrl, label: Link Google Maps, widget: string }
+          - { name: orari, label: Orari, widget: string }
+      - name: calendarioEmbedUrl
+        label: Link "incorpora" del Google Calendar delle date occupate
+        hint: "Vuoto = niente calendario sul sito: si chiede la disponibilità su WhatsApp."
+        widget: string
+        required: false
+      - { name: ragioneSociale, label: Ragione sociale (piè di pagina), widget: string }
+      - { name: sedeLegale, label: Sede legale (solo piè di pagina), widget: string }
+      - { name: piva, label: Partita IVA, widget: string }
+      - { name: rea, label: REA, widget: string }
+      - name: goatcounter
+        label: Codice GoatCounter (statistiche, facoltativo)
+        widget: string
+        required: false

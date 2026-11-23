@@ -4,6 +4,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 
 export const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 export const AUTO = path.join(ROOT, 'automazione');
@@ -36,6 +37,34 @@ export function settimanaISO(d = new Date()) {
   const y = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
   return Math.ceil(((t - y) / 86400000 + 1) / 7);
 }
+/** Ora italiana: { data: 'AAAA-MM-GG', giorno: 1 (lunedì) … 7 (domenica), ora: 0–23 }. */
+export function oraRoma(d = new Date()) {
+  const r = new Date(d.toLocaleString('en-US', { timeZone: 'Europe/Rome' }));
+  const data = `${r.getFullYear()}-${String(r.getMonth() + 1).padStart(2, '0')}-${String(r.getDate()).padStart(2, '0')}`;
+  return { data, giorno: r.getDay() || 7, ora: r.getHours(), r };
+}
+/** Oggi per esteso, per i prompt (es. "lunedì 23 novembre 2026"). */
+export const oggiEsteso = () => new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Rome' });
+/** Data leggibile in italiano da AAAA-MM-GG (es. "12 dicembre"). */
+export const dataIt = (iso, anno = false) => new Date(String(iso).slice(0, 10) + 'T12:00:00Z').toLocaleDateString('it-IT', { day: 'numeric', month: 'long', ...(anno ? { year: 'numeric' } : {}) });
+/** Codice corto (10 caratteri) per i pulsanti di Telegram, che accettano al massimo 64 byte. */
+export const codiceCorto = (s) => crypto.createHash('sha1').update(String(s)).digest('hex').slice(0, 10);
+/** Data AAAA-MM-GG valida? */
+export const eData = (v) => /^\d{4}-\d{2}-\d{2}$/.test(String(v ?? '')) && !isNaN(Date.parse(v));
+/** Spende in modo controllato: errore se il budget del mese è finito. */
+export function controllaBudget(stato) {
+  const budget = config.budgetMensileDollari ?? 15;
+  if (spesaDelMese(stato) >= budget) {
+    throw new Error(`budget del mese raggiunto ($${spesaDelMese(stato).toFixed(2)} su $${budget}). Si riparte il mese prossimo, oppure alzate "budgetMensileDollari" in automazione/config.json.`);
+  }
+}
+/** Aggiunge allo stato la spesa fatta da `prima` (valore di spesaDelGiro()) a ora. */
+export function registraSpesa(stato, prima) {
+  const costo = spesaDelGiro() - prima;
+  if (costo > 0) stato.spesa = { mese: meseCorrente(), dollari: spesaDelMese(stato) + costo };
+  return costo;
+}
+
 export const slug = (s) =>
   String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
     .replace(/[^a-z0-9]+/g, '-').slice(0, 60).replace(/^-+|-+$/g, '') || 'post';
@@ -63,35 +92,68 @@ export const meseCorrente = () => new Date().toISOString().slice(0, 7);
 export const spesaDelMese = (stato) => (stato.spesa?.mese === meseCorrente() ? stato.spesa.dollari : 0);
 
 export async function chiediClaude(prompt, { ricerche = 3, finta = finto } = {}) {
-  if (PROVA) { aggiungiSpesa(0.1); return finta(); }
+  if (PROVA) {
+    // PROVA_PROMPT=file: salva i prompt che verrebbero mandati a Claude, per controllarli
+    if (process.env.PROVA_PROMPT) fs.appendFileSync(process.env.PROVA_PROMPT, `\n\n======== PROMPT (${ricerche} ricerche)\n${prompt}`);
+    aggiungiSpesa(0.1);
+    return finta();
+  }
   const modello = env('ANTHROPIC_MODEL', config.modelloTesti);
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': env('ANTHROPIC_API_KEY'),
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: modello,
-      max_tokens: 8000,
-      ...(ricerche > 0 ? { tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: ricerche }] } : {}),
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(`Claude: ${res.status} ${JSON.stringify(data.error ?? data).slice(0, 400)}`);
-  const u = data.usage || {};
-  const [pin, pout] = config.prezzi?.[modello] || [4, 20];
-  const tokIn = (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) * 1.25 + (u.cache_read_input_tokens || 0) * 0.1;
-  const nRicerche = u.server_tool_use?.web_search_requests || 0;
-  const costo = (tokIn * pin + (u.output_tokens || 0) * pout) / 1e6 + nRicerche * (config.prezzi?.ricercaWeb ?? 0.01);
-  aggiungiSpesa(costo);
-  console.log(`Claude ${modello}: ${u.input_tokens} token in, ${u.output_tokens} out, ${nRicerche} ricerche ≈ $${costo.toFixed(3)}`);
-  const testo = data.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n');
-  const m = [...testo.matchAll(/```json\s*([\s\S]*?)```/g)].pop();
-  const json = m ? m[1] : testo.slice(testo.indexOf('{'), testo.lastIndexOf('}') + 1);
-  return JSON.parse(json);
+  const messaggi = [{ role: 'user', content: prompt }];
+  const tools = ricerche > 0 ? [{ type: 'web_search_20250305', name: 'web_search', max_uses: ricerche }] : undefined;
+
+  // Una chiamata all'API, con 2 nuovi tentativi se il servizio è sovraccarico o risponde in modo illeggibile
+  async function chiama() {
+    for (let tentativo = 1; ; tentativo++) {
+      const res = await fetch(`${process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com'}/v1/messages`, {
+        method: 'POST',
+        headers: { 'x-api-key': env('ANTHROPIC_API_KEY'), 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+        body: JSON.stringify({ model: modello, max_tokens: 16000, ...(tools ? { tools } : {}), messages: messaggi }),
+      });
+      const grezzo = await res.text();
+      let data = null;
+      try { data = JSON.parse(grezzo); } catch { /* risposta vuota o non JSON: gestita sotto */ }
+      const riprovabile = !data || [429, 500, 502, 503, 529].includes(res.status);
+      if (res.ok && data) return data;
+      if (riprovabile && tentativo < 3) {
+        const attesa = tentativo * Number(process.env.ATTESA_MS || 20000);
+        console.log(`Claude: risposta ${res.status} ${data ? '' : '(vuota o illeggibile)'}, nuovo tentativo tra ${Math.round(attesa / 1000)}s`);
+        await new Promise((r) => setTimeout(r, attesa));
+        continue;
+      }
+      throw new Error(`Claude: ${res.status} ${data ? JSON.stringify(data.error ?? data).slice(0, 300) : 'risposta vuota o non leggibile'}`);
+    }
+  }
+  const conta = (data) => {
+    const u = data.usage || {};
+    const [pin, pout] = config.prezzi?.[modello] || [4, 20];
+    const tokIn = (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) * 1.25 + (u.cache_read_input_tokens || 0) * 0.1;
+    const nRicerche = u.server_tool_use?.web_search_requests || 0;
+    const costo = (tokIn * pin + (u.output_tokens || 0) * pout) / 1e6 + nRicerche * (config.prezzi?.ricercaWeb ?? 0.01);
+    aggiungiSpesa(costo);
+    console.log(`Claude ${modello}: ${u.input_tokens} token in, ${u.output_tokens} out, ${nRicerche} ricerche, stop ${data.stop_reason} ≈ $${costo.toFixed(3)}`);
+  };
+  const estrai = (testo) => {
+    const m = [...testo.matchAll(/```json\s*([\s\S]*?)```/g)].pop();
+    const json = m ? m[1] : testo.includes('{') ? testo.slice(testo.indexOf('{'), testo.lastIndexOf('}') + 1) : '';
+    try { return json ? JSON.parse(json) : null; } catch { return null; }
+  };
+
+  let testo = '';
+  for (let giro = 1; giro <= 4; giro++) {
+    const data = await chiama();
+    conta(data);
+    messaggi.push({ role: 'assistant', content: data.content });
+    testo += data.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n');
+    // Con la ricerca web l'API può fermarsi a metà ("pause_turn"): si rimanda la conversazione così com'è per farla finire
+    if (data.stop_reason === 'pause_turn') continue;
+    const risultato = estrai(testo);
+    if (risultato) return risultato;
+    // Niente JSON valido (risposta troncata o solo testo): si chiede di ripetere soltanto il blocco JSON, senza nuove ricerche
+    messaggi.push({ role: 'user', content: 'La risposta non contiene un blocco ```json completo e valido. Rispondi ora SOLO con il blocco ```json richiesto, completo, senza altro testo e senza nuove ricerche.' });
+    testo = '';
+  }
+  throw new Error('Claude non ha restituito un JSON valido dopo 4 tentativi');
 }
 
 // ---------- Gemini ----------

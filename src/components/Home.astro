@@ -1,7 +1,8 @@
 ---
 import fs from 'node:fs';
 import { getCollection } from 'astro:content';
-import { t, paths, prezzi, info, getPromo, prezzoMinimo, fmtDate, u, fotoGalleria, isoData, versionata, type Lang } from '../lib/site';
+import { t, paths, prezzi, info, getPromo, prezzoMinimo, fmtDate, u, fotoGalleria, isoData, versionata, articoloPromo, type Lang } from '../lib/site';
+import PostCard from './PostCard.astro';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -9,10 +10,11 @@ const promo = getPromo();
 const waUrl = `https://wa.me/${info.whatsapp}?text=${encodeURIComponent(t(lang, 'wa_generic'))}`;
 
 // Articoli del Diario: i più recenti, esclusi esempi e nascosti. Quelli con l'evento già concluso li toglie il browser
-// (in base alla data di oggi), che poi mostra i primi 3 rimasti: per questo qui se ne preparano fino a 9.
+// (in base alla data di oggi), che poi mette in cima l'articolo dell'offerta del momento (se la promo è visibile),
+// mostra i 6 più recenti rimasti e il pulsante "Tutti gli articoli (N)" se ce ne sono di più.
 const posts = (await getCollection('diario', ({ data }) => data.lingua === lang && !data.esempio && !data.nascosto))
-  .sort((a, b) => b.data.data.getTime() - a.data.data.getTime())
-  .slice(0, 9);
+  .sort((a, b) => b.data.data.getTime() - a.data.data.getTime());
+const postPromo = articoloPromo(posts);
 
 const seasons = ['B', 'M', 'A'] as const;
 
@@ -154,17 +156,9 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
         <p class="section-sub">{t(lang, 'journal_sub')}</p>
       </div>
       <div class="posts">
-        {posts.map((p) => (
-          <a class="post-card" href={paths.post(lang, p.data.chiave)} data-scadenza={isoData(p.data.scadenza)} hidden>
-            <img src={u(versionata(p.data.immagine))} alt="" loading="lazy" width="400" height="225" />
-            <div>
-              <small>{fmtDate(p.data.data, lang)}</small>
-              <h3>{p.data.titolo}</h3>
-              <p>{p.data.estratto}</p>
-            </div>
-          </a>
-        ))}
+        {posts.map((p) => <PostCard post={p} lang={lang} promo={p === postPromo} />)}
       </div>
+      <a class="btn btn-ghost tutti" href={paths.diario(lang)} hidden>{t(lang, 'journal_all_btn')} <span></span></a>
     </div>
   </section>
 )}
@@ -239,6 +233,7 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
     {promo.attiva && (
       <p class="calc-promo" hidden data-from={promo.mostraDal} data-to={promo.mostraAl}>
         <strong>{promo.titolo[lang]}</strong> {t(lang, 'promo_valid', { a: fmtDate(promo.noleggiDal, lang), b: fmtDate(promo.noleggiAl, lang) })}
+        {postPromo && <a class="promo-read" href={paths.post(lang, postPromo.data.chiave)}>{t(lang, 'promo_read')}</a>}
       </p>
     )}
     <form class="calc" id="calc" novalidate>
@@ -383,11 +378,26 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
   const eur = (n: number) => '€' + Math.round(n).toLocaleString(D.lang === 'it' ? 'it-IT' : 'en-GB');
   const today = new Date().toISOString().slice(0, 10);
 
-  // Diario: nasconde gli articoli con l'evento concluso e mostra i 3 più recenti rimasti
+  // Promo visibile oggi? (riga nel calcolatore, articolo in evidenza)
+  const promoLive = D.promo.attiva && (!D.promo.mostraDal || today >= D.promo.mostraDal) && (!D.promo.mostraAl || today <= D.promo.mostraAl);
+
+  // Diario: nasconde gli articoli con l'evento concluso, mette in cima quello dell'offerta del momento
+  // e mostra i 6 più recenti rimasti (più quello in evidenza)
   {
+    const MAX = 6;
     const cards = [...document.querySelectorAll<HTMLElement>('#diario .post-card')]
       .filter((c) => !c.dataset.scadenza || c.dataset.scadenza >= today);
-    cards.slice(0, 3).forEach((c) => (c.hidden = false));
+    const inEvidenza = promoLive ? cards.find((c) => c.dataset.promo) : undefined;
+    if (inEvidenza) {
+      inEvidenza.classList.add('in-evidenza');
+      inEvidenza.parentElement!.prepend(inEvidenza);
+      inEvidenza.hidden = false;
+    }
+    const altri = cards.filter((c) => c !== inEvidenza);
+    altri.slice(0, MAX).forEach((c) => (c.hidden = false));
+    // Più articoli attivi di quelli mostrati: pulsante verso la pagina con tutti
+    const tutti = document.querySelector<HTMLElement>('#diario .tutti');
+    if (tutti && altri.length > MAX) { tutti.hidden = false; tutti.querySelector('span')!.textContent = `(${cards.length})`; }
     if (!cards.length) {
       document.getElementById('diario')?.remove();
       document.querySelector<HTMLElement>('.nav-journal')?.setAttribute('hidden', '');
@@ -397,7 +407,6 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
 
   // Mostra la riga promo nel calcolatore solo nelle date della promo
   const promoLine = document.querySelector<HTMLElement>('.calc-promo');
-  const promoLive = D.promo.attiva && (!D.promo.mostraDal || today >= D.promo.mostraDal) && (!D.promo.mostraAl || today <= D.promo.mostraAl);
   if (promoLine && promoLive) promoLine.hidden = false;
 
   // Le date non possono essere nel passato
@@ -604,20 +613,11 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
 
   /* Diario: card orizzontali e basse su telefono */
   .journal { background: var(--bg); }
-  .posts { display: grid; gap: 12px; }
-  .post-card { text-decoration: none; color: var(--ink); background: var(--white); border-radius: 14px; overflow: hidden; display: grid; grid-template-columns: 112px 1fr; box-shadow: 0 2px 10px rgba(12, 75, 66, 0.06); }
-  .post-card[hidden] { display: none; }
-  .post-card img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: auto; min-height: 96px; }
-  .post-card div { padding: 10px 14px; min-width: 0; }
-  .post-card small { color: var(--muted); font-size: 0.8rem; }
-  .post-card h3 { font-size: 1rem; margin: 2px 0 4px; line-height: 1.25; }
-  .post-card p { display: none; }
+  .posts { display: grid; gap: 8px; }
+  .tutti[hidden] { display: none; }
+  .tutti { margin-top: 14px; padding: 0.55em 1.1em; font-size: 0.92rem; }
   @media (min-width: 821px) {
-    .posts { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .post-card { grid-template-columns: 1fr; }
-    .post-card img { aspect-ratio: 16/9; height: auto; }
-    .post-card div { padding: 16px 18px; }
-    .post-card p { display: block; color: var(--muted); font-size: 0.93rem; margin: 0; }
+    .posts { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
   }
 
   /* Kit di partenza: elenco con icone, due colonne su schermo grande */
@@ -676,6 +676,7 @@ const icona = (k: string) => ICONE[k] ?? ICONE.incluso;
   /* Calcolatore */
   .calc-promo { background: var(--yellow); color: var(--green); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; font-size: 0.93rem; line-height: 1.35; }
   .calc-promo strong { display: block; }
+  .promo-read { display: block; margin-top: 6px; font-weight: 700; color: var(--green); }
   .calc-promo[hidden] { display: none; }
   .calc { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; margin-top: 12px; }
   @media (min-width: 821px) { .calc { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px; } }

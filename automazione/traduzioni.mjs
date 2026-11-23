@@ -6,7 +6,7 @@
 //   - data, scadenza, nascosto, immagine cambiati   → copiati nel file inglese, senza Claude
 //   - file italiano eliminato                       → eliminato anche quello inglese
 // In più tiene aggiornati nel file italiano `stato` e `ordine`, che il pannello /admin usa per mostrare in cima gli
-// articoli in vetrina e sotto quelli conclusi o nascosti, ognuno dal più recente.
+// articoli in vetrina e sotto quelli conclusi o archiviati, ognuno dal più recente.
 // Il file inglese conserva in `origine` l'impronta del testo italiano da cui è stato tradotto: se non cambia, niente
 // chiamate (e niente costi). Se una traduzione fallisce non si riprova finché l'italiano non cambia di nuovo.
 
@@ -16,13 +16,13 @@ import crypto from 'node:crypto';
 import { ROOT, AUTO, chiediClaude, scrivi } from './lib.mjs';
 
 const DIR = path.join(ROOT, 'src/content/diario');
-const CONDIVISI = ['data', 'scadenza', 'nascosto', 'immagine', 'immagineAI'];
+const CONDIVISI = ['data', 'scadenza', 'nascosto', 'immagine', 'immagineAI', 'categoria'];
 const oggiRoma = () => new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Rome' }); // AAAA-MM-GG
 
 /** Stato dell'articolo per il pannello e chiave di ordinamento (decrescente: prima i "1-" più recenti, poi i "0-"). */
 export function statoArticolo(fm) {
   const scad = fm.scadenza ? data(fm.scadenza) : '';
-  const stato = fm.nascosto === true ? '⚫ nascosto' : scad && scad < oggiRoma() ? '⚪ evento concluso' : '🟢 in vetrina';
+  const stato = fm.nascosto === true ? '⚫ archiviato' : scad && scad < oggiRoma() ? '⚪ evento concluso' : '🟢 in vetrina';
   return { stato, ordine: `${stato.startsWith('🟢') ? 1 : 0}-${data(fm.data) || '0000-00-00'}` };
 }
 

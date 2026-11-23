@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { getCollection } from 'astro:content';
 import { t, paths, info, getPromo, fmtDate, u, BASE, type Lang } from '../lib/site';
 
 interface Props {
@@ -21,6 +22,8 @@ const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const origin = Astro.site?.origin ?? '';
 const canonical = origin + Astro.url.pathname;
 const promo = getPromo();
+// Il link "Diario" del menu compare quando c'è almeno un articolo pubblicato (non esempio, non archiviato)
+const ciSonoArticoli = (await getCollection('diario', ({ data }) => data.lingua === lang && !data.esempio && !data.nascosto)).length > 0;
 const waText = encodeURIComponent(t(lang, 'wa_generic'));
 const waUrl = `https://wa.me/${info.whatsapp}?text=${waText}`;
 ---
@@ -75,7 +78,7 @@ const waUrl = `https://wa.me/${info.whatsapp}?text=${waText}`;
         <nav class="nav">
           <a class="nav-link" href={`${home}#prezzi`}>{t(lang, 'nav_prices')}</a>
           {info.calendarioEmbedUrl && <a class="nav-link" href={`${home}#disponibilita`}>{t(lang, 'nav_availability')}</a>}
-          <a class="nav-link nav-journal" href={`${home}#diario`} hidden>{t(lang, 'nav_journal')}</a>
+          {ciSonoArticoli && <a class="nav-link nav-journal" href={paths.diario(lang)}>{t(lang, 'nav_journal')}</a>}
           <a class="nav-link" href={`${home}#contatti`}>{t(lang, 'nav_contacts')}</a>
           <a class="nav-foto" href={`${home}#galleria`} data-i="0"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" /></svg>{t(lang, 'nav_photos')}</a>
           <a class="lang-btn nav-lang" href={altPath} hreflang={other} aria-label={t(lang, 'lang_switch_label')} data-lang={other}>{t(lang, 'lang_switch')}</a>
@@ -120,9 +123,6 @@ const waUrl = `https://wa.me/${info.whatsapp}?text=${waText}`;
       if (bigLogo && header) {
         new IntersectionObserver(([e]) => header.classList.toggle('brand-hidden', e.isIntersecting), { rootMargin: '-90px 0px 0px 0px' }).observe(bigLogo);
       }
-      // Il link "Diario" compare solo quando ci sono articoli
-      const jl = document.querySelector<HTMLElement>('.nav-journal');
-      if (jl && (document.getElementById('diario') || !document.querySelector('.hero-logo'))) jl.hidden = false;
       // Ricorda la lingua scelta a mano
       document.querySelectorAll<HTMLAnchorElement>('[data-lang]').forEach((a) =>
         a.addEventListener('click', () => {

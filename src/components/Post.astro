@@ -1,12 +1,13 @@
 ---
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { t, paths, fmtDate, u, isoData, versionata, type Lang } from '../lib/site';
+import { t, paths, fmtDate, u, isoData, versionata, categoriaDi, ICONE_CATEGORIA, type Lang } from '../lib/site';
 
 interface Props { post: CollectionEntry<'diario'>; lang: Lang }
 const { post, lang } = Astro.props;
 const { Content } = await render(post);
 const other: Lang = lang === 'it' ? 'en' : 'it';
+const cat = categoriaDi(post.data);
 ---
 <Base lang={lang} title={`${post.data.titolo} · Mistralia`} description={post.data.estratto}
       altPath={paths.post(other, post.data.chiave)} image={post.data.immagine} noindex={post.data.nascosto === true}>
@@ -14,17 +15,17 @@ const other: Lang = lang === 'it' ? 'en' : 'it';
     <div class="wrap">
       <a href={paths.home(lang)}>← {t(lang, 'journal_back')}</a>
       <h1>{post.data.titolo}</h1>
-      <p class="post-meta">{fmtDate(post.data.data, lang)}</p>
+      <p class="post-meta"><a class={`cat cat-${cat}`} href={`${paths.diario(lang)}#${{ offerta: 'offerte', evento: 'eventi', idea: 'idee' }[cat]}`}>{ICONE_CATEGORIA[cat]} {t(lang, `cat_${cat}`)}</a> · {fmtDate(post.data.data, lang)}</p>
       {post.data.nascosto && (
         <p class="post-expired">
           {t(lang, 'post_hidden')}
-          <a href={`${paths.home(lang)}#diario`}>{t(lang, 'post_expired_more')}</a>
+          <a href={paths.diario(lang)}>{t(lang, 'post_expired_more')}</a>
         </p>
       )}
       {!post.data.nascosto && post.data.scadenza && (
         <p class="post-expired" hidden data-scadenza={isoData(post.data.scadenza)}>
-          {t(lang, 'post_expired', { d: fmtDate(post.data.scadenza, lang) })}
-          <a href={`${paths.home(lang)}#diario`}>{t(lang, 'post_expired_more')}</a>
+          {t(lang, cat === 'offerta' ? 'post_expired_offer' : 'post_expired', { d: fmtDate(post.data.scadenza, lang) })}
+          <a href={paths.diario(lang)}>{t(lang, 'post_expired_more')}</a>
         </p>
       )}
       <figure class="post-figure">
@@ -50,4 +51,6 @@ const other: Lang = lang === 'it' ? 'en' : 'it';
   .post-expired { background: var(--yellow-soft); border-left: 6px solid var(--yellow); border-radius: 12px; padding: 12px 16px; font-weight: 600; margin: 12px 0 20px; }
   .post-expired[hidden] { display: none; }
   .post-expired a { display: block; margin-top: 4px; font-weight: 700; }
+  .cat { font-weight: 700; text-decoration: none; color: var(--green); }
+  .cat-offerta { color: #b4461b; }
 </style>

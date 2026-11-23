@@ -13,10 +13,35 @@
 
 ---
 
+## 2026-11-23 · Bot interattivo (radar eventi, sondaggio del lunedì, messaggio 💬), pannello riorganizzato, Diario con tipi e 6 articoli
+- Cosa:
+  - **Radar eventi** (`automazione/radar.mjs`, `radar.md`): martedì e venerdì dalle 11 (`config.json` → `radar`) il bot cerca 2–3 eventi tra 2 e 8 settimane (concerti, arte, festival, teatro, sagre, sport, fiere) e li propone uno per messaggio con ✍️ *Prepara la bozza*, 🏷 *Post + offerta*, ⏭ *No*; una risposta allo spunto prepara la bozza con quelle indicazioni. *Post + offerta* propone sconto e date, chiede se il camper è libero, accetta ritocchi in risposta e solo con ✅ scrive `src/data/promo.md` (il workflow *Bot Telegram* ora salva anche quel file e ripubblica il sito). Comando `/radar`;
+  - **Sondaggio del lunedì** (`automazione/sondaggio.mjs`, `sondaggio.md`): al posto della bozza diretta, un sondaggio con 3 proposte; dopo 4 ore o quando hanno votato tutti il bot prepara la bozza sul vincente (nessun voto o pareggio: la prima). `config.json` → `sondaggio` (`attivo: false` torna alla bozza diretta). Comando `/sondaggio`;
+  - **Messaggio 💬 *Che ne pensate?*** sotto ogni bozza, con 1–3 cose da controllare scritte dal verificatore (nuovo campo `da_controllare` in `verifica.md`) più il controllo dell'immagine; le risposte a questo messaggio sono correzioni (`stato.bozza.domandaId`);
+  - `/nuovo` accetta indicazioni (`/nuovo un weekend a Matera`); `creaBozza` accetta un tema imposto, indicazioni e un'offerta; nuove funzioni comuni in `lib.mjs` (`oraRoma`, `controllaBudget`, `registraSpesa`, `codiceCorto`…); il prompt prende i km inclusi da `prezzi.json`;
+  - **Tipo di articolo** (`categoria`: offerta, evento, idea) scelto dal bot, nel pannello, copiato nell'inglese da `traduzioni.mjs`; un'offerta scade con il banner della promo;
+  - **Home:** l'articolo dell'offerta del momento in evidenza in cima al Diario e **6 articoli** (righe compatte su telefono, griglia 3×2 su computer, componente unico `PostCard.astro`); nel calcolatore il riquadro della promo ha *Leggi l'idea di viaggio →*;
+  - **Pagina Diario:** filtri *Tutti · Offerte · Eventi · Idee* (anche nell'indirizzo, `#offerte`…), offerta in evidenza, Archivio con eventi e offerte conclusi; nella pagina dell'articolo il tipo e, per le offerte, *"Questa offerta è terminata il …"*;
+  - **Pannello riorganizzato:** una voce per argomento nella barra laterale (Diario, Prezzi e stagioni, Piani ed extra, Promozione, A bordo, FAQ, Foto, Contatti), senza anteprima affiancata, elenchi chiusi con un riassunto per riga. Per farlo i dati sono divisi in più file: `prezzi.json` + `coperture.json`, `info.json` + `foto.json` + `bordo.json` + `faq.json` (FAQ con i campi `domanda`, `risposta`, `question`, `answer`); `src/lib/site.ts` li riunisce e funziona anche con i file vecchi; `documentazione.mjs` e `foto-galleria.mjs` leggono i file nuovi;
+  - `budgetMensileDollari` da 8 a **15**.
+  - per chi sviluppa: con `PROVA_PROMPT=<file>` la modalità PROVA salva i prompt che andrebbero a Claude (vedi `docs/06-sviluppo.md`).
+- Perché: richieste di Gianluca del 23/11 (bot più interattivo, pannello "che si scrolla all'infinito", più articoli visibili e distinzione tra offerte e destinazioni).
+- Costi: radar ~$0,30–0,50 a giro (8–9 al mese), sondaggio ~$0,15–0,25 a settimana, ritocco dell'offerta ~$0,01. Spesa mensile stimata $6–10 con le bozze.
+- Da fare per chi usa il sistema: **lanciare una volta** `node aggiorna-dati-una-volta.mjs` (divide i dati e applica le correzioni della voce *Extra a persona…*) prima del commit; poi `/nuovo` nel gruppo per la bozza di questa settimana. Dal prossimo lunedì arriva il sondaggio; il primo radar martedì alle 11.
+
+## 2026-11-23 · Pagina Diario, bot più robusto, niente consigli su dove dormire
+- Cosa:
+  - nuova pagina `/diario/` (e `/en/journal/`, componente `DiarioIndice.astro`) con tutti gli articoli attivi e l'Archivio degli eventi conclusi; la voce *Diario* del menu porta lì e compare quando c'è almeno un articolo;
+  - in home, sotto gli ultimi 3 articoli, il pulsante *Tutti gli articoli (N)* quando ce ne sono di più; i link "Scopri le prossime idee" e quello della pagina 404 portano alla pagina Diario;
+  - `chiediClaude` (`lib.mjs`) riprova da sola in caso di API sovraccarica o risposta vuota, completa le risposte interrotte (`pause_turn`) e, se manca il JSON, lo richiede senza nuove ricerche; limite di risposta 16.000 token;
+  - prompt e verificatore: mai suggerire dove dormire o sostare; tolto "aree sosta per camper" dalle ricerche e "dove sostare" dai consigli dell'articolo.
+- Perché: con 4 articoli attivi quello di Agnone non era più raggiungibile; la bozza di lunedì 23/11 è fallita con "Unexpected end of JSON input"; richiesta di Gianluca sui luoghi per la notte.
+- Da fare: scrivere `/nuovo` nel gruppo per la bozza di questa settimana. Costo dei nuovi tentativi: pochi centesimi, solo quando servono.
+
 ## 2026-11-23 · Extra a persona, a letto e a tratta; FAQ complete
 - Cosa:
   - gli extra hanno l'unità di prezzo (`unita` in `prezzi.json`, campo *Il prezzo è…* nel pannello): il calcolatore moltiplica gli asciugamani per le persone e fa scegliere quanti letti per le lenzuola e se il transfer è solo andata o andata e ritorno; nei prezzi compare "a persona", "a letto", "a tratta";
-  - script una tantum `aggiorna-dati-una-volta.mjs`, non nel repository, che sui dati veri ha impostato le unità, ripulito i nomi degli extra, messo "Pastiglie per il WC" e completato le FAQ (patente con 21 anni, cauzione con importi e pre-autorizzazione Stripe, 100 km al giorno, cancellazione fino a 30 giorni prima) e ne ha aggiunte due (pagamento con Stripe, consegna solo in aeroporto);
+  - script una tantum `aggiorna-dati-una-volta.mjs`, non nel repository (consegnato con l'aggiornamento del 23/11, vedi la voce sopra), che sui dati veri imposta le unità, ripulito i nomi degli extra, messo "Pastiglie per il WC" e completa le FAQ (patente con 21 anni, cauzione con importi e pre-autorizzazione Stripe, 100 km al giorno, cancellazione fino a 30 giorni prima) e ne aggiunge due (pagamento con Stripe, consegna solo in aeroporto);
   - nel pannello la voce della preparazione si chiama "Prima di ogni partenza".
 - Perché: risposte di Gianluca del 23/11 e dati del pannello.
 - Da fare: decidere supplementi e franchigie dei piani (vedi log del progetto).

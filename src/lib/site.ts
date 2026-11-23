@@ -3,9 +3,23 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import it from '../i18n/it.json';
 import en from '../i18n/en.json';
-import prezziFile from '../data/prezzi.json';
-import info from '../data/info.json';
 import * as promoFile from '../data/promo.md';
+
+/**
+ * Dati del sito, divisi in più file per avere nel pannello /admin una sezione per argomento:
+ *   prezzi.json (prezzi, stagioni, minimi, km) + coperture.json (piani, quota, extra) → `prezzi`
+ *   info.json (contatti, ritiro, calendario, azienda) + foto.json + bordo.json (kit, preparazione, riconsegna, regole)
+ *   + faq.json → `info`
+ * Un file mancante vale come vuoto: così il sito funziona anche con i dati di prima della divisione (tutto in info.json e prezzi.json).
+ */
+const dati = import.meta.glob('../data/*.json', { eager: true, import: 'default' }) as Record<string, any>;
+const file = (nome: string): any => dati[`../data/${nome}.json`] ?? {};
+// FAQ: nel pannello ogni domanda ha 4 campi (domanda, risposta, question, answer); il sito le usa come { it: [d, r], en: [d, r] }
+type Faq = { it: [string, string]; en: [string, string] };
+const faq: Faq[] = (file('faq').faq ?? file('info').faq ?? []).map((f: any) =>
+  f.it ? f : { it: [f.domanda ?? '', f.risposta ?? ''], en: [f.question ?? '', f.answer ?? ''] });
+const info: any = { ...file('info'), ...file('foto'), ...file('bordo'), faq };
+const prezziFile: any = { ...file('prezzi'), ...file('coperture') };
 
 export type Lang = 'it' | 'en';
 const dict: Record<Lang, Record<string, string>> = { it, en };
@@ -25,6 +39,7 @@ export const u = (path: string) => (path.startsWith('/') ? BASE + path : path);
 export const paths = {
   home: (lang: Lang) => u(lang === 'it' ? '/' : '/en/'),
   post: (lang: Lang, chiave: string) => u(lang === 'it' ? `/diario/${chiave}/` : `/en/journal/${chiave}/`),
+  diario: (lang: Lang) => u(lang === 'it' ? '/diario/' : '/en/journal/'),
 };
 
 // Data come AAAA-MM-GG. Il pannello /admin salva le date senza virgolette e il sito le riceve come
@@ -97,10 +112,28 @@ export const fotoGalleria = (v: string | number) => (typeof v === 'number' || /^
 export { prezzi, info };
 
 /** Prezzo minimo al giorno, per il "da €X". */
-export const prezzoMinimo = Math.min(...Object.values(prezzi.prezzoGiorno));
+export const prezzoMinimo = Math.min(...(Object.values(prezzi.prezzoGiorno) as number[]));
 
 /** Data in formato leggibile. */
 export function fmtDate(d: string | Date, lang: Lang) {
   const date = typeof d === 'string' ? new Date(d + 'T12:00:00') : d;
   return date.toLocaleDateString(lang === 'it' ? 'it-IT' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+export type Categoria = 'offerta' | 'evento' | 'idea';
+export const CATEGORIE: Categoria[] = ['offerta', 'evento', 'idea'];
+export const ICONE_CATEGORIA: Record<Categoria, string> = { offerta: '🏷', evento: '📅', idea: '🧭' };
+/** Categoria di un articolo del Diario: quella scritta nel file, altrimenti evento (se ha una scadenza) o idea. */
+export const categoriaDi = (d: { categoria?: string; scadenza?: unknown }): Categoria =>
+  CATEGORIE.includes(d.categoria as Categoria) ? (d.categoria as Categoria) : d.scadenza ? 'evento' : 'idea';
+
+/**
+ * Articolo collegato alla promo del momento: un articolo "offerta" che scade con il banner (scadenza = mostra_al),
+ * altrimenti l'articolo "offerta" più recente ancora valido all'inizio della promo. undefined se non c'è.
+ */
+export function articoloPromo<T extends { data: { categoria?: string; scadenza?: Date; data: Date } }>(posts: T[]) {
+  const p = getPromo();
+  if (!p.attiva) return undefined;
+  const offerte = posts.filter((x) => categoriaDi(x.data) === 'offerta').sort((a, b) => b.data.data.getTime() - a.data.data.getTime());
+  return offerte.find((x) => iso(x.data.scadenza) === p.mostraAl) ?? offerte.find((x) => x.data.scadenza && iso(x.data.scadenza) >= (p.mostraDal || '0'));
 }

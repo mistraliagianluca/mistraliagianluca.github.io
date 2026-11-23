@@ -31,14 +31,14 @@ Questa cartella spiega **tutto** il sistema digitale di Mistralia: il sito www.m
 
 ```mermaid
 flowchart TB
-    subgraph Lun["① Ogni lunedì (in automatico)"]
+    subgraph Lun["① Ogni settimana (in automatico)"]
         direction LR
-        PS["Bot Telegram<br>lunedì dalle 9 (GitHub)"] --> C["Claude<br>scrive + verifica i fatti"]
+        PS["Bot Telegram (GitHub)<br>lunedì: 🗳 sondaggio sul tema<br>mar e ven: 📡 radar eventi"] --> C["Claude<br>scrive + verifica i fatti"]
         C --> G["Gemini<br>crea l'immagine"]
     end
     subgraph Team["② Il team decide (dal telefono)"]
         direction LR
-        TG["Gruppo Telegram<br>bozza con i pulsanti"] --> D{"✅ Pubblica<br>🔄 Rigenera<br>✍️ Correggi"}
+        TG["Gruppo Telegram<br>bozza con i pulsanti<br>+ 💬 Che ne pensate?"] --> D{"✅ Pubblica<br>🔄 Rigenera<br>💬 Correggi"}
     end
     subgraph Web["③ Sul sito e sui social"]
         direction LR
@@ -55,7 +55,7 @@ flowchart TB
     SOC --> CL
 ```
 
-**In una frase:** ogni lunedì dalle 9 il bot, che gira su GitHub ed è svegliato ogni minuto da cron-job.org, chiede a Claude un post su una meta raggiungibile in camper da Bari, ne fa verificare i fatti da una seconda chiamata a Claude, fa creare l'immagine a Gemini e manda la bozza nel gruppo Telegram. Il team la approva con un tap, l'articolo finisce sul sito e il bot manda i testi pronti per i social. I clienti vedono il sito e chiedono il preventivo su WhatsApp.
+**In una frase:** ogni lunedì dalle 9 il bot, che gira su GitHub ed è svegliato ogni minuto da cron-job.org, fa votare al team il tema della settimana con un sondaggio (il martedì e il venerdì propone anche eventi dal radar, eventualmente con un'offerta da attivare sul sito), chiede a Claude un post sul tema scelto, ne fa verificare i fatti da una seconda chiamata a Claude, fa creare l'immagine a Gemini e manda la bozza nel gruppo Telegram. Il team la approva con un tap, l'articolo finisce sul sito e il bot manda i testi pronti per i social. I clienti vedono il sito e chiedono il preventivo su WhatsApp.
 
 ## Chi è il riferimento
 

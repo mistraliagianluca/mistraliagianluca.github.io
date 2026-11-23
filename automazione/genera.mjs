@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import path from 'node:path';
-import { AUTO, config, leggiStato, salvaStato, oggiISO, settimanaISO, slug, temiUsati, chiediClaude, creaImmagine, telegram, chatId, spesaDelGiro, spesaDelMese, meseCorrente } from './lib.mjs';
+import { AUTO, config, leggiStato, salvaStato, oggiISO, settimanaISO, slug, temiUsati, chiediClaude, creaImmagine, telegram, chatId, spesaDelGiro, spesaDelMese, meseCorrente, controllaBudget, dataIt } from './lib.mjs';
 
 const BOZZE = path.join(AUTO, 'bozze');
 // "Da €X al giorno": il prezzo più basso di src/data/prezzi.json, così segue i prezzi cambiati dal pannello /admin
@@ -14,6 +14,10 @@ const prezzoDa = () => {
     return Math.min(...Object.values(p.prezzoGiorno).map(Number));
   } catch { return config.prezzoDa; }
 };
+const kmInclusi = () => {
+  try { return Number(JSON.parse(fs.readFileSync(path.join(AUTO, '..', 'src/data/prezzi.json'), 'utf8')).kmInclusiGiorno) || 0; } catch { return 0; }
+};
+export const ETICHETTE = { offerta: '🏷 Offerta', evento: '📅 Evento', idea: '🧭 Idea di viaggio' };
 const oggi = () => new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
 /** Seconda chiamata a Claude, indipendente: cerca sul web ogni fatto su eventi e luoghi. */
@@ -22,8 +26,9 @@ async function verifica(contenuto) {
   const testo = fs.readFileSync(path.join(AUTO, 'verifica.md'), 'utf8')
     .replaceAll('{{OGGI}}', oggi())
     .replaceAll('{{BOZZA}}', JSON.stringify(daVerificare, null, 2));
-  const v = await chiediClaude(testo, { ricerche: config.ricercheVerifica ?? 4, finta: () => ({ esito: 'ok', problemi: [], correzione: '', fonti: ['https://example.org/prova'] }) });
+  const v = await chiediClaude(testo, { ricerche: config.ricercheVerifica ?? 4, finta: () => ({ esito: 'ok', problemi: [], correzione: '', da_controllare: ['le date sul sito del Comune → example.org'], fonti: ['https://example.org/prova'] }) });
   if (!['ok', 'correggi', 'scarta'].includes(v.esito)) v.esito = 'scarta';
+  if (!Array.isArray(v.da_controllare)) v.da_controllare = [];
   return v;
 }
 
@@ -33,6 +38,9 @@ async function verifica(contenuto) {
  * @param {string} [opz.nota]       correzione scritta dal team (rigenera la stessa bozza tenendone conto)
  * @param {object} [opz.precedente] bozza da correggere
  * @param {object} [opz.scartata]  bozza scartata con Rigenera: la nuova deve avere un altro tema e un altro luogo
+ * @param {object} [opz.tema]      tema scelto dal team (spunto del radar o sondaggio del lunedì): { titolo, luogo, date, dettagli, fonte }
+ * @param {string} [opz.indicazioni] indicazioni del team per una bozza nuova (es. "/nuovo un weekend a Matera")
+ * @param {object} [opz.offerta]   offerta appena attivata sul sito, da citare nel post: { nome, sconto, noleggi_dal, noleggi_al, mostra_al, titolo_it }
  */
 export async function creaBozza(opz = {}) {
   const prima = spesaDelGiro();
@@ -47,13 +55,13 @@ export async function creaBozza(opz = {}) {
   }
 }
 
-async function preparaBozza({ nota, precedente, scartata } = {}) {
+async function preparaBozza({ nota, precedente, scartata, tema, indicazioni, offerta } = {}) {
+  // Una correzione resta sullo stesso tema e sulla stessa offerta della bozza da correggere
+  tema ??= precedente?.tema;
+  offerta ??= precedente?.offerta;
   const stato = leggiStato();
   // Tetto di spesa: oltre il budget del mese non si chiama più l'API fino al mese successivo
-  const budget = config.budgetMensileDollari ?? 8;
-  if (spesaDelMese(stato) >= budget) {
-    throw new Error(`budget del mese raggiunto ($${spesaDelMese(stato).toFixed(2)} su $${budget}). Si riparte il mese prossimo, oppure alzate "budgetMensileDollari" in automazione/config.json.`);
-  }
+  controllaBudget(stato);
   const partenza = spesaDelGiro();
   const SCRITTURA = { ricerche: config.ricercheScrittura ?? 3 };
   const improbabile = settimanaISO() % config.ogniQuanteSettimaneImprobabile === 0;
@@ -63,14 +71,18 @@ async function preparaBozza({ nota, precedente, scartata } = {}) {
   const prompt = (notaPrompt) => fs.readFileSync(path.join(AUTO, 'prompt.md'), 'utf8')
     .replaceAll('{{OGGI}}', oggi())
     .replaceAll('{{PREZZO_DA}}', String(prezzoDa()))
+    .replaceAll('{{KM}}', kmInclusi() ? `${kmInclusi()} km al giorno inclusi, ` : '')
     .replaceAll('{{ORE_MAX}}', String(config.oreMaxDaBari ?? 4))
     .replaceAll('{{LINK}}', link)
     .replaceAll('{{TEMI_USATI}}', [...temiUsati(stato), ...scartati].map((t) => `"${t}"`).join(', ') || 'nessuno')
     .replaceAll('{{TIPO}}', tipo)
-    .replaceAll('{{NOTA}}', notaPrompt + (scartata ? SCARTATA : ''));
+    .replaceAll('{{NOTA}}', TEMA + OFFERTA + INDICAZIONI + notaPrompt + (scartata ? SCARTATA : ''));
   const correggi = (contenuto, testo) => `\n## Correzione richiesta\nRiscrivi questa bozza tenendo lo stesso tema e luogo, applicando la correzione: "${testo}".\nSe la correzione non riguarda l'immagine, metti "rifai_immagine": false e lascia invariato "prompt_immagine".\nBozza attuale:\n\`\`\`json\n${JSON.stringify(contenuto, null, 2)}\n\`\`\`\n`;
   const sc = scartata?.contenuto;
   const SCARTATA = sc ? `\n## Proposta scartata dal team\nIl team ha premuto "Rigenera" su questa proposta: «${sc.titolo_it}» (tema: ${sc.tema}; luogo: ${sc.luogo}).\nProponi qualcosa di **completamente diverso**: un altro evento, in un altro luogo. Non riproporre lo stesso evento, la stessa sagra o lo stesso paese, nemmeno con parole diverse.\n` : '';
+  const TEMA = tema ? `\n## Tema scelto dal team\nIl post deve parlare di: «${tema.titolo}»${tema.luogo ? ` a ${tema.luogo}` : ''}${tema.date ? ` (${tema.date})` : ''}.${tema.dettagli ? `\nDettagli: ${tema.dettagli}` : ''}${tema.fonte ? `\nFonte trovata: ${tema.fonte} (verifica comunque date e fatti).` : ''}\nNon cambiare tema: ignora la regola sui temi già usati se riguarda questo stesso tema. Se scopri che l'evento non si tiene con quelle date, parla del luogo e della stagione senza date.\n` : '';
+  const OFFERTA = offerta ? `\n## Offerta attiva sul sito\nSul sito è appena partita la promo «${offerta.titolo_it}»: −${offerta.sconto}% sui noleggi che iniziano dal ${dataIt(offerta.noleggi_dal)} al ${dataIt(offerta.noleggi_al)}, prenotando entro ${/^(8|11) /.test(dataIt(offerta.mostra_al)) ? "l'" : 'il '}${dataIt(offerta.mostra_al)}. Citala una volta nel post, nell'articolo e nel testo TikTok, in modo chiaro e senza finta urgenza. Metti "categoria": "offerta".\n` : '';
+  const INDICAZIONI = indicazioni ? `\n## Indicazioni del team\n${indicazioni}\n` : '';
   const SENZA_EVENTI = '\n## Attenzione\nQuesta settimana **non citare eventi né date**: scegli un luogo, un borgo o un itinerario e parla della stagione. Ogni fatto deve essere vero e verificabile.\n';
 
   // Scrittura + verifica indipendente dei fatti. Se la verifica non conferma, si corregge o si cambia tema.
@@ -93,6 +105,10 @@ async function preparaBozza({ nota, precedente, scartata } = {}) {
     }
   }
   c.verifica = v;
+  // Categoria dell'articolo nel Diario: offerta (se c'è una promo collegata), evento (con una data di fine), idea di viaggio
+  c.categoria = offerta ? 'offerta' : ['evento', 'idea'].includes(c.categoria) ? c.categoria : c.scadenza ? 'evento' : 'idea';
+  // Un articolo "offerta" esce dalla vetrina quando finisce la promo
+  if (offerta) c.scadenza = offerta.mostra_al;
 
   const id = `${oggiISO()}-${slug(c.chiave || c.titolo_it)}`;
   const dir = path.join(BOZZE, id);
@@ -107,7 +123,7 @@ async function preparaBozza({ nota, precedente, scartata } = {}) {
 
   // Telegram accetta al massimo 64 byte nei dati dei pulsanti: usiamo un codice corto al posto dell'id
   const codice = crypto.createHash('sha1').update(id).digest('hex').slice(0, 10);
-  const bozza = { id, codice, tipo, creata: new Date().toISOString(), contenuto: c, immagine };
+  const bozza = { id, codice, tipo, creata: new Date().toISOString(), contenuto: c, immagine, ...(tema ? { tema } : {}), ...(offerta ? { offerta } : {}) };
   fs.writeFileSync(path.join(dir, 'bozza.json'), JSON.stringify(bozza, null, 2));
 
   // Anteprima su Telegram. La didascalia di una foto ha un limite di 1024 caratteri:
@@ -119,10 +135,10 @@ async function preparaBozza({ nota, precedente, scartata } = {}) {
     : `⚠️ VERIFICA NON SUPERATA, non pubblicare senza controllare:\n${(c.verifica.problemi || []).map((p) => '• ' + p).join('\n')}`;
   const costo = spesaDelGiro() - partenza;
   const delMese = spesaDelMese(stato) + costo;
-  const riga$ = `💰 Costo di questa bozza: circa $${costo.toFixed(2)} · nel mese: $${delMese.toFixed(2)} su $${config.budgetMensileDollari ?? 8}`;
+  const riga$ = `💰 Costo di questa bozza: circa $${costo.toFixed(2)} · nel mese: $${delMese.toFixed(2)} su $${config.budgetMensileDollari ?? 15}`;
   const testo = [c.post_it, '', c.hashtag.map((h) => '#' + h).join(' '), '', esitoVerifica, ...fonti, '', riga$].join('\n');
-  const testa = `${c.verifica.esito === 'ok' ? '📝' : '⚠️'} Bozza della settimana${tipo === 'improbabile' ? ' (immagine improbabile)' : ''}\n«${c.titolo_it}»${c.durata ? `\n🗓 ${c.durata}` : ''}`;
-  const coda = 'Per correggere: rispondi a questo messaggio scrivendo cosa cambiare.';
+  const testa = `${c.verifica.esito === 'ok' ? '📝' : '⚠️'} Bozza${tipo === 'improbabile' ? ' (immagine improbabile)' : ''} · ${ETICHETTE[c.categoria]}\n«${c.titolo_it}»${c.durata ? `\n🗓 ${c.durata}` : ''}`;
+  const coda = 'Per correggere: rispondi al messaggio 💬 qui sotto.';
   const intera = [testa, '', testo, '', coda].join('\n');
   const staInFoto = intera.length <= 1024 && c.verifica.esito === 'ok';
   const msg = await telegram('sendPhoto', {
@@ -136,12 +152,26 @@ async function preparaBozza({ nota, precedente, scartata } = {}) {
     testoId = t.message_id;
   }
 
+  // Messaggio di dialogo: il team risponde qui (invece che alla bozza) e trova cosa controllare prima di pubblicare
+  const controlli = [...(c.verifica.da_controllare || []).slice(0, 3), "che nell'immagine il camper sia il Kentucky e non ci siano scritte strane"];
+  const domanda = await telegram('sendMessage', {
+    chat_id: chatId(),
+    text: [
+      c.verifica.esito === 'ok' ? '💬 Che ne pensate?' : '💬 La verifica non è passata: conviene 🔄 Rigenera, oppure dite qui cosa cambiare.',
+      'Rispondete a questo messaggio per chiedere modifiche (es. "tono più ironico", "rifai l\'immagine al tramonto").',
+      '',
+      'Prima di pubblicare controllate:',
+      ...controlli.map((x) => '• ' + x),
+    ].join('\n'),
+    reply_parameters: { message_id: msg.message_id },
+  });
+
   // Chiude i pulsanti della bozza precedente, se c'era
   if (stato.bozza?.messageId && stato.bozza.id !== id) {
     await telegram('editMessageReplyMarkup', { chat_id: chatId(), message_id: stato.bozza.messageId, reply_markup: { inline_keyboard: [] } }).catch(() => {});
   }
 
-  stato.bozza = { id, codice, messageId: msg.message_id, testoId, creata: bozza.creata, promemoria: false };
+  stato.bozza = { id, codice, messageId: msg.message_id, testoId, domandaId: domanda.message_id, creata: bozza.creata, promemoria: false };
   stato.spesa = { mese: meseCorrente(), dollari: delMese };
   stato.storico = [...(stato.storico || []), { id, tema: c.tema, luogo: c.luogo, data: oggiISO() }].slice(-30);
   salvaStato(stato);

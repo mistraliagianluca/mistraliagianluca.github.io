@@ -1,0 +1,98 @@
+---
+// Pagina con tutti gli articoli del Diario: filtri per tipo (Tutti · Offerte · Eventi · Idee), in alto gli articoli attivi
+// (con l'offerta del momento in evidenza), sotto l'archivio degli eventi e delle offerte conclusi.
+// Cosa è concluso lo decide il browser in base alla data di oggi (come in home), senza ricostruire il sito.
+// Gli articoli archiviati con l'interruttore del pannello (nascosto) non compaiono qui: si raggiungono solo dal loro link.
+// Il filtro scelto resta nell'indirizzo (#offerte, #eventi, #idee), così si può condividere.
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PostCard from './PostCard.astro';
+import { t, paths, getPromo, articoloPromo, categoriaDi, CATEGORIE, ICONE_CATEGORIA, type Lang } from '../lib/site';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const other: Lang = lang === 'it' ? 'en' : 'it';
+const posts = (await getCollection('diario', ({ data }) => data.lingua === lang && !data.esempio && !data.nascosto))
+  .sort((a, b) => b.data.data.getTime() - a.data.data.getTime());
+const postPromo = articoloPromo(posts);
+const promo = getPromo();
+// Filtri solo per i tipi che hanno almeno un articolo
+const presenti = CATEGORIE.filter((c) => posts.some((p) => categoriaDi(p.data) === c));
+const ancora = { offerta: 'offerte', evento: 'eventi', idea: 'idee' } as const;
+---
+<Base lang={lang} title={`${t(lang, 'journal_title')} · Mistralia`} description={t(lang, 'journal_sub')} altPath={paths.diario(other)}>
+  <section class="indice">
+    <div class="wrap">
+      <a class="indietro" href={paths.home(lang)}>← {t(lang, 'journal_back')}</a>
+      <h1>{t(lang, 'journal_title')}</h1>
+      <p class="sub">{t(lang, 'journal_sub')}</p>
+      {presenti.length > 1 && (
+        <div class="filtri" role="group" aria-label={t(lang, 'journal_filter_label')}>
+          <button type="button" data-filtro="" aria-pressed="true">{t(lang, 'filter_all')}</button>
+          {presenti.map((c) => <button type="button" data-filtro={c} data-ancora={ancora[c]} aria-pressed="false">{ICONE_CATEGORIA[c]} {t(lang, `filter_${c}`)}</button>)}
+        </div>
+      )}
+      <div class="lista attivi" data-promo-dal={promo.attiva ? promo.mostraDal : ''} data-promo-al={promo.attiva ? promo.mostraAl : ''}>
+        {posts.map((p) => <PostCard post={p} lang={lang} promo={p === postPromo} h="h2" />)}
+      </div>
+      <p class="vuoto" hidden>{t(lang, 'journal_empty')}</p>
+      <h2 class="archivio-titolo" hidden>{t(lang, 'journal_archive')}</h2>
+      <p class="archivio-sub" hidden>{t(lang, 'journal_archive_sub')}</p>
+      <div class="lista archivio"></div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const oggi = new Date().toISOString().slice(0, 10);
+  const attivi = document.querySelector<HTMLElement>('.lista.attivi')!;
+  const archivio = document.querySelector<HTMLElement>('.lista.archivio')!;
+  const tutte = [...attivi.querySelectorAll<HTMLElement>('.post-card')];
+
+  // Conclusi (evento finito, offerta scaduta) nell'archivio
+  for (const c of tutte) {
+    if (c.dataset.scadenza && c.dataset.scadenza < oggi) { c.classList.add('concluso'); archivio.append(c); }
+  }
+  // Offerta del momento in evidenza, in cima, se la promo è visibile oggi
+  const { promoDal = '', promoAl = '' } = attivi.dataset;
+  const promoLive = !!promoAl && (!promoDal || oggi >= promoDal) && oggi <= promoAl;
+  const evidenza = promoLive ? attivi.querySelector<HTMLElement>('.post-card[data-promo]') : null;
+  if (evidenza) { evidenza.classList.add('in-evidenza'); attivi.prepend(evidenza); }
+
+  const titoliArchivio = document.querySelectorAll<HTMLElement>('.archivio-titolo, .archivio-sub');
+  const vuoto = document.querySelector<HTMLElement>('.vuoto')!;
+  const bottoni = [...document.querySelectorAll<HTMLButtonElement>('.filtri button')];
+
+  function filtra(cat: string) {
+    const vede = (c: HTMLElement) => !cat || c.dataset.cat === cat;
+    tutte.forEach((c) => (c.hidden = !vede(c)));
+    const nArchivio = [...archivio.children].filter((c) => !(c as HTMLElement).hidden).length;
+    titoliArchivio.forEach((e) => (e.hidden = nArchivio === 0));
+    vuoto.hidden = [...attivi.children].some((c) => !(c as HTMLElement).hidden);
+    bottoni.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filtro === cat)));
+  }
+  bottoni.forEach((b) => b.addEventListener('click', () => {
+    filtra(b.dataset.filtro!);
+    history.replaceState(null, '', b.dataset.ancora ? `#${b.dataset.ancora}` : location.pathname);
+  }));
+  const iniziale = bottoni.find((b) => b.dataset.ancora && `#${b.dataset.ancora}` === location.hash);
+  filtra(iniziale?.dataset.filtro ?? '');
+</script>
+
+<style>
+  .indice { padding: 28px 0 64px; }
+  .indietro { font-size: 0.92rem; }
+  .indice h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); margin: 12px 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 16px; }
+  .filtri { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 14px; scrollbar-width: none; }
+  .filtri button { flex: none; font: inherit; font-size: 0.9rem; font-weight: 600; padding: 7px 14px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--white); color: var(--ink); cursor: pointer; }
+  .filtri button[aria-pressed='true'] { background: var(--green); border-color: var(--green); color: var(--white); }
+  .lista { display: grid; gap: 8px; }
+  .vuoto { color: var(--muted); }
+  .archivio-titolo { margin: 36px 0 2px; font-size: 1.6rem; }
+  .archivio-sub { color: var(--muted); margin: 0 0 12px; font-size: 0.92rem; }
+  [hidden] { display: none !important; }
+  @media (min-width: 821px) {
+    .lista { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  }
+</style>

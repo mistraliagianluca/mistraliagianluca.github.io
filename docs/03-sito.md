@@ -11,15 +11,16 @@ La pagina è pensata **prima per il telefono**: niente scorrimento laterale (reg
 | Sezione | Cosa mostra | Da dove prende i dati |
 | --- | --- | --- |
 | **Banner promo** | Barra gialla in cima, **dentro l'intestazione fissa**: resta visibile anche scorrendo. Solo se la promo è attiva e nelle date giuste | `promo.md` |
-| **Apertura** | Logo, foto di apertura (senza scritte sopra), titolo, pulsante *Calcola il prezzo*, "da €X al giorno" e il riquadro **"A bordo c'è già tutto"** con 4 icone (pieno, cucina per 4, kit sosta libera, assistenza 24/7) che porta al kit | `info.json` → `fotoApertura`; prezzo più basso da `prezzi.json` |
+| **Apertura** | Logo, foto di apertura (senza scritte sopra), titolo, pulsante *Calcola il prezzo*, "da €X al giorno" e il riquadro **"A bordo c'è già tutto"** con 4 icone (pieno, cucina per 4, kit sosta libera, assistenza 24/7) che porta al kit | `foto.json` → `fotoApertura`; prezzo più basso da `prezzi.json` |
 | **Perché il Kentucky** | Tre righe con icona | testi in `src/i18n/` (`why_*`) |
-| **Diario di bordo** | Gli ultimi 3 articoli non scaduti; su telefono card basse con foto piccola e titolo. È in alto apposta, perché più in basso nessuno ci arrivava | `src/content/diario/` |
-| **Kit di partenza** | Elenco con icone (2–4 colonne su schermo grande), la nota *"Lenzuola e asciugamani non sono inclusi: puoi aggiungerli tra gli extra"* e il riquadro *Prima di ogni partenza* | `info.json` → `kit` (campo `icona` facoltativo: se manca, l'icona dipende dalla posizione del gruppo), `preparazione` |
-| **Piani e prezzi** | 1 · stagioni (tre riquadri con prezzo e periodi) · 2 · coperture (tre colonne, senza tabelle larghe) · 3 · quota fissa: **è l'unico posto in cui compare la quota da €200** · extra in una riga | `prezzi.json` |
-| **Calcolatore** | Date affiancate anche su telefono, piano, persone (menu alto quanto gli altri campi, numero al centro), extra, note, totale e *Invia la richiesta su WhatsApp*. Sotto, il calendario delle date occupate (apribile), **solo se è configurato** | `prezzi.json`, `promo.md`, `info.json` |
-| **Galleria** | 2 foto su telefono, 3 su schermo grande, il pulsante *Tutte le foto (N)* e il pulsante verde **📷 Foto** nell'intestazione, sempre visibile anche su telefono. Sulla home tutti e due aprono direttamente il visore; dagli articoli il pulsante Foto porta alla galleria della home. Il visore è apre un visore a tutto schermo con frecce, tastiera, swipe e contatore | `info.json` → `galleria` |
-| **Ritiro e riconsegna** | Indirizzo con link a Maps, orari, come riconsegnarlo, regole | `info.json` → `ritiro`, `riconsegna`, `regole` |
-| **Domande frequenti** | Domande apribili; quelle con `DA_CONFERMARE` sono nascoste | `info.json` → `faq` |
+| **Diario di bordo** | In cima, se la promo è visibile, l'**articolo dell'offerta** in evidenza (più grande, bordo giallo, testo del banner). Sotto, i **6 articoli più recenti** non scaduti: su telefono righe compatte (miniatura, tipo, data, titolo), su computer una griglia 3×2 con immagine ed estratto. Ogni articolo ha il suo tipo: 🏷 Offerta, 📅 Evento, 🧭 Idea di viaggio. Se gli articoli attivi sono di più, il pulsante **Tutti gli articoli (N)** porta alla pagina Diario. È in alto apposta, perché più in basso nessuno ci arrivava | `src/content/diario/`, `promo.md` |
+| **Pagina Diario** (`/diario/`, `/en/journal/`) | Tutti gli articoli attivi dal più recente, e sotto l'**Archivio** con gli eventi conclusi. Ci porta la voce *Diario* del menu, che compare quando c'è almeno un articolo | `src/components/DiarioIndice.astro` |
+| **Kit di partenza** | Elenco con icone (2–4 colonne su schermo grande), la nota *"Lenzuola e asciugamani non sono inclusi: puoi aggiungerli tra gli extra"* e il riquadro *Prima di ogni partenza* | `bordo.json` → `kit` (campo `icona` facoltativo: se manca, l'icona dipende dalla posizione del gruppo), `preparazione` |
+| **Piani e prezzi** | 1 · stagioni (tre riquadri con prezzo e periodi) · 2 · coperture (tre colonne, senza tabelle larghe) · 3 · quota fissa: **è l'unico posto in cui compare la quota da €200** · extra in una riga | `prezzi.json`, `coperture.json` |
+| **Calcolatore** | Date affiancate anche su telefono, piano, persone (menu alto quanto gli altri campi, numero al centro), extra, note, totale e *Invia la richiesta su WhatsApp*. Sotto, il calendario delle date occupate (apribile), **solo se è configurato**. Con la promo visibile, il riquadro giallo dello sconto ha il link **Leggi l'idea di viaggio →** all'articolo dell'offerta | `prezzi.json`, `coperture.json`, `promo.md`, `info.json` |
+| **Galleria** | 2 foto su telefono, 3 su schermo grande, il pulsante *Tutte le foto (N)* e il pulsante verde **📷 Foto** nell'intestazione, sempre visibile anche su telefono. Sulla home tutti e due aprono direttamente il visore; dagli articoli il pulsante Foto porta alla galleria della home. Il visore è a tutto schermo, con frecce, tastiera, swipe e contatore | `foto.json` → `galleria` |
+| **Ritiro e riconsegna** | Indirizzo con link a Maps, orari, come riconsegnarlo, regole | `info.json` → `ritiro`; `bordo.json` → `riconsegna`, `regole` |
+| **Domande frequenti** | Domande apribili; quelle con `DA_CONFERMARE` sono nascoste | `faq.json` |
 | **Contatti** | Telefoni ed email | `info.json` |
 | **WhatsApp** | **Un solo pulsante**, fisso in basso a destra e sempre visibile su ogni schermo. L'unico altro pulsante WhatsApp è quello del calcolatore, che manda la richiesta già compilata | `info.json` → `whatsapp` |
 
@@ -47,9 +48,24 @@ flowchart LR
    - Salvalo nel password manager e annotalo in [Sicurezza](05-sicurezza.md#inventario-dei-segreti).
 2. Apri **www.mistralia.co/admin** → **Sign In Using Access Token** → incolla il token. Il browser lo ricorda: le volte successive entri direttamente.
 
-**Uso:** *Dati del sito* → scegli **Prezzi, stagioni e condizioni**, **Promozione** oppure **Contatti, ritiro, kit, regole, FAQ e foto** → modifica → **Save**. Le foto si caricano dal campo *Galleria* (anche dal telefono), si trascinano per cambiare l'ordine e finiscono in `public/assets/gallery/`.
+**Com'è fatto (dal 23/11/2026):** a sinistra un elenco corto, una voce per argomento. Ogni voce apre **un solo modulo**, a tutta larghezza (senza l'anteprima affiancata). Gli elenchi lunghi (stagioni, extra, kit, regole, FAQ) sono **chiusi**: ogni riga mostra un riassunto (es. *"1 nov 2026 → 24 mar 2027 · Bassa"*, *"Che patente serve?"*) e si apre con un tocco su ›; *Expand All* le apre tutte.
 
-**Diario di bordo (articoli):** sezione *Diario di bordo* del pannello. Si vede e si modifica **solo la versione italiana**: titolo, anteprima, testo, immagine, **Fine dell'evento**, interruttore **Nascondi** o **Delete**. La **versione inglese si aggiorna da sola** entro pochi minuti: il bot ritraduce i testi cambiati, copia date, immagine e interruttori, ed elimina l'inglese se elimini l'italiano. Nel gruppo Telegram arriva *"🌍 Versione inglese aggiornata"*. Gli articoli nuovi li crea solo il bot.
+| Voce del pannello | Cosa contiene | File |
+| --- | --- | --- |
+| 📖 **Diario** | Gli articoli (solo italiano) | `src/content/diario/*.it.md` |
+| 💶 **Prezzi e stagioni** | Prezzo al giorno, calendario delle stagioni, noleggio minimo ed eccezioni, km | `src/data/prezzi.json` |
+| 🛡 **Piani ed extra** | Piani Basic/Plus/Premium, quota obbligatoria, extra facoltativi | `src/data/coperture.json` |
+| 🏷 **Promozione** | Banner, sconto e date | `src/data/promo.md` |
+| ✅ **A bordo** | Kit (riquadri con icona), prima di ogni partenza, riconsegna, regole | `src/data/bordo.json` |
+| ❓ **FAQ** | Domande frequenti: domanda e risposta in italiano e in inglese | `src/data/faq.json` |
+| 🖼 **Foto** | Foto di apertura, foto di riserva, galleria | `src/data/foto.json` |
+| ☎️ **Contatti** | WhatsApp, telefoni, email, ritiro, calendario, dati dell'azienda, GoatCounter | `src/data/info.json` |
+
+Le icone vere del pannello sono simboli Material (`icon` in `config.yml`); le voci sono separate in tre gruppi da una linea: prezzi e promo, contenuti, contatti. Sveltia chiama *Files* il gruppo delle voci a file singolo.
+
+**Uso:** scegli la voce → modifica → **Save** (in alto a destra). Le foto si caricano dalla voce *Foto* (anche dal telefono), si trascinano per cambiare l'ordine e finiscono in `public/assets/gallery/`. Il sito unisce i file in `src/lib/site.ts`: per i componenti è come se fossero un file solo.
+
+**Diario (articoli):** voce *Diario* del pannello. Si vede e si modifica **solo la versione italiana**: titolo, **tipo di articolo** (🧭 Idea di viaggio, 📅 Evento, 🏷 Offerta), anteprima, testo, immagine, **Fine dell'evento o dell'offerta**, interruttore **Archivia** o **Delete**. La **versione inglese si aggiorna da sola** entro pochi minuti: il bot ritraduce i testi cambiati, copia date, immagine e interruttori, ed elimina l'inglese se elimini l'italiano. Nel gruppo Telegram arriva *"🌍 Versione inglese aggiornata"*. Gli articoli nuovi li crea solo il bot.
 
 **Ordine dell'elenco:** in cima gli articoli **🟢 in vetrina**, sotto quelli **⚪ evento concluso** e **⚫ archiviato**, ognuno dal più recente. Lo stato lo aggiorna il bot entro 1–2 minuti da ogni modifica, e a mezzanotte per quelli che scadono. Il pannello ricorda l'ultimo ordinamento scelto con *Sort*: per tornare a questo scegli *Ordine*, decrescente.
 
@@ -65,20 +81,20 @@ flowchart LR
 
 | Voglio cambiare… | File | Come |
 | --- | --- | --- |
-| **Prezzo al giorno** di una stagione | pannello → Prezzi · oppure `src/data/prezzi.json` → `prezzoGiorno` | `B` bassa, `M` media, `A` alta |
-| **In che stagione** è un giorno | pannello → Prezzi → *Stagioni (periodi)* · oppure `prezzi.json` → `periodi` | Elenco di periodi `dal`–`al` con la stagione. I giorni non coperti valgono come media; un anno senza periodi usa quelli dell'ultimo anno presente. **Per un anno nuovo aggiungi i suoi periodi** |
-| **Noleggio minimo** | `prezzi.json` → `minimoGiorni`, `minimoEccezioni` | Le eccezioni valgono per i ritiri tra `dal` e `al` |
-| **Piani** (supplemento, cauzione, franchigia) | `prezzi.json` → `piani` | `supplementoGiorno` in euro al giorno |
-| **Quota obbligatoria** (pulizia, preparazione, check-in) | `prezzi.json` → `servizio` | Si paga una volta per noleggio |
-| **Extra** (lenzuola, asciugamani, barbecue, transfer) | pannello → Prezzi → Extra · oppure `prezzi.json` → `extra` | Ogni extra ha un'**unità** (`unita`): *a noleggio*, *a persona* (il calcolatore moltiplica per le persone), *a letto* o *a tratta* (il calcolatore fa scegliere quanti letti o se andata e ritorno). Il nome va scritto senza l'unità: "a persona", "a letto" eccetera li aggiunge il sito |
+| **Prezzo al giorno** di una stagione | pannello → Prezzi e stagioni · oppure `src/data/prezzi.json` → `prezzoGiorno` | `B` bassa, `M` media, `A` alta |
+| **In che stagione** è un giorno | pannello → Prezzi e stagioni → *Calendario delle stagioni* · oppure `prezzi.json` → `periodi` | Elenco di periodi `dal`–`al` con la stagione. I giorni non coperti valgono come media; un anno senza periodi usa quelli dell'ultimo anno presente. **Per un anno nuovo aggiungi i suoi periodi** |
+| **Noleggio minimo** | pannello → Prezzi e stagioni · oppure `prezzi.json` → `minimoGiorni`, `minimoEccezioni` | Le eccezioni valgono per i ritiri tra `dal` e `al` |
+| **Piani** (supplemento, cauzione, franchigia) | pannello → Piani ed extra · oppure `coperture.json` → `piani` | `supplementoGiorno` in euro al giorno |
+| **Quota obbligatoria** (pulizia, preparazione, check-in) | pannello → Piani ed extra · oppure `coperture.json` → `servizio` | Si paga una volta per noleggio |
+| **Extra** (lenzuola, asciugamani, barbecue, transfer) | pannello → Piani ed extra · oppure `coperture.json` → `extra` | Ogni extra ha un'**unità** (`unita`): *a noleggio*, *a persona* (il calcolatore moltiplica per le persone), *a letto* o *a tratta* (il calcolatore fa scegliere quanti letti o se andata e ritorno). Il nome va scritto senza l'unità: "a persona", "a letto" eccetera li aggiunge il sito |
 | **Promo** (es. Black Friday) | pannello → Promozione · oppure `src/data/promo.md` | vedi [Promo](#promo) |
-| **Numero WhatsApp**, telefoni, email | `src/data/info.json` | `whatsapp` senza `+` e senza spazi (es. `393756473839`) |
-| **Indirizzo e orari di ritiro** | `info.json` → `ritiro` | È l'indirizzo che vedono i clienti, non la sede legale |
-| **Kit incluso, preparazione, riconsegna, regole** | pannello → Contatti… · oppure `info.json` | Sempre in italiano **e** inglese. Ogni gruppo del kit ha un'**icona** a scelta (carburante, benvenuto, sicurezza, energia, cucina, relax, igiene, comfort, spunta) |
-| **Domande frequenti** | `info.json` → `faq` | Una FAQ che contiene `DA_CONFERMARE` non viene mostrata |
-| **Foto della galleria** | pannello → Contatti… → *Galleria* · oppure `public/assets/gallery/` + `info.json` → `galleria` | vedi [Foto](#foto) |
+| **Numero WhatsApp**, telefoni, email | pannello → Contatti · oppure `src/data/info.json` | `whatsapp` senza `+` e senza spazi (es. `393756473839`) |
+| **Indirizzo e orari di ritiro** | pannello → Contatti · oppure `info.json` → `ritiro` | È l'indirizzo che vedono i clienti, non la sede legale |
+| **Kit incluso, preparazione, riconsegna, regole** | pannello → A bordo · oppure `bordo.json` | Sempre in italiano **e** inglese. Ogni gruppo del kit ha un'**icona** a scelta (carburante, benvenuto, sicurezza, energia, cucina, relax, igiene, comfort, spunta) |
+| **Domande frequenti** | pannello → FAQ · oppure `faq.json` | Ogni domanda ha 4 campi: `domanda`, `risposta`, `question`, `answer`. Una risposta che contiene `DA_CONFERMARE` non viene mostrata |
+| **Foto della galleria** | pannello → Foto · oppure `public/assets/gallery/` + `foto.json` → `galleria` | vedi [Foto](#foto) |
 | **Testi fissi** (titoli, pulsanti, frasi) | `src/i18n/it.json` e `src/i18n/en.json` | Stesse chiavi in tutti e due i file |
-| **Articoli del Diario** | pannello → Diario di bordo · oppure `src/content/diario/` | Li scrive il bot; vedi [Articoli scaduti, archiviati ed eliminati](#articoli-scaduti-archiviati-ed-eliminati) |
+| **Articoli del Diario** | pannello → Diario · oppure `src/content/diario/` | Li scrive il bot; vedi [Articoli scaduti, archiviati ed eliminati](#articoli-scaduti-archiviati-ed-eliminati) |
 | Aspetto, colori, struttura | `src/components/`, `src/layouts/`, `src/styles/global.css` | Solo per chi sviluppa ([Sviluppo](06-sviluppo.md)) |
 
 ### In alternativa: modificare un file con l'editor web di GitHub
@@ -113,6 +129,8 @@ titolo_en: "Black Friday: 15% off spring rentals"
 - Per vedere subito il banner (per esempio per una prova), metti come *Banner visibile dal* la data di oggi.
 - Per una nuova promo cambia i valori e metti `attiva: true` (nel pannello: l'interruttore *Promo attiva*).
 - Salvando dal pannello i commenti `#` del file spariscono: le spiegazioni restano qui e nei suggerimenti dei campi.
+- **La promo la può attivare anche il bot**: dal radar eventi, con *🏷 Post + offerta* e la conferma *✅ È libero: attiva l'offerta* nel gruppo Telegram (vedi [Uso quotidiano → Radar eventi](02-uso-quotidiano.md#il-radar-eventi)). Il bot sovrascrive i valori della promo precedente, e lo dice prima della conferma.
+- **Articolo dell'offerta:** se c'è un articolo di tipo *Offerta* con *Fine* uguale a *Banner visibile fino al* (il bot li fa così), finché il banner è visibile quell'articolo sta **in evidenza in cima al Diario** (home e pagina Diario) e il riquadro dello sconto nel calcolatore ha il link *Leggi l'idea di viaggio →*. Se manca, vale l'articolo *Offerta* più recente ancora valido all'inizio della promo; se non c'è nessun articolo *Offerta*, niente evidenza e niente link.
 
 ## Articoli scaduti, archiviati ed eliminati
 
@@ -121,15 +139,17 @@ titolo_en: "Black Friday: 15% off spring rentals"
 ```mermaid
 flowchart LR
     A["Articolo pubblicato<br>con 'Fine dell'evento'"] --> B{"Oggi è dopo<br>la fine?"}
-    B -->|No| C["In vetrina nella home<br>(i 3 più recenti)"]
+    B -->|No| C["In vetrina nella home<br>(i 6 più recenti)"]
     B -->|Sì| D["Esce dalla home;<br>la pagina resta online<br>con l'avviso 'evento concluso'"]
     E["Interruttore 'Archivia'<br>nel pannello"] --> F["Esce dalla home;<br>la pagina resta raggiungibile dal link<br>con l'avviso 'in archivio'"]
     G["Delete<br>nel pannello"] --> H["La pagina non esiste più:<br>chi ha il link vede la<br>pagina 404 di Mistralia"]
 ```
 
-- **Fine dell'evento** (`scadenza`): la scrive il bot quando il post parla di un evento con date, ed è controllata dal verificatore. Per luoghi e itinerari è vuota e l'articolo non scade. Si può correggere dal pannello.
-- Dal giorno dopo la scadenza l'articolo **esce dalla home** e la sua pagina mostra *"Questo evento si è concluso il … · Scopri le prossime idee di viaggio"*. La pagina **resta online** apposta, così i link già condivisi sui social non portano a una pagina inesistente. Lo decide il browser del visitatore in base alla data: non serve ricostruire il sito.
-- La home mostra i **3 articoli più recenti non scaduti**. Se sono tutti scaduti, la sezione Diario sparisce.
+- **Tipo di articolo** (`categoria`): **🏷 Offerta** (post legato a una promo), **📅 Evento** (con date), **🧭 Idea di viaggio** (luoghi, borghi, itinerari). Lo sceglie il bot; si cambia dal pannello. Gli articoli di prima del 23/11/2026 non ce l'hanno: valgono come *Evento* se hanno una fine, altrimenti come *Idea*.
+- **Fine dell'evento o dell'offerta** (`scadenza`): la scrive il bot quando il post parla di un evento con date (controllata dal verificatore) e, per le offerte, è l'ultimo giorno del banner della promo. Per luoghi e itinerari è vuota e l'articolo non scade. Si può correggere dal pannello.
+- Dal giorno dopo la scadenza l'articolo **esce dalla home** e la sua pagina mostra *"Questo evento si è concluso il … · Scopri le prossime idee di viaggio"* (per le offerte: *"Questa offerta è terminata il …"*). La pagina **resta online** apposta, così i link già condivisi sui social non portano a una pagina inesistente. Lo decide il browser del visitatore in base alla data: non serve ricostruire il sito.
+- La home mostra l'articolo dell'offerta in evidenza (se la promo è visibile) e i **6 articoli più recenti non scaduti**, più il pulsante *Tutti gli articoli (N)* se ce ne sono altri. Se sono tutti scaduti, la sezione Diario sparisce. La scheda dell'articolo è una sola (`src/components/PostCard.astro`) e cambia aspetto tra telefono e computer: niente da mantenere due volte.
+- La **pagina Diario** (`/diario/`, in inglese `/en/journal/`) ha in alto i **filtri** *Tutti · Offerte · Eventi · Idee* (solo i tipi presenti), poi tutti gli articoli attivi (con l'offerta in evidenza) e, sotto, l'**Archivio** con eventi e offerte conclusi (anche questo lo decide il browser in base alla data). Il filtro resta nell'indirizzo: `/diario/#offerte`, `#eventi`, `#idee` si possono condividere. Il tipo nella pagina di un articolo porta alla pagina Diario già filtrata. Gli articoli **archiviati** con l'interruttore non compaiono né qui né in home: si raggiungono solo dal loro link.
 - **Archivia** (`nascosto: true`, interruttore *Archivia* nel pannello): l'articolo **esce dalla home** ma la sua pagina **resta raggiungibile** da chi ha il link, ad esempio dai social, con l'avviso *"Questo articolo è in archivio e non è più in evidenza · Scopri le prossime idee di viaggio"*. Non compare in nessun elenco e Google non la indicizza (`noindex`). Si può riattivare spegnendo l'interruttore.
 - **Elimina** (*Delete* nel pannello): per un articolo **sbagliato** da togliere davvero. Toglie l'articolo dal repository (resta nella storia di git), e il bot elimina anche la versione inglese. Chi apre il vecchio link vede la **pagina 404 di Mistralia**: *"Questa pagina non c'è più"*, con i pulsanti per il Diario, il calcolatore e WhatsApp, in italiano o in inglese secondo il link. L'immagine in `public/assets/diario/` resta e si può cancellare dalla libreria media del pannello.
 - **Versione inglese:** non va mai modificata a mano, perché viene riscritta a ogni modifica dell'italiano. Si corregge l'italiano e la traduzione segue. Dettagli in [Automazione → Traduzioni](04-automazione.md#versione-inglese-degli-articoli).
@@ -138,9 +158,9 @@ flowchart LR
 ## Foto
 
 - **Dal pannello:** campo *Galleria* → **carica** le foto o scegli tra quelle già caricate → trascina per l'ordine → Salva. Le foto finiscono in `public/assets/gallery/`. Usa foto orizzontali in JPG, meglio sotto i 500 KB.
-- **Foto di apertura** (quella grande in alto): campo *Foto grande in cima* (`info.json` → `fotoApertura`, oggi `/assets/gallery/SER.jpg`). Se il file non c'è, il sito usa la *Foto di riserva* (`fotoAperturaRiserva`). Maiuscole e minuscole nel nome del file non contano.
+- **Foto di apertura** (quella grande in alto): campo *Foto grande in cima* (`foto.json` → `fotoApertura`, oggi `/assets/gallery/SER.jpg`). Se il file non c'è, il sito usa la *Foto di riserva* (`fotoAperturaRiserva`). Maiuscole e minuscole nel nome del file non contano.
 - **Foto sostituite con lo stesso nome:** il sito aggiunge a ogni immagine una versione calcolata dal contenuto del file (`7.jpg?v=3fa2c1d0`, funzione `versionata` in `src/lib/site.ts`). Quando una foto cambia, cambia l'indirizzo, e browser e GitHub Pages scaricano subito quella nuova invece di mostrare la copia in memoria. Vale per galleria, foto di apertura e immagini degli articoli.
-- In `info.json` la galleria è un elenco di percorsi (`"/assets/gallery/7.jpg"`). Per compatibilità il sito accetta anche il vecchio formato a numeri (`7`).
+- In `foto.json` la galleria è un elenco di percorsi (`"/assets/gallery/7.jpg"`). Per compatibilità il sito accetta anche il vecchio formato a numeri (`7`).
 - **Riferimento del camper per i post:** Gemini usa le foto **vere** salvate in `automazione/riferimento/` (`kentucky-1.jpg`, `kentucky-2.jpg`), indicate in `automazione/config.json` → `fotoRiferimento`. Se mancano, usa `1.jpg` e `2.jpg` della galleria. Non cancellarle.
 - Sotto la galleria c'è la nota *"Ambientazioni ricreate con l'intelligenza artificiale: il camper è quello vero."* (`gallery_ai_note` in `src/i18n/`).
 
@@ -169,7 +189,7 @@ Le istruzioni a Gemini chiedono anche che quello che si vede dai finestrini e da
 
 1. Su Google Calendar crea il calendario **"Mistralia – occupato"** e segna come eventi i giorni già venduti, **anche quelli presi da Yescapa o Indie**.
 2. In *Impostazioni del calendario → Autorizzazioni di accesso* attiva **Rendi disponibile pubblicamente** con *Mostra solo disponibilità (nascondi dettagli)*.
-3. In *Integra calendario* copia l'**URL dell'incorporamento** e incollalo in `info.json` → `calendarioEmbedUrl`.
+3. In *Integra calendario* copia l'**URL dell'incorporamento** e incollalo nel pannello → *Contatti* → *Link "incorpora" del Google Calendar* (`info.json` → `calendarioEmbedUrl`).
 
 Finché `calendarioEmbedUrl` è vuoto, sul sito **non compare niente** sulla disponibilità: né la voce *Disponibilità* nel menu, né il riquadro nel calcolatore. Quando incolli il link (anche dal pannello: *Contatti… → Link "incorpora" del Google Calendar*), compaiono tutti e due da soli. Il calendario **non** si sincronizza con Yescapa e Indie: va aggiornato a mano, è una scelta voluta per tenere bassi costi e complessità.
 

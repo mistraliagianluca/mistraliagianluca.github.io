@@ -1,0 +1,135 @@
+{
+  "_leggimi": "Cosa c'è a bordo, preparazione, riconsegna e regole. Si modifica dal pannello www.mistralia.co/admin → A bordo.",
+  "kit": [
+    {
+      "titolo": {
+        "it": "Viaggio",
+        "en": "Travel"
+      },
+      "voci": {
+        "it": "Si parte con il pieno di carburante",
+        "en": "Full fuel tank at departure"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Benvenuto",
+        "en": "Welcome kit"
+      },
+      "voci": {
+        "it": "Acqua minerale 1,5 L, caffè 200 g e moka",
+        "en": "1.5 L mineral water, 200 g of coffee and a moka pot"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Sicurezza",
+        "en": "Safety"
+      },
+      "voci": {
+        "it": "Estintore, kit di pronto soccorso, assistenza stradale 24/7",
+        "en": "Fire extinguisher, first-aid kit, 24/7 roadside assistance"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Energia e sosta libera",
+        "en": "Energy and off-grid"
+      },
+      "voci": {
+        "it": "Inverter, prese ovunque, cavo elettrico, tubo dell'acqua, cunei di livellamento, oscurante termico",
+        "en": "Inverter, sockets throughout, power cable, water hose, levelling wedges, thermal cover"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Cucina",
+        "en": "Kitchen"
+      },
+      "voci": {
+        "it": "Pentole e stoviglie per 4 persone, moka e accessori",
+        "en": "Pots and tableware for 4, moka pot and accessories"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Esterno e relax",
+        "en": "Outdoor and relax"
+      },
+      "voci": {
+        "it": "Tavolo con 4 sedie, tappeto da esterno, tendalino, carte (napoletane, burraco, Uno)",
+        "en": "Table with 4 chairs, outdoor mat, awning, playing cards (Neapolitan, burraco, Uno)"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Igiene",
+        "en": "Hygiene"
+      },
+      "voci": {
+        "it": "Kit pulizia, carta igienica, sfera d'argento per l'acqua, spugna, panno, sgrassatore, scopino",
+        "en": "Cleaning kit, toilet paper, silver ball for the water tank, sponge, cloth, degreaser, toilet brush"
+      }
+    },
+    {
+      "titolo": {
+        "it": "Comfort",
+        "en": "Comfort"
+      },
+      "voci": {
+        "it": "Aria condizionata in cabina e cellula, riscaldamento a gasolio, 2 bombole del gas da 10 kg",
+        "en": "Air conditioning in cab and living area, diesel heating, 2x 10 kg gas bottles"
+      }
+    }
+  ],
+  "preparazione": {
+    "it": [
+      "Pulizia professionale",
+      "Igienizzazione",
+      "Bombole del gas piene",
+      "Pastiglie per il WC",
+      "Serbatoio dell'acqua pieno",
+      "Batterie cariche"
+    ],
+    "en": [
+      "Professional cleaning",
+      "Sanitisation",
+      "Full gas bottles",
+      "Toilet tablets",
+      "Full fresh-water tank",
+      "Fully charged batteries"
+    ]
+  },
+  "riconsegna": {
+    "it": [
+      "Interni puliti",
+      "Pieno di carburante",
+      "Serbatoi svuotati e puliti",
+      "Stesse condizioni del ritiro"
+    ],
+    "en": [
+      "Clean interior",
+      "Full fuel tank",
+      "Tanks emptied and cleaned",
+      "Same condition as at pick-up"
+    ]
+  },
+  "regole": [
+    {
+      "it": "Patente B",
+      "en": "Car licence (category B)"
+    },
+    {
+      "it": "Viaggi all'estero consentiti",
+      "en": "Travel abroad allowed"
+    },
+    {
+      "it": "Animali non ammessi",
+      "en": "No pets"
+    },
+    {
+      "it": "Vietato fumare",
+      "en": "No smoking"
+    }
+  ]
+}

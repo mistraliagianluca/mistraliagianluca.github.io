@@ -101,7 +101,8 @@ function workflows() {
 function genera() {
   const wf = workflows();
   const config = JSON.parse(leggi('automazione/config.json'));
-  const prezzi = JSON.parse(leggi('src/data/prezzi.json'));
+  // prezzi.json + coperture.json (piani, quota, extra), come li unisce il sito in src/lib/site.ts
+  const prezzi = { ...JSON.parse(leggi('src/data/prezzi.json')), ...(fs.existsSync(rel('src/data/coperture.json')) ? JSON.parse(leggi('src/data/coperture.json')) : {}) };
   const promo = leggi('src/data/promo.md');
   const val = (k) => (promo.match(new RegExp(`^${k}:\\s*(.+?)\\s*(#.*)?$`, 'm')) || [, '—'])[1].replace(/^"|"$/g, '');
   const tuttiSecrets = [...new Set(wf.flatMap((w) => w.secrets))].sort();
@@ -141,7 +142,7 @@ function genera() {
     '| --- | --- |',
     ...Object.entries(config).filter(([k]) => !k.startsWith('_')).map(([k, v]) => `| \`${k}\` | \`${JSON.stringify(v)}\` |`),
     '',
-    '## Prezzi in vigore (`src/data/prezzi.json`)',
+    '## Prezzi in vigore (`src/data/prezzi.json` e `coperture.json`)',
     '',
     `- Prezzo al giorno: bassa €${prezzi.prezzoGiorno.B} · media €${prezzi.prezzoGiorno.M} · alta €${prezzi.prezzoGiorno.A}`,
     `- Noleggio minimo: bassa ${prezzi.minimoGiorni.B} giorni · media ${prezzi.minimoGiorni.M} · alta ${prezzi.minimoGiorni.A}` +
@@ -161,12 +162,13 @@ function genera() {
     '## Articoli pubblicati nel Diario',
     '',
     ...(diario.length
-      ? ['| Articolo | Pubblicato | Fine evento | Stato |', '| --- | --- | --- | --- |', ...diario.map((f) => {
+      ? ['| Articolo | Tipo | Pubblicato | Fine evento/offerta | Stato |', '| --- | --- | --- | --- | --- |', ...diario.map((f) => {
           const t = fs.readFileSync(rel('src/content/diario', f), 'utf8');
           const v = (k) => (t.match(new RegExp(`^${k}:\\s*"?([^"\\n]*)"?`, 'm')) || [, ''])[1].trim();
           const oggi = new Date().toISOString().slice(0, 10);
           const stato = v('nascosto') === 'true' ? 'archiviato' : v('scadenza') && v('scadenza') < oggi ? 'evento concluso' : 'in vetrina';
-          return `| \`${f.replace('.it.md', '')}\` | ${v('data') || '—'} | ${v('scadenza') || '—'} | ${stato} |`;
+          const tipo = v('categoria') || (v('scadenza') ? 'evento' : 'idea');
+          return `| \`${f.replace('.it.md', '')}\` | ${tipo} | ${v('data') || '—'} | ${v('scadenza') || '—'} | ${stato} |`;
         })]
       : ['Nessuno.']),
     '',

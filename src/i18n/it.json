@@ -150,5 +150,19 @@
   "trip_both": "Andata e ritorno",
   "qty_persona_one": "{n} persona",
   "qty_letto_one": "{n} letto",
-  "qty_tratta_one": "{n} tratta"
+  "qty_tratta_one": "{n} tratta",
+  "journal_all_btn": "Tutti gli articoli",
+  "journal_archive": "Archivio",
+  "journal_archive_sub": "Eventi e offerte già conclusi: restano qui come idee per i prossimi anni.",
+  "cat_offerta": "Offerta",
+  "cat_evento": "Evento",
+  "cat_idea": "Idea di viaggio",
+  "filter_all": "Tutti",
+  "filter_offerta": "Offerte",
+  "filter_evento": "Eventi",
+  "filter_idea": "Idee",
+  "promo_read": "Leggi l'idea di viaggio →",
+  "post_expired_offer": "Questa offerta è terminata il {d}.",
+  "journal_filter_label": "Mostra",
+  "journal_empty": "Al momento non ce ne sono."
 }

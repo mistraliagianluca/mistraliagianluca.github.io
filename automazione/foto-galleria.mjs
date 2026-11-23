@@ -80,7 +80,9 @@ for (const n of [1, 2]) {
   if (!fs.existsSync(dest) && fs.existsSync(path.join(GALLERIA, `${n}.jpg`))) fs.copyFileSync(path.join(GALLERIA, `${n}.jpg`), dest);
 }
 
-const info = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/data/info.json'), 'utf8'));
+// La galleria sta in src/data/foto.json (prima della divisione dei dati era in info.json)
+const fileFoto = ['foto.json', 'info.json'].map((f) => path.join(ROOT, 'src/data', f)).find((f) => fs.existsSync(f) && JSON.parse(fs.readFileSync(f, 'utf8')).galleria);
+const info = JSON.parse(fs.readFileSync(fileFoto, 'utf8'));
 const tutte = info.galleria.map((v) => String(v).split('/').pop()).map((f) => (/^\d+$/.test(f) ? `${f}.jpg` : f));
 const scelte = process.argv.slice(2);
 const daFare = scelte.length ? tutte.filter((f) => scelte.includes(f.replace(/\.\w+$/, ''))) : tutte;

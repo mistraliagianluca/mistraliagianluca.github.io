@@ -13,7 +13,7 @@ import { t, paths, u } from '../lib/site';
           <h1>{t(l, 'nf_title')}</h1>
           <p>{t(l, 'nf_text')}</p>
           <div class="nf-azioni">
-            <a class="btn btn-primary" href={`${paths.home(l)}#diario`}>{t(l, 'nf_journal')}</a>
+            <a class="btn btn-primary" href={paths.diario(l)}>{t(l, 'nf_journal')}</a>
             <a class="btn" href={`${paths.home(l)}#calcola`}>{t(l, 'cta_quote')}</a>
           </div>
         </div>

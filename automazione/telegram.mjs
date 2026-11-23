@@ -1,22 +1,32 @@
 // Legge i messaggi arrivati al bot Telegram e li esegue:
 //   ✅ Pubblica  -> l'articolo va nel Diario del sito (IT + EN) e il bot manda i testi per i social
 //   🔄 Rigenera  -> nuova proposta con un altro tema
-//   risposta alla bozza -> nuova versione con la correzione richiesta
-//   /nuovo  /aiuto  /id
-// Lo lancia un job di GitHub Actions ogni 15 minuti: nessun server da tenere acceso.
+//   risposta alla bozza o al messaggio 💬 -> nuova versione con la correzione richiesta
+//   pulsanti e risposte del radar eventi (radar.mjs), voti del sondaggio del lunedì (sondaggio.mjs)
+//   /nuovo [indicazioni]  /sondaggio  /radar  /aiuto  /id
+// Poi fa i lavori a orario: sondaggio del lunedì, radar eventi, traduzioni, promemoria.
+// Lo lancia GitHub Actions, svegliato ogni minuto da cron-job.org: nessun server da tenere acceso.
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROOT, AUTO, PROVA, config, leggiStato, salvaStato, oggiISO, slug, telegram, chatId, scrivi, spesaDelGiro, spesaDelMese, meseCorrente } from './lib.mjs';
+import { ROOT, AUTO, PROVA, config, leggiStato, salvaStato, oggiISO, slug, telegram, chatId, scrivi, spesaDelGiro, registraSpesa, oraRoma } from './lib.mjs';
 import { creaBozza } from './genera.mjs';
+import { radarDaFare, lanciaRadar, tapRadar, rispostaRadar } from './radar.mjs';
+import { sondaggioAttivo, avviaSondaggio, aggiornaSondaggio, chiudiSondaggioSeServe } from './sondaggio.mjs';
 import { allineaTraduzioni, impronta, leggiArticolo } from './traduzioni.mjs';
 
 const AIUTO = [
   'Comandi del bot Mistralia:',
   '✅ Pubblica: mette l\'articolo sul sito e ti manda i testi per i social',
   '🔄 Rigenera: nuova proposta con un altro tema',
-  '✍️ Rispondi alla bozza per chiedere una correzione',
+  '💬 Rispondi al messaggio "Che ne pensate?" (o alla bozza) per chiedere una correzione',
+  '📡 Spunti del radar: ✍️ bozza, 🏷 post + offerta, ⏭ no; oppure rispondi allo spunto con indicazioni',
+  '🗳 Il lunedì: sondaggio sul tema della settimana, poi la bozza sul più votato',
+  '',
   '/nuovo — prepara subito una nuova bozza',
+  '/nuovo un weekend a Matera per l\'Immacolata — bozza con le tue indicazioni',
+  '/sondaggio — fa subito il sondaggio con 3 proposte',
+  '/radar — cerca subito eventi per i prossimi post',
   '/id — mostra l\'identificativo di questa chat',
 ].join('\n');
 
@@ -28,6 +38,7 @@ const yaml = (v) => JSON.stringify(v); // una stringa JSON è anche una stringa 
 
 function scriviArticolo(b) {
   const c = b.contenuto;
+  const CATEGORIE = ['offerta', 'evento', 'idea'];
   let chiave = slug(c.chiave || c.titolo_it);
   const dir = path.join(ROOT, 'src/content/diario');
   fs.mkdirSync(dir, { recursive: true });
@@ -45,6 +56,7 @@ function scriviArticolo(b) {
       `immagine: ${yaml(img)}`,
       `estratto: ${yaml(c[`estratto_${l}`])}`,
       'immagineAI: true',
+      ...(CATEGORIE.includes(c.categoria) ? [`categoria: ${c.categoria}`] : []),
       ...(/^\d{4}-\d{2}-\d{2}$/.test(String(c.scadenza ?? '')) ? [`scadenza: ${c.scadenza}`] : []),
       '---',
       '',
@@ -83,7 +95,7 @@ async function pubblica(stato, id, chi) {
 
 async function main() {
   const stato = leggiStato();
-  const updates = await telegram('getUpdates', { offset: stato.offset ?? 0, timeout: 0, allowed_updates: ['message', 'callback_query'] });
+  const updates = await telegram('getUpdates', { offset: stato.offset ?? 0, timeout: 0, allowed_updates: ['message', 'callback_query', 'poll'] });
   // Senza TELEGRAM_CHAT_ID il bot risponde solo a /id (serve per scoprire l'id del gruppo durante l'attivazione)
   const nostra = process.env.TELEGRAM_CHAT_ID || (PROVA ? String(chatId()) : '');
 
@@ -91,11 +103,13 @@ async function main() {
     stato.offset = u.update_id + 1;
     salvaStato(stato); // se un passaggio fallisce, lo stesso messaggio non viene rieseguito all'infinito
     try {
+      if (u.poll) { await aggiornaSondaggio(stato, u.poll); continue; }
       if (u.callback_query) {
         const q = u.callback_query;
         if (String(q.message?.chat?.id) !== nostra) continue;
         const [azione, codice] = String(q.data).split(':');
         const chi = q.from?.first_name || 'il team';
+        if (await tapRadar(stato, azione, codice, chi, (t) => rispondiTap(q, t))) continue;
         if (!stato.bozza || ![stato.bozza.codice, stato.bozza.id].includes(codice)) {
           await rispondiTap(q, 'Questa bozza non è più attiva.');
           continue;
@@ -122,17 +136,31 @@ async function main() {
       if (String(m.chat.id) !== nostra) continue;
       if (/^\/(aiuto|help|start)\b/.test(testo)) { await scrivi(AIUTO); continue; }
       if (/^\/nuovo\b/.test(testo)) {
-        await scrivi('Preparo una nuova bozza, qualche minuto…');
-        await creaBozza();
+        const indicazioni = testo.replace(/^\/nuovo(@\w+)?\s*/, '').trim();
+        await scrivi(indicazioni ? 'Preparo una bozza con le tue indicazioni, qualche minuto…' : 'Preparo una nuova bozza, qualche minuto…');
+        await creaBozza(indicazioni ? { indicazioni } : {});
         Object.assign(stato, leggiStato());
         continue;
       }
+      if (/^\/sondaggio\b/.test(testo)) {
+        if (stato.sondaggio) { await scrivi('C\'è già un sondaggio aperto: votate lì.', { reply_parameters: { message_id: stato.sondaggio.messageId } }); continue; }
+        await scrivi('Preparo il sondaggio con 3 proposte, qualche minuto…');
+        await avviaSondaggio(stato);
+        continue;
+      }
+      if (/^\/radar\b/.test(testo)) {
+        await scrivi('📡 Cerco eventi per le prossime settimane, qualche minuto…');
+        await lanciaRadar(stato);
+        continue;
+      }
       const risposta = m.reply_to_message?.message_id;
-      if (stato.bozza && risposta && [stato.bozza.messageId, stato.bozza.testoId].includes(risposta)) {
+      if (stato.bozza && risposta && [stato.bozza.messageId, stato.bozza.testoId, stato.bozza.domandaId].includes(risposta)) {
         await scrivi('Ricevuto, preparo la versione corretta…', { reply_parameters: { message_id: m.message_id } });
         await creaBozza({ nota: testo, precedente: leggiBozza(stato.bozza.id) });
         Object.assign(stato, leggiStato());
+        continue;
       }
+      await rispostaRadar(stato, m, testo);
     } catch (e) {
       console.error(e);
       stato.spesa = leggiStato().spesa;
@@ -141,36 +169,47 @@ async function main() {
     salvaStato(stato);
   }
 
-  // Post della settimana: lo prepara il bot stesso, dal giorno e dall'ora in config (ora italiana),
-  // una sola volta a settimana. Così un solo workflow tocca lo stato e nessun giro ne cancella un altro.
-  const ps = config.postSettimanale ?? { giorno: 1, ora: 9 };
-  const roma = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Rome' }));
-  const giornoRoma = roma.getDay() || 7; // 1 = lunedì … 7 = domenica
-  const lunedi = new Date(roma); lunedi.setDate(roma.getDate() - (giornoRoma - 1));
-  const settimana = `${lunedi.getFullYear()}-${String(lunedi.getMonth() + 1).padStart(2, '0')}-${String(lunedi.getDate()).padStart(2, '0')}`;
-  const eOra = giornoRoma > ps.giorno || (giornoRoma === ps.giorno && roma.getHours() >= ps.ora);
-  if (nostra && eOra && stato.settimanale !== settimana) {
-    stato.settimanale = settimana; // segnato PRIMA di provare: se fallisce non si riprova ogni minuto (e non si spende)
+  // Lavori a orario (ora italiana). Ognuno segna nello stato che è stato fatto PRIMA di provare:
+  // se fallisce non si riprova a ogni giro (e non si spende); il bot scrive l'errore nel gruppo.
+  const aOrario = async (nome, lavoro) => {
+    try { await lavoro(); } catch (e) {
+      console.error(e);
+      stato.spesa = leggiStato().spesa; // la spesa dei tentativi falliti è già stata salvata nel file
+      await scrivi(`⚠️ ${nome}: ${e.message.slice(0, 300)}`).catch(() => {});
+    }
     salvaStato(stato);
-    const giaFatta = (stato.storico || []).some((x) => x.data >= settimana);
+  };
+
+  // Sondaggio del lunedì chiuso (scaduto o votato da tutti) → bozza sul tema vincente
+  if (nostra) await aOrario('Non sono riuscito a preparare la bozza dal sondaggio. Per riprovare scrivi /nuovo', () => chiudiSondaggioSeServe(stato));
+
+  // Post della settimana: dal giorno e dall'ora in config, una sola volta a settimana.
+  // Con il sondaggio attivo (config.sondaggio) prima si vota il tema, poi arriva la bozza.
+  const ps = config.postSettimanale ?? { giorno: 1, ora: 9 };
+  const ora = oraRoma();
+  const lunedi = new Date(ora.r); lunedi.setDate(ora.r.getDate() - (ora.giorno - 1));
+  const settimana = `${lunedi.getFullYear()}-${String(lunedi.getMonth() + 1).padStart(2, '0')}-${String(lunedi.getDate()).padStart(2, '0')}`;
+  const eOra = ora.giorno > ps.giorno || (ora.giorno === ps.giorno && ora.ora >= ps.ora);
+  if (nostra && eOra && stato.settimanale !== settimana) {
+    stato.settimanale = settimana;
+    salvaStato(stato);
+    const giaFatta = (stato.storico || []).some((x) => x.data >= settimana) || stato.sondaggio;
     if (!giaFatta) {
-      try {
-        await creaBozza();
-        Object.assign(stato, leggiStato());
-      } catch (e) {
-        console.error(e);
-        stato.spesa = leggiStato().spesa;
-        await scrivi(`⚠️ Non sono riuscito a preparare il post della settimana: ${e.message.slice(0, 300)}\nPer riprovare scrivi /nuovo.`).catch(() => {});
-      }
+      await aOrario(sondaggioAttivo() ? 'Non sono riuscito a preparare il sondaggio della settimana. Per una bozza scrivi /nuovo' : 'Non sono riuscito a preparare il post della settimana. Per riprovare scrivi /nuovo', async () => {
+        if (sondaggioAttivo()) await avviaSondaggio(stato);
+        else { await creaBozza(); Object.assign(stato, leggiStato()); }
+      });
     }
   }
+
+  // Radar eventi nei giorni e all'ora di config.radar
+  if (nostra && radarDaFare(stato)) await aOrario('Radar eventi non riuscito', () => lanciaRadar(stato));
 
   // Versioni inglesi degli articoli allineate a quelle italiane (modificate dal pannello o a mano)
   if (nostra) {
     const prima = spesaDelGiro();
     try { await allineaTraduzioni(stato); } catch (e) { console.error(e); }
-    const costo = spesaDelGiro() - prima;
-    if (costo > 0) stato.spesa = { mese: meseCorrente(), dollari: spesaDelMese(stato) + costo };
+    registraSpesa(stato, prima);
   }
 
   // Promemoria se la bozza aspetta da troppo

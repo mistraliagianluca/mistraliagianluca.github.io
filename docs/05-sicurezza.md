@@ -8,7 +8,7 @@
 2. **Il repository è pubblico**: tutto quello che c'è dentro lo può leggere chiunque. Prima di ogni commit, `git status` non deve mostrare file come `.env`, `chiavi.txt` o `credentials.json`.
 3. **2FA attiva** su GitHub, Anthropic, Google e Telegram. Su GitHub è obbligatoria: chi entra nell'account controlla il sito.
 4. **Ogni chiave ha il minimo dei permessi** e, dove si può, **una scadenza e un limite di spesa**.
-5. **Nel gruppo Telegram solo persone del team:** chiunque ci sia dentro può pubblicare sul sito con un tap.
+5. **Nel gruppo Telegram solo persone del team:** chiunque ci sia dentro può pubblicare sul sito con un tap e, dal radar eventi, **attivare un'offerta** (banner e sconto nel calcolatore) con ✅ *È libero: attiva l'offerta*.
 6. **Se una chiave potrebbe essere uscita, si revoca subito**, senza aspettare di esserne certi. Rifarla costa 5 minuti.
 7. **Ogni chiave nuova, revocata o rinnovata si annota** nell'[inventario](#inventario-dei-segreti) qui sotto, con la data. Si annotano dove si trova e la scadenza, **mai il valore**.
 
@@ -81,7 +81,7 @@ Il vantaggio è che GitHub Actions è gratuito senza limiti. Se un giorno serve 
 | --- | --- | --- |
 | Account GitHub `mistraliagianluca` (admin del repository) | Gianluca | github.com → Settings → Password and authentication |
 | Collaboratori del repository (possono modificare il sito) | nessuno, per ora | repository → Settings → Collaborators |
-| Gruppo Telegram "Mistralia" (può approvare e pubblicare) | i membri del team | info del gruppo → Membri |
+| Gruppo Telegram "Mistralia" (può approvare, pubblicare e attivare offerte dal radar) | i membri del team | info del gruppo → Membri |
 | Proprietario del bot (BotFather) | chi l'ha creato | Telegram → @BotFather |
 | Console Anthropic | Gianluca | console.anthropic.com → Settings → Members |
 | Google AI Studio / Cloud | Gianluca | console.cloud.google.com → IAM |

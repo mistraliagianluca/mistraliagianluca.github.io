@@ -1,0 +1,71 @@
+{
+  "_leggimi": "Domande frequenti. Si modifica dal pannello www.mistralia.co/admin → FAQ. Una risposta con DA_CONFERMARE non viene mostrata.",
+  "faq": [
+    {
+      "domanda": "Che patente serve?",
+      "risposta": "Serve la patente B e almeno 21 anni di età.",
+      "question": "Which licence do I need?",
+      "answer": "A standard car licence (category B) and a minimum age of 21."
+    },
+    {
+      "domanda": "Quanto è la cauzione?",
+      "risposta": "€2.000 con il piano Basic, €1.500 con Plus e €1.000 con Premium. Viene pre-autorizzata sulla carta tramite Stripe, cioè bloccata e non addebitata, e sbloccata alla riconsegna se il camper torna senza danni.",
+      "question": "How much is the deposit?",
+      "answer": "€2,000 with the Basic plan, €1,500 with Plus and €1,000 with Premium. It is pre-authorised on your card via Stripe (blocked, not charged) and released at drop-off if the camper comes back undamaged."
+    },
+    {
+      "domanda": "Cosa copre l'assicurazione?",
+      "risposta": "L'assicurazione del veicolo copre la responsabilità civile verso terzi. Con i piani Plus e Premium la franchigia è azzerata.",
+      "question": "What does the insurance cover?",
+      "answer": "The vehicle insurance covers third-party liability. With the Plus and Premium plans the excess is waived."
+    },
+    {
+      "domanda": "Cos'è il costo di €200?",
+      "risposta": "È la quota obbligatoria di pulizia finale, preparazione e check-in, una volta per noleggio: ti consegniamo il camper pulito, igienizzato, con bombole, acqua e batterie piene.",
+      "question": "What is the €200 fee?",
+      "answer": "It's the mandatory final cleaning, preparation and check-in fee, charged once per rental: you get the camper cleaned, sanitised, with full gas, water and batteries."
+    },
+    {
+      "domanda": "Posso portare il cane?",
+      "risposta": "No, gli animali non sono ammessi a bordo.",
+      "question": "Can I bring my dog?",
+      "answer": "No, pets are not allowed on board."
+    },
+    {
+      "domanda": "Posso andare all'estero?",
+      "risposta": "Sì, i viaggi all'estero sono consentiti.",
+      "question": "Can I drive abroad?",
+      "answer": "Yes, travel abroad is allowed."
+    },
+    {
+      "domanda": "E se si guasta durante il viaggio?",
+      "risposta": "Hai l'assistenza stradale 24/7 inclusa e puoi chiamarci quando vuoi.",
+      "question": "What if it breaks down?",
+      "answer": "24/7 roadside assistance is included, and you can call us any time."
+    },
+    {
+      "domanda": "Ci sono km inclusi?",
+      "risposta": "Sì, 100 km al giorno inclusi. Oltre, ogni km costa €0,35.",
+      "question": "Are kilometres included?",
+      "answer": "Yes, 100 km per day are included. Beyond that, each km costs €0.35."
+    },
+    {
+      "domanda": "Posso cancellare?",
+      "risposta": "Sì, puoi cancellare la prenotazione fino a 30 giorni prima della partenza.",
+      "question": "Can I cancel?",
+      "answer": "Yes, you can cancel your booking up to 30 days before departure."
+    },
+    {
+      "domanda": "Come si paga?",
+      "risposta": "Tutto online con carta, tramite Stripe: noleggio, extra e cauzione.",
+      "question": "How do I pay?",
+      "answer": "Everything online by card, via Stripe: rental, extras and deposit."
+    },
+    {
+      "domanda": "Potete consegnare il camper altrove?",
+      "risposta": "Solo in aeroporto, con il servizio transfer tra gli extra. Per altre esigenze scrivici su WhatsApp.",
+      "question": "Can you deliver the camper elsewhere?",
+      "answer": "Only at the airport, with the transfer service among the extras. For anything else, message us on WhatsApp."
+    }
+  ]
+}
