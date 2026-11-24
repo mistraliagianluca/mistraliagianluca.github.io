@@ -129,9 +129,68 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 6.551038
+    "dollari": 6.8446940000000005
   },
   "settimanale": "2026-11-23",
   "traduzioniFallite": {},
-  "sondaggio": null
+  "sondaggio": null,
+  "radar": {
+    "ultimo": "2026-11-24"
+  },
+  "spunti": [
+    {
+      "codice": "e0f0d271d4",
+      "evento": "La Fòcara di Novoli – festa di Sant'Antonio Abate",
+      "tipo": "festival",
+      "luogo": "Novoli (Lecce), Puglia",
+      "date": "16–18 gennaio 2027 (accensione della Fòcara sabato 16 gennaio)",
+      "inizio": "2027-01-16",
+      "fine": "2027-01-18",
+      "distanza": "circa 2 ore e 30 di guida da Bari",
+      "perche": "Un falò rituale alto circa 25 metri, fatto con migliaia di fascine di tralci di vite, acceso in piazza tra musica salentina e festa fino a notte. Il weekend si allunga volentieri con Lecce e il Salento d'inverno, senza folla estiva.",
+      "fonte": "https://www.italia.it/en/puglia/lecce/things-to-do/focara-novoli-event",
+      "offerta": {
+        "motivo": "Cade in bassa stagione ed è un grande evento che richiama molti visitatori da fuori regione.",
+        "sconto": 10,
+        "noleggi_dal": "2027-01-13",
+        "noleggi_al": "2027-01-18",
+        "mostra_dal": "2026-11-24",
+        "mostra_al": "2027-01-12",
+        "nome": "Focara Novoli 2027",
+        "titolo_it": "Fòcara di Novoli: −10% sui noleggi dal 13 al 18 gennaio",
+        "titolo_en": "Novoli Fòcara: 10% off rentals starting 13–18 January"
+      },
+      "testo": "🎪 Spunto 1/2\n«La Fòcara di Novoli – festa di Sant'Antonio Abate» · Novoli (Lecce), Puglia\n🗓 16–18 gennaio 2027 (accensione della Fòcara sabato 16 gennaio) · 🚐 circa 2 ore e 30 di guida da Bari\nUn falò rituale alto circa 25 metri, fatto con migliaia di fascine di tralci di vite, acceso in piazza tra musica salentina e festa fino a notte. Il weekend si allunga volentieri con Lecce e il Salento d'inverno, senza folla estiva.\n🔗 https://www.italia.it/en/puglia/lecce/things-to-do/focara-novoli-event\n🏷 Idea offerta: −10% sui noleggi dal 13 gennaio al 18 gennaio\n\nFacciamo un post?",
+      "messageId": 92,
+      "data": "2026-11-24",
+      "esito": null
+    },
+    {
+      "codice": "910c41f09e",
+      "evento": "Lo Schiaccianoci al Teatro San Carlo",
+      "tipo": "teatro",
+      "luogo": "Napoli, Campania",
+      "date": "dal 22 dicembre 2026 al 5 gennaio 2027 (13 recite, con due matinée di mezzogiorno il 24 e il 31 dicembre)",
+      "inizio": "2026-12-22",
+      "fine": "2027-01-05",
+      "distanza": "circa 3 ore di guida da Bari",
+      "perche": "Il balletto di Natale nel teatro lirico più antico d'Europa, con tante date tra Natale e l'Epifania per scegliere il weekend. Si abbina bene a un giro tra le luminarie e le feste della città, in un viaggio di più giorni.",
+      "fonte": "https://www.cosefighenapoli.it/blog/cosa-fare-a-napoli-a-dicembre-2026",
+      "offerta": {
+        "motivo": "Le date cadono in bassa stagione, quindi uno sconto può spingere a partire.",
+        "sconto": 5,
+        "noleggi_dal": "2026-12-19",
+        "noleggi_al": "2027-01-05",
+        "mostra_dal": "2026-11-24",
+        "mostra_al": "2026-12-18",
+        "nome": "Schiaccianoci Napoli",
+        "titolo_it": "Natale a Napoli in camper: −5% dal 19 dicembre al 5 gennaio",
+        "titolo_en": "Christmas in Naples by camper: 5% off, 19 Dec – 5 Jan"
+      },
+      "testo": "🎭 Spunto 2/2\n«Lo Schiaccianoci al Teatro San Carlo» · Napoli, Campania\n🗓 dal 22 dicembre 2026 al 5 gennaio 2027 (13 recite, con due matinée di mezzogiorno il 24 e il 31 dicembre) · 🚐 circa 3 ore di guida da Bari\nIl balletto di Natale nel teatro lirico più antico d'Europa, con tante date tra Natale e l'Epifania per scegliere il weekend. Si abbina bene a un giro tra le luminarie e le feste della città, in un viaggio di più giorni.\n🔗 https://www.cosefighenapoli.it/blog/cosa-fare-a-napoli-a-dicembre-2026\n🏷 Idea offerta: −5% sui noleggi dal 19 dicembre al 5 gennaio\n\nFacciamo un post?",
+      "messageId": 93,
+      "data": "2026-11-24",
+      "esito": null
+    }
+  ]
 }
