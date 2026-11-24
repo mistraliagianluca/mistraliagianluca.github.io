@@ -2,7 +2,7 @@
   "id": "2026-11-24-festa-propaggini-putignano-carnevale-2027",
   "codice": "ce2706033a",
   "tipo": "improbabile",
-  "creata": "2026-11-24T08:18:30.483Z",
+  "creata": "2026-11-24T08:20:14.206Z",
   "contenuto": {
     "tema": "Festa delle Propaggini a Putignano, sabato 26 dicembre 2026: il via alla 633ª edizione del Carnevale più antico d'Europa, con satira in vernacolo e cartapesta, in un weekend lungo in camper",
     "luogo": "Putignano (Bari, Puglia)",
@@ -39,16 +39,16 @@
       "https://www.giornaledipuglia.com/2026/11/carnevale-di-putignano-2027-ufficiali.html",
       "https://www.trmtv.it/cultura/2026_11_10/585767.html"
     ],
-    "prompt_immagine": "Edit the reference photo: keep the motorhome exactly identical and fully intact (same shape, same colours, same details, and the KENTUCKY lettering on the over-cab bunk clearly visible, undistorted). Funny, impossible scene: the Kentucky is parked on top of a huge, hand-painted papier-mâché Carnival float shaped like a giant smiling jester head, as if the motorhome were its oversized hat. The camper is shown from a front three-quarter angle, sharp and well lit, sitting level and stable on the platform, with realistic scale, shadows and reflections. The float stands in a narrow street of Putignano, between whitewashed Apulian houses with stone details. Down at street level, a small group of five or six people in colourful traditional Carnival costumes look up and laugh, with a few streamers and confetti in the air. Clear, cold late-December afternoon, soft warm light, wide shot from a slightly low angle. Ironic photographic style, natural colours, realistic textures, sharp details, no deformed shapes or faces, uncluttered composition. No added text, no logos, no banners, no signs. Horizontal format.",
+    "prompt_immagine": "Edit the reference photo: keep the motorhome exactly identical and fully intact (same shape, same colours, same details, and the KENTUCKY lettering on the over-cab bunk clearly visible, undistorted). Realistic, believable scene at sunset in Putignano, Apulia: the Kentucky is parked at the side of a wide, empty paved street on the edge of the town, shown from a front three-quarter angle, sharp and well lit, sitting level on the ground with realistic scale, shadows and reflections. Behind and beside it stand several large, colourful papier-mâché Carnival floats in the foreground and middle ground, with oversized caricature figures in bright reds, yellows, blues and greens, tall and imposing, partly lined up as if waiting for the parade season. Whitewashed Apulian houses with stone details in the background. The sun is low on the horizon: warm golden-orange sunset light, long soft shadows, a sky with pink and orange tones, gentle rim light on the camper and the floats. Calm, empty scene with no people in the foreground, or at most a few tiny distant figures. Photorealistic style, natural colours, realistic textures, sharp details, no deformed shapes or faces, uncluttered composition. No added text, no logos, no banners, no signs, no lettering on the floats. Wide shot at eye level. Horizontal format.",
     "rifai_immagine": true,
     "verifica": {
       "esito": "ok",
       "problemi": [],
       "correzione": "",
       "da_controllare": [
-        "Orario e luogo delle Propaggini del 26/12 non ancora pubblicati → carnevalediputignano.it",
-        "Date sfilate 31/1, 7/2, 9/2, 13/2 ancora invariate → carnevalediputignano.it",
-        "Frasi 'sosta libera' / 'dove fermarti lo scegli tu': solo dotazioni, nessun luogo. Ok per policy?"
+        "Orario e luogo del 26/12 non ancora pubblicati → carnevalediputignano.it, prima di pubblicare",
+        "Il testo dice che il programma esce nelle prossime settimane: se esce, aggiornare → carnevalediputignano.it",
+        "Scadenza 2026-12-26 = solo la Festa delle Propaggini; il Carnevale finisce il 13/02/2027 → decide il team"
       ],
       "fonti": [
         "https://www.carnevalediputignano.it/carnevale-di-putignano-2027-ecco-le-date-della-633a-edizione/",
