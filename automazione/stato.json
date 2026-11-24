@@ -1,5 +1,5 @@
 {
-  "offset": 926428062,
+  "offset": 926428063,
   "bozza": null,
   "storico": [
     {
@@ -139,11 +139,12 @@
       }
     ],
     "creato": "2026-11-24T07:57:55.480Z",
-    "votanti": 0,
+    "votanti": 1,
     "conteggi": [
       0,
-      0,
+      1,
       0
-    ]
+    ],
+    "membri": 3
   }
 }
