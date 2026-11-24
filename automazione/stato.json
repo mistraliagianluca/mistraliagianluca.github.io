@@ -1,6 +1,14 @@
 {
-  "offset": 926428065,
-  "bozza": null,
+  "offset": 926428066,
+  "bozza": {
+    "id": "2026-11-24-festa-propaggini-putignano-carnevale-2027",
+    "codice": "ce2706033a",
+    "messageId": 76,
+    "testoId": 77,
+    "domandaId": 78,
+    "creata": "2026-11-24T08:15:37.699Z",
+    "promemoria": false
+  },
   "storico": [
     {
       "id": "2026-11-21-selva-di-fasano-camper-apulia-for-christmas-2026",
@@ -75,6 +83,12 @@
       "tema": "Presepi di San Gregorio Armeno a Napoli in camper: la via dei maestri presepiai e la fiera natalizia",
       "luogo": "Napoli (Campania)",
       "data": "2026-11-23"
+    },
+    {
+      "id": "2026-11-24-festa-propaggini-putignano-carnevale-2027",
+      "tema": "Festa delle Propaggini a Putignano, sabato 26 dicembre 2026: il via alla 633ª edizione del Carnevale più antico d'Europa, con satira in vernacolo e cartapesta, in un weekend lungo in camper",
+      "luogo": "Putignano (Bari, Puglia)",
+      "data": "2026-11-24"
     }
   ],
   "pubblicati": [
@@ -105,46 +119,9 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 5.361624
+    "dollari": 5.77358
   },
   "settimanale": "2026-11-23",
   "traduzioniFallite": {},
-  "sondaggio": {
-    "pollId": "5778427160129700949",
-    "messageId": 73,
-    "opzioni": [
-      {
-        "etichetta": "🎭 Propaggini di Putignano: il Carnevale più antico d'Europa, 26 dicembre",
-        "titolo": "Festa delle Propaggini a Putignano, il via al Carnevale 2027",
-        "luogo": "Putignano (Bari, Puglia)",
-        "date": "Sabato 26 dicembre 2026",
-        "dettagli": "Il 26 dicembre, Santo Stefano, la Festa delle Propaggini apre la 633ª edizione del Carnevale: poeti in vernacolo recitano versi satirici in costume tradizionale. Si può fare in un weekend lungo, con la cartapesta e la Valle d'Itria intorno. Putignano dista circa 45 minuti–1 ora da Bari.",
-        "fonte": "https://www.carnevalediputignano.it/carnevale-di-putignano-2027-ecco-le-date-della-633a-edizione/"
-      },
-      {
-        "etichetta": "🌲 Gargano d'inverno in camper: Foresta Umbra, Monte Sant'Angelo e Vieste",
-        "titolo": "Itinerario invernale sul Gargano",
-        "luogo": "Gargano (Foggia, Puglia)",
-        "date": "",
-        "dettagli": "Giro di 4–5 giorni fuori stagione: Foresta Umbra, il santuario di San Michele a Monte Sant'Angelo (UNESCO) e i borghi costieri di Vieste e Peschici, senza folla. Da Bari servono circa 3–3 ore e mezza di guida per raggiungere il cuore del promontorio.",
-        "fonte": ""
-      },
-      {
-        "etichetta": "🍞 Altamura e Castel del Monte: pane, storia e Alta Murgia in inverno",
-        "titolo": "Altamura, Castel del Monte e Parco dell'Alta Murgia",
-        "luogo": "Altamura e Castel del Monte (Alta Murgia, Puglia)",
-        "date": "",
-        "dettagli": "Weekend lungo tra il centro storico di Altamura e il suo pane, il Castel del Monte di Federico II (UNESCO) e gli altipiani dell'Alta Murgia. Da Bari sono circa 45 minuti–1 ora di guida.",
-        "fonte": ""
-      }
-    ],
-    "creato": "2026-11-24T07:57:55.480Z",
-    "votanti": 2,
-    "conteggi": [
-      0,
-      1,
-      1
-    ],
-    "membri": 3
-  }
+  "sondaggio": null
 }
