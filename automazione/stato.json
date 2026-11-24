@@ -1,14 +1,6 @@
 {
-  "offset": 926428069,
-  "bozza": {
-    "id": "2026-11-24-festa-propaggini-putignano-carnevale-2027",
-    "codice": "ce2706033a",
-    "messageId": 86,
-    "testoId": 87,
-    "domandaId": 88,
-    "creata": "2026-11-24T08:20:14.206Z",
-    "promemoria": false
-  },
+  "offset": 926428070,
+  "bozza": null,
   "storico": [
     {
       "id": "2026-11-21-selva-di-fasano-camper-apulia-for-christmas-2026",
@@ -126,6 +118,12 @@
       "id": "2026-11-23-napoli-san-gregorio-armeno-presepi-camper",
       "chiave": "napoli-san-gregorio-armeno-presepi-camper",
       "data": "2026-11-23",
+      "da": "Gianluca"
+    },
+    {
+      "id": "2026-11-24-festa-propaggini-putignano-carnevale-2027",
+      "chiave": "festa-propaggini-putignano-carnevale-2027",
+      "data": "2026-11-24",
       "da": "Gianluca"
     }
   ],
