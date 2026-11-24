@@ -2,7 +2,7 @@
   "id": "2026-11-24-festa-propaggini-putignano-carnevale-2027",
   "codice": "ce2706033a",
   "tipo": "improbabile",
-  "creata": "2026-11-24T08:15:37.699Z",
+  "creata": "2026-11-24T08:18:30.483Z",
   "contenuto": {
     "tema": "Festa delle Propaggini a Putignano, sabato 26 dicembre 2026: il via alla 633ª edizione del Carnevale più antico d'Europa, con satira in vernacolo e cartapesta, in un weekend lungo in camper",
     "luogo": "Putignano (Bari, Puglia)",
@@ -39,16 +39,16 @@
       "https://www.giornaledipuglia.com/2026/11/carnevale-di-putignano-2027-ufficiali.html",
       "https://www.trmtv.it/cultura/2026_11_10/585767.html"
     ],
-    "prompt_immagine": "Edit the reference photo: keep the motorhome exactly identical (shape, colours, details and the KENTUCKY lettering on the over-cab bunk). Place it in an impossible, funny scene: the Kentucky is perched on top of a gigantic, colourful papier-mâché Carnival float, more than 12 metres tall, shaped like an oversized grinning mask with exaggerated features. The float rolls through the old town of Putignano, with whitewashed Apulian buildings on both sides. A crowd of cheerful revellers in traditional costumes and masks looks up and waves, and confetti and streamers fill the air. Cold, clear late-December afternoon, soft golden light, slightly low-angle wide shot. Ironic, photographic, realistic style. No added text, no logos, no banners. Horizontal format.",
+    "prompt_immagine": "Edit the reference photo: keep the motorhome exactly identical and fully intact (same shape, same colours, same details, and the KENTUCKY lettering on the over-cab bunk clearly visible, undistorted). Funny, impossible scene: the Kentucky is parked on top of a huge, hand-painted papier-mâché Carnival float shaped like a giant smiling jester head, as if the motorhome were its oversized hat. The camper is shown from a front three-quarter angle, sharp and well lit, sitting level and stable on the platform, with realistic scale, shadows and reflections. The float stands in a narrow street of Putignano, between whitewashed Apulian houses with stone details. Down at street level, a small group of five or six people in colourful traditional Carnival costumes look up and laugh, with a few streamers and confetti in the air. Clear, cold late-December afternoon, soft warm light, wide shot from a slightly low angle. Ironic photographic style, natural colours, realistic textures, sharp details, no deformed shapes or faces, uncluttered composition. No added text, no logos, no banners, no signs. Horizontal format.",
     "rifai_immagine": true,
     "verifica": {
       "esito": "ok",
       "problemi": [],
       "correzione": "",
       "da_controllare": [
-        "Orario e luogo delle Propaggini del 26/12 (ancora non pubblicati) → carnevalediputignano.it",
-        "Date sfilate 31/1, 7/2, 9/2, 13/2 non cambiate prima di pubblicare → carnevalediputignano.it",
-        "Scadenza 2026-12-26: vale per la sola Festa delle Propaggini; il Carnevale va al 13/02/2027 → carnevalediputignano.it"
+        "Orario e luogo delle Propaggini del 26/12 non ancora pubblicati → carnevalediputignano.it",
+        "Date sfilate 31/1, 7/2, 9/2, 13/2 ancora invariate → carnevalediputignano.it",
+        "Frasi 'sosta libera' / 'dove fermarti lo scegli tu': solo dotazioni, nessun luogo. Ok per policy?"
       ],
       "fonti": [
         "https://www.carnevalediputignano.it/carnevale-di-putignano-2027-ecco-le-date-della-633a-edizione/",

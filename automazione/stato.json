@@ -1,12 +1,12 @@
 {
-  "offset": 926428067,
+  "offset": 926428068,
   "bozza": {
     "id": "2026-11-24-festa-propaggini-putignano-carnevale-2027",
     "codice": "ce2706033a",
-    "messageId": 76,
-    "testoId": 77,
-    "domandaId": 78,
-    "creata": "2026-11-24T08:15:37.699Z",
+    "messageId": 81,
+    "testoId": 82,
+    "domandaId": 83,
+    "creata": "2026-11-24T08:18:30.483Z",
     "promemoria": false
   },
   "storico": [
@@ -89,6 +89,12 @@
       "tema": "Festa delle Propaggini a Putignano, sabato 26 dicembre 2026: il via alla 633ª edizione del Carnevale più antico d'Europa, con satira in vernacolo e cartapesta, in un weekend lungo in camper",
       "luogo": "Putignano (Bari, Puglia)",
       "data": "2026-11-24"
+    },
+    {
+      "id": "2026-11-24-festa-propaggini-putignano-carnevale-2027",
+      "tema": "Festa delle Propaggini a Putignano, sabato 26 dicembre 2026: il via alla 633ª edizione del Carnevale più antico d'Europa, con satira in vernacolo e cartapesta, in un weekend lungo in camper",
+      "luogo": "Putignano (Bari, Puglia)",
+      "data": "2026-11-24"
     }
   ],
   "pubblicati": [
@@ -119,7 +125,7 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 5.77358
+    "dollari": 6.161036
   },
   "settimanale": "2026-11-23",
   "traduzioniFallite": {},
