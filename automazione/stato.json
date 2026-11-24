@@ -1,5 +1,5 @@
 {
-  "offset": 926428061,
+  "offset": 926428062,
   "bozza": null,
   "storico": [
     {
@@ -105,8 +105,45 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 5.229616
+    "dollari": 5.361624
   },
   "settimanale": "2026-11-23",
-  "traduzioniFallite": {}
+  "traduzioniFallite": {},
+  "sondaggio": {
+    "pollId": "5778427160129700949",
+    "messageId": 73,
+    "opzioni": [
+      {
+        "etichetta": "🎭 Propaggini di Putignano: il Carnevale più antico d'Europa, 26 dicembre",
+        "titolo": "Festa delle Propaggini a Putignano, il via al Carnevale 2027",
+        "luogo": "Putignano (Bari, Puglia)",
+        "date": "Sabato 26 dicembre 2026",
+        "dettagli": "Il 26 dicembre, Santo Stefano, la Festa delle Propaggini apre la 633ª edizione del Carnevale: poeti in vernacolo recitano versi satirici in costume tradizionale. Si può fare in un weekend lungo, con la cartapesta e la Valle d'Itria intorno. Putignano dista circa 45 minuti–1 ora da Bari.",
+        "fonte": "https://www.carnevalediputignano.it/carnevale-di-putignano-2027-ecco-le-date-della-633a-edizione/"
+      },
+      {
+        "etichetta": "🌲 Gargano d'inverno in camper: Foresta Umbra, Monte Sant'Angelo e Vieste",
+        "titolo": "Itinerario invernale sul Gargano",
+        "luogo": "Gargano (Foggia, Puglia)",
+        "date": "",
+        "dettagli": "Giro di 4–5 giorni fuori stagione: Foresta Umbra, il santuario di San Michele a Monte Sant'Angelo (UNESCO) e i borghi costieri di Vieste e Peschici, senza folla. Da Bari servono circa 3–3 ore e mezza di guida per raggiungere il cuore del promontorio.",
+        "fonte": ""
+      },
+      {
+        "etichetta": "🍞 Altamura e Castel del Monte: pane, storia e Alta Murgia in inverno",
+        "titolo": "Altamura, Castel del Monte e Parco dell'Alta Murgia",
+        "luogo": "Altamura e Castel del Monte (Alta Murgia, Puglia)",
+        "date": "",
+        "dettagli": "Weekend lungo tra il centro storico di Altamura e il suo pane, il Castel del Monte di Federico II (UNESCO) e gli altipiani dell'Alta Murgia. Da Bari sono circa 45 minuti–1 ora di guida.",
+        "fonte": ""
+      }
+    ],
+    "creato": "2026-11-24T07:57:55.480Z",
+    "votanti": 0,
+    "conteggi": [
+      0,
+      0,
+      0
+    ]
+  }
 }
