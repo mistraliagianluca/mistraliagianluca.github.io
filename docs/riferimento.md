@@ -3,7 +3,7 @@
 > ⚙️ **Non modificare questo file a mano.** Lo rigenera il workflow *Documentazione* a ogni push, leggendo i file veri del progetto.
 > Se qualcosa qui è sbagliato, è sbagliato il file da cui viene: correggi quello.
 
-Ultimo aggiornamento: 2026-11-25 13:30 UTC
+Ultimo aggiornamento: 2026-11-26 13:09 UTC
 
 ## Workflow di GitHub Actions
 
