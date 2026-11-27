@@ -129,13 +129,13 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 6.8446940000000005
+    "dollari": 7.143764000000001
   },
   "settimanale": "2026-11-23",
   "traduzioniFallite": {},
   "sondaggio": null,
   "radar": {
-    "ultimo": "2026-11-24"
+    "ultimo": "2026-11-27"
   },
   "spunti": [
     {
@@ -191,6 +191,50 @@
       "messageId": 93,
       "data": "2026-11-24",
       "esito": "no"
+    },
+    {
+      "codice": "17acea0cda",
+      "evento": "Festa delle Farchie di Fara Filiorum Petri",
+      "tipo": "altro",
+      "luogo": "Fara Filiorum Petri (Chieti), Abruzzo",
+      "date": "sabato 16 gennaio 2027",
+      "inizio": "2027-01-16",
+      "fine": "2027-01-16",
+      "distanza": "circa 3 ore e mezza di camper",
+      "perche": "Per la vigilia di Sant'Antonio Abate le contrade accendono enormi torce di canne, in un rito popolare vissuto per le strade del borgo ai piedi della Majella. È un weekend lungo invernale che unisce fuoco, tradizione e Abruzzo interno.",
+      "fonte": "https://www.agenziacomunica.net/2026/11/23/le-farchie-di-fara-filiorum-petri/",
+      "offerta": {
+        "motivo": "Si tiene in bassa stagione ed è un rito molto sentito che richiama visitatori da fuori regione.",
+        "sconto": 10,
+        "noleggi_dal": "2027-01-13",
+        "noleggi_al": "2027-01-16",
+        "mostra_dal": "2026-11-27",
+        "mostra_al": "2027-01-12",
+        "nome": "Farchie 2027",
+        "titolo_it": "Farchie in camper: -10% sui noleggi dal 13 al 16 gennaio",
+        "titolo_en": "Farchie fires by camper: 10% off rentals starting 13–16 Jan"
+      },
+      "testo": "✨ Spunto 1/2\n«Festa delle Farchie di Fara Filiorum Petri» · Fara Filiorum Petri (Chieti), Abruzzo\n🗓 sabato 16 gennaio 2027 · 🚐 circa 3 ore e mezza di camper\nPer la vigilia di Sant'Antonio Abate le contrade accendono enormi torce di canne, in un rito popolare vissuto per le strade del borgo ai piedi della Majella. È un weekend lungo invernale che unisce fuoco, tradizione e Abruzzo interno.\n🔗 https://www.agenziacomunica.net/2026/11/23/le-farchie-di-fara-filiorum-petri/\n🏷 Idea offerta: −10% sui noleggi dal 13 gennaio al 16 gennaio\n\nFacciamo un post?",
+      "messageId": 95,
+      "data": "2026-11-27",
+      "esito": null
+    },
+    {
+      "codice": "24cb3846b6",
+      "evento": "Natale Diffuso ed Eventi a Caserta (luminarie, concerti e spettacoli tra centro, Reggia e Casertavecchia)",
+      "tipo": "altro",
+      "luogo": "Caserta, Campania",
+      "date": "dal 6 dicembre 2026 al 6 gennaio 2027",
+      "inizio": "2026-12-06",
+      "fine": "2027-01-06",
+      "distanza": "circa 3 ore di camper",
+      "perche": "Il Comune ha finanziato un cartellone di feste con luminarie, concerti e spettacoli tra il centro, la Reggia e Casertavecchia, e si parla del ritorno del Capodanno in piazza Dante. Si può abbinare la visita alla Reggia, sito UNESCO, e restare più giorni.",
+      "fonte": "https://www.casertanews.it/attualita/piazza-dante-capodanno-festa-caserta.html",
+      "offerta": null,
+      "testo": "✨ Spunto 2/2\n«Natale Diffuso ed Eventi a Caserta (luminarie, concerti e spettacoli tra centro, Reggia e Casertavecchia)» · Caserta, Campania\n🗓 dal 6 dicembre 2026 al 6 gennaio 2027 · 🚐 circa 3 ore di camper\nIl Comune ha finanziato un cartellone di feste con luminarie, concerti e spettacoli tra il centro, la Reggia e Casertavecchia, e si parla del ritorno del Capodanno in piazza Dante. Si può abbinare la visita alla Reggia, sito UNESCO, e restare più giorni.\n🔗 https://www.casertanews.it/attualita/piazza-dante-capodanno-festa-caserta.html\n\nFacciamo un post?",
+      "messageId": 96,
+      "data": "2026-11-27",
+      "esito": null
     }
   ]
 }
