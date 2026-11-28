@@ -2,7 +2,7 @@
   "id": "2026-11-28-natale-diffuso-caserta-camper-reggia-2026",
   "codice": "c3e80b96c6",
   "tipo": "improbabile",
-  "creata": "2026-11-28T15:47:10.488Z",
+  "creata": "2026-11-28T15:58:21.527Z",
   "contenuto": {
     "tema": "Natale Diffuso ed Eventi a Caserta (6 dicembre 2026 - 6 gennaio 2027): luminarie, concerti e spettacoli, con la Domenica al Museo alla Reggia il 6 dicembre",
     "luogo": "Caserta (Campania)",
@@ -41,23 +41,25 @@
       "https://www.napolike.it/eventi-caserta-weekend-27-11-2026",
       "https://calcolopercorso.it/it/distanza/Bari/Caserta"
     ],
-    "prompt_immagine": "Edit the reference photo of the camper so that the motorhome is realistically parked in front of the Royal Palace of Caserta (the Reggia di Caserta), seen from a natural, credible eye-level angle, with the long cream-and-pink eighteenth-century facade and its central pavilion clearly recognizable behind it. Late-afternoon winter light, clear sky with soft golden tones, a few small festive Christmas lights and a couple of distant visitors walking near the palace. Realistic, natural, high-quality documentary photographic style, no surreal or ironic elements, wide horizontal framing, the camper well in focus in the foreground. The camper must stay identical to the reference: same shape, same colours, same KENTUCKY lettering on the loft. Add a clean, simple graphic overlay: the Mistralia logo (a small, tidy wordmark reading \"Mistralia\") in the top-left corner, and a rounded badge in the bottom-right corner with the text \"A partire da €78 al giorno\", in a legible sans-serif font, white text on a dark semi-transparent background. No other text, logos or watermarks. Horizontal format.",
+    "prompt_immagine": "Edit the first reference photo of the camper to create a funny, impossible, ironic photographic scene: the motorhome is parked indoors at the foot of the monumental Grand Staircase (Scalone d'Onore) of the Royal Palace of Caserta (the Reggia di Caserta), calmly sitting between the two stone lions as if it were the most normal parking spot in the world. Warm light from the palace lanterns, polished marble and grand baroque architecture clearly recognizable, the camper wrapped in a few strings of warm Christmas lights and a small festive garland on the front, a light dusting of snowflakes drifting in from the open entrance. Ironic but photorealistic high-quality photographic style, wide horizontal framing, camper large and sharply in focus in the foreground, eye-level angle. The camper must stay identical to the first reference photo: same shape, same colours, same KENTUCKY lettering on the loft; keep the lettering fully visible and unobstructed. Graphic overlay, using the second reference image, which is the official Mistralia logo taken from the website mistralia.co: place that exact logo, reproduced faithfully without redrawing, re-typing or altering it, clearly visible in the top-left corner on a clean background, with comfortable margins. For the price, add a large, fresh, modern banner across the bottom of the image, full-width or a wide rounded ribbon, using exactly the same colour palette sampled from the Mistralia logo (same main colour and accent colour, with white or a very light tone for contrast). The banner contains the text \"A partire da €78 al giorno\", with \"€78\" very big and bold and the rest in a smaller, clean, rounded, highly legible sans-serif font. The banner must be noticeably larger than a small badge (about 15-20% of the image height) but must not cover the camper or the KENTUCKY lettering. No other text, logos or watermarks. Horizontal format.",
     "rifai_immagine": true,
     "verifica": {
       "esito": "ok",
       "problemi": [],
       "correzione": "",
       "da_controllare": [
-        "Programma completo, presentato il 2 dicembre → sito/pagina social del Comune di Caserta e casertanews.it",
-        "Domenica al Museo 6/12: biglietti, orari, aree aperte → reggiadicaserta.cultura.gov.it/domenica-al-museo/",
-        "Concerto del 31/12: piazza e conferma → comunicati del Comune dopo il 2 dicembre"
+        "Programma completo presentato il 2 dicembre: se cambiano date o nome, aggiornare → comune.caserta.it",
+        "Domenica al Museo 6/12: biglietti TicketOne dal 30/11, in sede dalle 8.30 → reggiadicaserta.cultura.gov.it/domenica-al-museo",
+        "Concerto del 31/12: piazza e artisti non sono ancora ufficiali (piazza Dante solo ipotizzata) → comune.caserta.it"
       ],
       "fonti": [
-        "https://reggiadicaserta.cultura.gov.it/il-6-dicembre-e-domenica-al-museo-alla-reggia-di-caserta/",
         "https://www.casertanews.it/attualita/piazza-dante-capodanno-festa-caserta.html",
-        "https://www.casertanews.it/attualita/natale-eventi-480mila-euro-ricerca-societa.html",
-        "https://casertaweb.com/notizie/natale-2026-caserta-lwr-massimo-vecchione-si-aggiudica-lotti-torna-concertone-capodanno-piazza/",
         "https://www.casertanews.it/attualita/domenica-museo-reggia-caserta-ingresso-gratuito-6-dicembre-2026.html",
+        "https://www.ondawebtv.it/domenicalmuseo-alla-reggia-il-6-dicembre-ingresso-gratuito/",
+        "https://edizionecaserta.net/2026/11/26/reggia-caserta-domenica-al-museo-6-dicembre/",
+        "https://casertaweb.com/notizie/natale-2026-caserta-lwr-massimo-vecchione-si-aggiudica-lotti-torna-concertone-capodanno-piazza/",
+        "https://www.casertanews.it/attualita/natale-eventi-480mila-euro-ricerca-societa.html",
+        "https://edizionecaserta.net/2026/10/27/natale-caserta-2026-2027-eventi-480mila-euro/",
         "https://calcolopercorso.it/it/distanza/Bari/Caserta"
       ]
     }

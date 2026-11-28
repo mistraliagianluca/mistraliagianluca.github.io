@@ -1,12 +1,12 @@
 {
-  "offset": 926428077,
+  "offset": 926428078,
   "bozza": {
     "id": "2026-11-28-natale-diffuso-caserta-camper-reggia-2026",
     "codice": "c3e80b96c6",
-    "messageId": 107,
-    "testoId": 108,
-    "domandaId": 109,
-    "creata": "2026-11-28T15:47:10.488Z",
+    "messageId": 112,
+    "testoId": 113,
+    "domandaId": 114,
+    "creata": "2026-11-28T15:58:21.527Z",
     "promemoria": false
   },
   "storico": [
@@ -119,6 +119,12 @@
       "tema": "Natale Diffuso ed Eventi a Caserta (6 dicembre 2026 - 6 gennaio 2027): luminarie, concerti e spettacoli, con la Domenica al Museo alla Reggia il 6 dicembre",
       "luogo": "Caserta (Campania)",
       "data": "2026-11-28"
+    },
+    {
+      "id": "2026-11-28-natale-diffuso-caserta-camper-reggia-2026",
+      "tema": "Natale Diffuso ed Eventi a Caserta (6 dicembre 2026 - 6 gennaio 2027): luminarie, concerti e spettacoli, con la Domenica al Museo alla Reggia il 6 dicembre",
+      "luogo": "Caserta (Campania)",
+      "data": "2026-11-28"
     }
   ],
   "pubblicati": [
@@ -155,7 +161,7 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 8.890468000000002
+    "dollari": 9.335776000000003
   },
   "settimanale": "2026-11-23",
   "traduzioniFallite": {},
