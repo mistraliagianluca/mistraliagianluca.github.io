@@ -1,12 +1,12 @@
 {
-  "offset": 926428075,
+  "offset": 926428076,
   "bozza": {
-    "id": "2026-11-28-natale-diffuso-caserta-camper-reggia-luminarie-2026",
-    "codice": "8f6311f116",
-    "messageId": 97,
-    "testoId": 98,
-    "domandaId": 99,
-    "creata": "2026-11-28T15:09:24.765Z",
+    "id": "2026-11-28-natale-diffuso-caserta-camper-reggia-2026",
+    "codice": "c3e80b96c6",
+    "messageId": 102,
+    "testoId": 103,
+    "domandaId": 104,
+    "creata": "2026-11-28T15:35:21.695Z",
     "promemoria": false
   },
   "storico": [
@@ -107,6 +107,12 @@
       "tema": "Natale Diffuso ed Eventi a Caserta: luminarie, concerti e spettacoli tra centro, Reggia e Casertavecchia, con il possibile ritorno del Capodanno in piazza Dante",
       "luogo": "Caserta (Campania)",
       "data": "2026-11-28"
+    },
+    {
+      "id": "2026-11-28-natale-diffuso-caserta-camper-reggia-2026",
+      "tema": "Natale Diffuso ed Eventi a Caserta (6 dicembre 2026 - 6 gennaio 2027): luminarie, concerti e spettacoli, con la Domenica al Museo alla Reggia il 6 dicembre",
+      "luogo": "Caserta (Campania)",
+      "data": "2026-11-28"
     }
   ],
   "pubblicati": [
@@ -143,7 +149,7 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 7.971670000000001
+    "dollari": 8.582340000000002
   },
   "settimanale": "2026-11-23",
   "traduzioniFallite": {},
