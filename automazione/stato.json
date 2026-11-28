@@ -1,6 +1,14 @@
 {
-  "offset": 926428072,
-  "bozza": null,
+  "offset": 926428073,
+  "bozza": {
+    "id": "2026-11-28-natale-diffuso-caserta-camper-reggia-luminarie-2026",
+    "codice": "8f6311f116",
+    "messageId": 97,
+    "testoId": 98,
+    "domandaId": 99,
+    "creata": "2026-11-28T15:09:24.765Z",
+    "promemoria": false
+  },
   "storico": [
     {
       "id": "2026-11-21-selva-di-fasano-camper-apulia-for-christmas-2026",
@@ -93,6 +101,12 @@
       "tema": "Festa delle Propaggini a Putignano, sabato 26 dicembre 2026: il via alla 633ª edizione del Carnevale più antico d'Europa, con satira in vernacolo e cartapesta, in un weekend lungo in camper",
       "luogo": "Putignano (Bari, Puglia)",
       "data": "2026-11-24"
+    },
+    {
+      "id": "2026-11-28-natale-diffuso-caserta-camper-reggia-luminarie-2026",
+      "tema": "Natale Diffuso ed Eventi a Caserta: luminarie, concerti e spettacoli tra centro, Reggia e Casertavecchia, con il possibile ritorno del Capodanno in piazza Dante",
+      "luogo": "Caserta (Campania)",
+      "data": "2026-11-28"
     }
   ],
   "pubblicati": [
@@ -129,7 +143,7 @@
   ],
   "spesa": {
     "mese": "2026-11",
-    "dollari": 7.143764000000001
+    "dollari": 7.971670000000001
   },
   "settimanale": "2026-11-23",
   "traduzioniFallite": {},
@@ -234,7 +248,7 @@
       "testo": "✨ Spunto 2/2\n«Natale Diffuso ed Eventi a Caserta (luminarie, concerti e spettacoli tra centro, Reggia e Casertavecchia)» · Caserta, Campania\n🗓 dal 6 dicembre 2026 al 6 gennaio 2027 · 🚐 circa 3 ore di camper\nIl Comune ha finanziato un cartellone di feste con luminarie, concerti e spettacoli tra il centro, la Reggia e Casertavecchia, e si parla del ritorno del Capodanno in piazza Dante. Si può abbinare la visita alla Reggia, sito UNESCO, e restare più giorni.\n🔗 https://www.casertanews.it/attualita/piazza-dante-capodanno-festa-caserta.html\n\nFacciamo un post?",
       "messageId": 96,
       "data": "2026-11-27",
-      "esito": null
+      "esito": "bozza"
     }
   ]
 }
